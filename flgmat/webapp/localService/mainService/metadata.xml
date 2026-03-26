@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="Aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="Analytics"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="Capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="Measures"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ODM',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.ODM.v1" Alias="SAP__ODM"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="Validation"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="YY1_FLGTRK_TRACKING_API_CDS" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="YY1_FLGTRK_Tracking_APIType" sap:semantics="aggregate" sap:label="FLG Tracking app" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.String" Nullable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="MaintenanceOrder" Type="Edm.String" MaxLength="12" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:text="MaintenanceOrderDesc" sap:label="Order" sap:quickinfo="Order Number"/>
+                <Property Name="MaintenanceOrderDesc" Type="Edm.String" MaxLength="40" sap:required-in-filter="false" sap:label="Description"/>
+                <Property Name="MaintenanceOrderType" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Order Type"/>
+                <Property Name="MaintOrdBasicStartDate" Type="Edm.DateTime" Precision="0" sap:aggregation-role="dimension" sap:display-format="Date" sap:required-in-filter="false" sap:label="Basic Start Date"/>
+                <Property Name="MaintOrdBasicEndDate" Type="Edm.DateTime" Precision="0" sap:aggregation-role="dimension" sap:display-format="Date" sap:required-in-filter="false" sap:label="Basic Finish Date"/>
+                <Property Name="MaintenanceOrderOperation" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Operation" sap:quickinfo="Maintenance Order Operation"/>
+                <Property Name="Reservation" Type="Edm.String" MaxLength="10" sap:aggregation-role="dimension" sap:display-format="NonNegative" sap:required-in-filter="false" sap:label="Reservation" sap:quickinfo="Number of reservation/dependent requirements"/>
+                <Property Name="Plant" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Plant"/>
+                <Property Name="ReservationItem" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="NonNegative" sap:required-in-filter="false" sap:label="Item no." sap:quickinfo="Item Number of Reservation / Dependent Requirements"/>
+                <Property Name="StorageLocation" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Storage Location"/>
+                <Property Name="Material" Type="Edm.String" MaxLength="40" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Material" sap:quickinfo="Material Number"/>
+                <Property Name="MaintOrdOpCompRequisitioner" Type="Edm.String" MaxLength="12" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="Requisitioner" sap:quickinfo="Name of requisitioner/requester"/>
+                <Property Name="ComponentDescription" Type="Edm.String" MaxLength="40" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="Item Text" sap:quickinfo="BOM Item Text (Line 1)"/>
+                <Property Name="RequirementQuantityInBaseUnit" Type="Edm.Decimal" Precision="13" Scale="3" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:unit="BaseUnit" sap:label="Requirement Quantity"/>
+                <Property Name="QuantityWithdrawnInBaseUnit" Type="Edm.Decimal" Precision="13" Scale="3" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:unit="BaseUnit" sap:label="Quantity withdrawn"/>
+                <Property Name="BaseUnit" Type="Edm.String" MaxLength="3" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="Base Unit of Measure" sap:semantics="unit-of-measure"/>
+                <Property Name="MaintComponentItemCategory" Type="Edm.String" MaxLength="1" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Item Category" sap:quickinfo="Item category (bill of material)"/>
+                <Property Name="RequirementDate" Type="Edm.DateTime" Precision="0" sap:aggregation-role="dimension" sap:display-format="Date" sap:required-in-filter="false" sap:label="Requirements date" sap:quickinfo="Requirements date for the component"/>
+                <Property Name="PurchaseRequisition" Type="Edm.String" MaxLength="10" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Purchase Requisition" sap:quickinfo="Purchase Requisition Number"/>
+                <Property Name="PurchaseRequisitionItem" Type="Edm.String" MaxLength="5" sap:aggregation-role="dimension" sap:display-format="NonNegative" sap:required-in-filter="false" sap:label="Item of requisition" sap:quickinfo="Item Number of Purchase Requisition"/>
+                <Property Name="PRDeliveryDate" Type="Edm.DateTime" Precision="0" sap:aggregation-role="dimension" sap:display-format="Date" sap:required-in-filter="false" sap:label="PRDelivery Date" sap:quickinfo="Item Delivery Date"/>
+                <Property Name="QuantityInUnitOfEntry" Type="Edm.Decimal" Precision="13" Scale="3" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:unit="UnitOfEntry" sap:label="Qty in unit of entry" sap:quickinfo="Quantity in unit of entry"/>
+                <Property Name="UnitOfEntry" Type="Edm.String" MaxLength="3" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="Unit of Entry" sap:quickinfo="Unit of entry" sap:semantics="unit-of-measure"/>
+                <Property Name="ScheduledBasicEndDate" Type="Edm.DateTime" Precision="0" sap:aggregation-role="dimension" sap:display-format="Date" sap:required-in-filter="false" sap:label="Maximo Original Finish Date" sap:quickinfo="Scheduled finish"/>
+                <Property Name="PurchaseRequisition_Res" Type="Edm.String" MaxLength="10" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Purchase Requisition_Res" sap:quickinfo="Purchase Requisition Number"/>
+                <Property Name="PurchaseRequisitionItem_Res" Type="Edm.String" MaxLength="5" sap:aggregation-role="dimension" sap:display-format="NonNegative" sap:required-in-filter="false" sap:label="Item of requisition_Res" sap:quickinfo="Item Number of Purchase Requisition"/>
+                <Property Name="PurchaseOrderQuantityUnit_Res" Type="Edm.String" MaxLength="3" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="Order Unit_Res" sap:quickinfo="Purchase Order Unit of Measure" sap:semantics="unit-of-measure"/>
+                <Property Name="PurchaseOrderQuantityUnit_PR" Type="Edm.String" MaxLength="3" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="Order Unit_PR" sap:quickinfo="Purchase Order Unit of Measure" sap:semantics="unit-of-measure"/>
+                <Property Name="MaterialDocument_PO" Type="Edm.String" MaxLength="10" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Material Document_PO" sap:quickinfo="Number of Material Document"/>
+                <Property Name="QuantityinBaseUnit_PO" Type="Edm.Decimal" Precision="18" Scale="3" sap:aggregation-role="measure" sap:required-in-filter="false" sap:unit="MaterialBaseUnit_PO" sap:label="Delivered Quantity_PO" sap:filterable="false"/>
+                <Property Name="MaterialBaseUnit_PO" Type="Edm.String" MaxLength="3" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="Base Unit of Measure_PO" sap:quickinfo="Base Unit of Measure" sap:semantics="unit-of-measure"/>
+                <Property Name="MaterialDocumentYear_PO" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="NonNegative" sap:required-in-filter="false" sap:label="Material Document Year_PO" sap:quickinfo="Material Document Year"/>
+                <Property Name="MaterialDocument_STO" Type="Edm.String" MaxLength="10" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Material Document_STO" sap:quickinfo="Number of Material Document"/>
+                <Property Name="QuantityinBaseUnit_STO" Type="Edm.Decimal" Precision="18" Scale="3" sap:aggregation-role="measure" sap:required-in-filter="false" sap:unit="MaterialBaseUnit_PO" sap:label="Delivered Quantity_STO" sap:filterable="false"/>
+                <Property Name="MaterialDocumentYear_STO" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="NonNegative" sap:required-in-filter="false" sap:label="Material Document Year_STO" sap:quickinfo="Material Document Year"/>
+                <Property Name="PurchaseOrder" Type="Edm.String" MaxLength="10" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="PurchaseOrder" sap:quickinfo="Purchase Order Number"/>
+                <Property Name="POItem" Type="Edm.String" MaxLength="5" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="POItem"/>
+                <Property Name="STO" Type="Edm.String" MaxLength="10" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="STO" sap:quickinfo="Purchase Order Number"/>
+                <Property Name="STOItem" Type="Edm.String" MaxLength="5" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="STO Item"/>
+                <Property Name="ReturnSTO" Type="Edm.String" MaxLength="10" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Return STO" sap:quickinfo="Purchase Order Number"/>
+                <Property Name="ReturnStoItem" Type="Edm.String" MaxLength="5" sap:aggregation-role="dimension" sap:display-format="NonNegative" sap:required-in-filter="false" sap:label="ReturnStoItem" sap:quickinfo="Item Number of Purchase Order"/>
+                <Property Name="GoodsMovementType_PO" Type="Edm.String" MaxLength="3" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Movement Type_PO" sap:quickinfo="Movement Type (Inventory Management)"/>
+                <Property Name="PostingDate_PO" Type="Edm.DateTime" Precision="0" sap:aggregation-role="dimension" sap:display-format="Date" sap:required-in-filter="false" sap:label="Posting Date_PO" sap:quickinfo="Posting Date in the Document"/>
+                <Property Name="GoodsMovementType_STO" Type="Edm.String" MaxLength="3" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Movement Type_STO" sap:quickinfo="Movement Type (Inventory Management)"/>
+                <Property Name="PostingDate_STO" Type="Edm.DateTime" Precision="0" sap:aggregation-role="dimension" sap:display-format="Date" sap:required-in-filter="false" sap:label="Posting Date_STO" sap:quickinfo="Posting Date in the Document"/>
+                <Property Name="QuantityinBaseUnit_RTO" Type="Edm.Decimal" Precision="18" Scale="3" sap:aggregation-role="measure" sap:required-in-filter="false" sap:unit="MaterialBaseUnit" sap:label="Delivered Quantity_RTO" sap:filterable="false"/>
+                <Property Name="GoodsMovementType_RTO" Type="Edm.String" MaxLength="3" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Movement Type_RTO" sap:quickinfo="Movement Type (Inventory Management)"/>
+                <Property Name="PostingDate_RTO" Type="Edm.DateTime" Precision="0" sap:aggregation-role="dimension" sap:display-format="Date" sap:required-in-filter="false" sap:label="Posting Date_RTO" sap:quickinfo="Posting Date in the Document"/>
+                <Property Name="MaterialBaseUnit" Type="Edm.String" MaxLength="3" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="Base Unit of Measure" sap:semantics="unit-of-measure"/>
+                <Property Name="DeliveryDocumentType_Deli" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Delivery Type_Del" sap:quickinfo="Delivery Type"/>
+                <Property Name="ReturnDeliveryNumber" Type="Edm.String" MaxLength="10" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="ReturnDeliveryNumber" sap:quickinfo="Number of Material Document"/>
+                <Property Name="PickingDate_Deli" Type="Edm.DateTime" Precision="0" sap:aggregation-role="dimension" sap:display-format="Date" sap:required-in-filter="false" sap:label="Picking Date_Del" sap:quickinfo="Picking Date"/>
+                <Property Name="PlannedGoodsIssueDate_Deli" Type="Edm.DateTime" Precision="0" sap:aggregation-role="dimension" sap:display-format="Date" sap:required-in-filter="false" sap:label="Pland Gds Mvmnt Date_Del" sap:quickinfo="Planned Goods Movement Date"/>
+                <Property Name="ActualGoodsMovementDa_Deli" Type="Edm.DateTime" Precision="0" sap:aggregation-role="dimension" sap:display-format="Date" sap:required-in-filter="false" sap:label="Act. Gds Mvmnt Date_Deli" sap:quickinfo="Actual Goods Movement Date"/>
+                <Property Name="OverallGoodsMovementStat_Deli" Type="Edm.String" MaxLength="1" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Goods Movement Sts_De" sap:quickinfo="Goods Movement Status (All Items)"/>
+                <Property Name="OvrlItmGeneralIncompletio_Deli" Type="Edm.String" MaxLength="1" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="All Items_Deli" sap:quickinfo="Incompletion Status (All Items)"/>
+                <Property Name="InventoryValuationType_Del" Type="Edm.String" MaxLength="10" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Valuation Type_Deli" sap:quickinfo="Valuation Type"/>
+                <Property Name="DeliveryDocumentType_RDeli" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Delivery Type_RDel" sap:quickinfo="Delivery Type"/>
+                <Property Name="PickingDate_RDeli" Type="Edm.DateTime" Precision="0" sap:aggregation-role="dimension" sap:display-format="Date" sap:required-in-filter="false" sap:label="Picking Date_RDel" sap:quickinfo="Picking Date"/>
+                <Property Name="PlannedGoodsIssueDate_RDeli" Type="Edm.DateTime" Precision="0" sap:aggregation-role="dimension" sap:display-format="Date" sap:required-in-filter="false" sap:label="Pland Gds Mvmnt Date_RDel" sap:quickinfo="Planned Goods Movement Date"/>
+                <Property Name="OverallGoodsMovementSt_RDEL" Type="Edm.String" MaxLength="1" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Goods Movement Sts_RDel" sap:quickinfo="Goods Movement Status (All Items)"/>
+                <Property Name="ActualGoodsMovementD_RDel" Type="Edm.DateTime" Precision="0" sap:aggregation-role="dimension" sap:display-format="Date" sap:required-in-filter="false" sap:label="Act. Gds Mvmnt Date_Rdel" sap:quickinfo="Actual Goods Movement Date"/>
+                <Property Name="OvrlItmGeneralIncompletion_RDe" Type="Edm.String" MaxLength="1" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="All Items_RDel" sap:quickinfo="Incompletion Status (All Items)"/>
+                <Property Name="InventoryValuationType_RDeli" Type="Edm.String" MaxLength="10" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Valuation Type_Rdel" sap:quickinfo="Valuation Type"/>
+                <Property Name="ReturnDeliveryItem" Type="Edm.String" MaxLength="6" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="ReturnDeliveryItem"/>
+                <Property Name="DeliveryNumber" Type="Edm.String" MaxLength="10" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="DeliveryNumber" sap:quickinfo="Text of length 10"/>
+                <Property Name="DeliveryItem" Type="Edm.String" MaxLength="6" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="DeliveryItem"/>
+                <Property Name="SupplyingPlant_PO" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="SupplyingPlant_PO" sap:quickinfo="Supplying (issuing) plant in case of stock transport order"/>
+                <Property Name="SupplyingPlant_STO" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="SupplyingPlant_STO" sap:quickinfo="Supplying (issuing) plant in case of stock transport order"/>
+                <Property Name="IssuingStorageLocation_PO" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="IssuingStorageLocation_PO" sap:quickinfo="Issuing Storage Location for Stock Transport Order"/>
+                <Property Name="IssuingStorageLocation_STO" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="IssuingStorageLocation_STO" sap:quickinfo="Issuing Storage Location for Stock Transport Order"/>
+                <Property Name="Supplier_PO" Type="Edm.String" MaxLength="10" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Supplier_PO" sap:quickinfo="Supplier"/>
+                <Property Name="Supplier_STO" Type="Edm.String" MaxLength="10" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Supplier_STO" sap:quickinfo="Supplier"/>
+                <Property Name="YY1_DELIVERYDATE_PDI_PO" Type="Edm.String" MaxLength="50" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="YY1_DELIVERYDATE_PDI_PO" sap:quickinfo="DeliveryDate"/>
+                <Property Name="YY1_DELIVERYDATE_PDI_STO" Type="Edm.String" MaxLength="50" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="YY1_DELIVERYDATE_PDI_STO" sap:quickinfo="DeliveryDate"/>
+                <Property Name="OrderQuantity_PO" Type="Edm.Decimal" Precision="13" Scale="3" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:unit="PurchaseOrderQuantityUnit_Res" sap:label="OrderQuantity_PO" sap:quickinfo="Purchase Order Quantity"/>
+                <Property Name="OrderQuantit_STO" Type="Edm.Decimal" Precision="13" Scale="3" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:unit="PurchaseOrderQuantityUnit_Res" sap:label="OrderQuantity_STO" sap:quickinfo="Purchase Order Quantity"/>
+                <Property Name="POType_PO" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="POType_PO" sap:quickinfo="Purchasing Document Type"/>
+                <Property Name="POType_STO" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="POType_STO" sap:quickinfo="Purchasing Document Type"/>
+                <Property Name="YettoDeliverQuantity_PO" Type="Edm.Decimal" Precision="19" Scale="3" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:unit="MaterialBaseUnit_PO" sap:label="YettoDeliverQuantity_PO"/>
+                <Property Name="YettoDeliverQuantity_STO" Type="Edm.Decimal" Precision="19" Scale="3" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:unit="MaterialBaseUnit_PO" sap:label="YettoDeliverQuantity_STO"/>
+                <Property Name="EWMWarehouse" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Warehouse Number" sap:quickinfo="Warehouse Number/Warehouse Complex"/>
+                <Property Name="WarehouseTask" Type="Edm.String" MaxLength="12" sap:aggregation-role="dimension" sap:display-format="NonNegative" sap:required-in-filter="false" sap:label="Warehouse Task"/>
+                <Property Name="WarehouseTaskStatus" Type="Edm.String" MaxLength="1" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="WT Status" sap:quickinfo="Warehouse Task Status"/>
+                <Property Name="Batch" Type="Edm.String" MaxLength="10" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Batch"/>
+                <Property Name="DeliveryCreationDate" Type="Edm.DateTime" Precision="0" sap:aggregation-role="dimension" sap:display-format="Date" sap:required-in-filter="false" sap:label="Deliv. Creation Date" sap:quickinfo="Delivery Creation Date"/>
+                <Property Name="ProductType" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Product Type"/>
+                <Property Name="ProductName" Type="Edm.String" MaxLength="40" sap:required-in-filter="false" sap:label="Product Description"/>
+                <Property Name="StockReport" Type="Edm.String" MaxLength="40" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="StockReport" sap:quickinfo="Material Number"/>
+            </EntityType>
+            <EntityContainer Name="YY1_FLGTRK_TRACKING_API_CDS_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="YY1_FLGTRK_Tracking_API" EntityType="YY1_FLGTRK_TRACKING_API_CDS.YY1_FLGTRK_Tracking_APIType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+            </EntityContainer>
+            <Annotation Term="Core.SchemaVersion" String="1.0.0" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+            <Annotations Target="YY1_FLGTRK_TRACKING_API_CDS.YY1_FLGTRK_TRACKING_API_CDS_Entities" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
+            </Annotations>
+            <Annotations Target="YY1_FLGTRK_TRACKING_API_CDS.YY1_FLGTRK_TRACKING_API_CDS_Entities/YY1_FLGTRK_Tracking_API" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonFilterableProperties">
+                            <Collection>
+                                <PropertyPath>ID</PropertyPath>
+                                <PropertyPath>QuantityinBaseUnit_PO</PropertyPath>
+                                <PropertyPath>QuantityinBaseUnit_STO</PropertyPath>
+                                <PropertyPath>QuantityinBaseUnit_RTO</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.SortRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonSortableProperties">
+                            <Collection>
+                                <PropertyPath>ID</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="YY1_FLGTRK_TRACKING_API_CDS.YY1_FLGTRK_TRACKING_API_CDS_Entities" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+            <atom:link rel="self" href="/sap/opu/odata/sap/YY1_FLGTRK_TRACKING_API_CDS/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="/sap/opu/odata/sap/YY1_FLGTRK_TRACKING_API_CDS/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

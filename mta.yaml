@@ -1,0 +1,84 @@
+_schema-version: "3.2"
+ID: FLOG-MATERIALTRACKER
+version: 0.0.1
+modules:
+- name: FLOG-MATERIALTRACKER-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: FLOG-MATERIALTRACKER-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - nsflgmat.zip
+      name: nsflgmat
+      target-path: resources/
+- name: nsflgmat
+  type: html5
+  path: flgmat
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: FLOG-MATERIALTRACKER-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: FLOG-MATERIALTRACKER-destination-service
+    parameters:
+      content-target: true
+  - name: FLOG-MATERIALTRACKER-repo-host
+    parameters:
+      service-key:
+        name: FLOG-MATERIALTRACKER-repo-host-key
+  - name: uaa_FLOG-MATERIALTRACKER
+    parameters:
+      service-key:
+        name: uaa_FLOG-MATERIALTRACKER-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: nsflgmat_FLOG_MATERIALTRACKER_repo_host
+          ServiceInstanceName: FLOG-MATERIALTRACKER-html5-service
+          ServiceKeyName: FLOG-MATERIALTRACKER-repo-host-key
+          sap.cloud.service: nsflgmat
+        - Authentication: OAuth2UserTokenExchange
+          Name: nsflgmat_uaa_FLOG_MATERIALTRACKER
+          ServiceInstanceName: FLOG-MATERIALTRACKER-xsuaa-service
+          ServiceKeyName: uaa_FLOG-MATERIALTRACKER-key
+          sap.cloud.service: nsflgmat
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+resources:
+- name: FLOG-MATERIALTRACKER-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: FLOG-MATERIALTRACKER-html5-service
+    service-plan: app-host
+- name: FLOG-MATERIALTRACKER-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      version: 1.0.0
+    service: destination
+    service-name: FLOG-MATERIALTRACKER-destination-service
+    service-plan: lite
+- name: uaa_FLOG-MATERIALTRACKER
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: FLOG-MATERIALTRACKER-xsuaa-service
+    service-plan: application
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true

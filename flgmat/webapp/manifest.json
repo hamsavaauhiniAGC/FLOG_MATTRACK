@@ -1,0 +1,236 @@
+{
+  "_version": "1.82.0",
+  "sap.app": {
+    "id": "ns.flgmat",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.20.4",
+      "toolsId": "fc11085e-8b0d-44c8-98ba-914c1ad00626"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata/sap/YY1_FLGTRK_TRACKING_API_CDS/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      },
+      "YY1_FLG_UCCWOREF_API_CDS": {
+        "uri": "/sap/opu/odata/sap/YY1_FLG_UCCWOREF_API_CDS/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/YY1_FLG_UCCWOREF_API_CDS/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      },
+      "shipmentcontainerunit": {
+        "uri": "/sap/opu/odata4/sap/api_shipmentcontainerpackg/srvd_a2x/sap/shipmentcontainerunit/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/shipmentcontainerunit/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      },
+      "fldlogsshipmentcontainer": {
+        "uri": "/sap/opu/odata4/sap/api_fldlogsshipmentcontainer/srvd_a2x/sap/fldlogsshipmentcontainer/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/fldlogsshipmentcontainer/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      },
+      "fldlogsshipmentvoyage": {
+        "uri": "/sap/opu/odata4/sap/api_fldlogsshipmentvoyage/srvd_a2x/sap/fldlogsshipmentvoyage/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/fldlogsshipmentvoyage/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      },
+      "YY1_FLGTRK_TRACKPR_API_CDS": {
+        "uri": "/sap/opu/odata/sap/YY1_FLGTRK_TRACKPR_API_CDS/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "annotationMain"
+          ],
+          "localUri": "localService/YY1_FLGTRK_TRACKPR_API_CDS/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      },
+      "YY1_FLG_WOREF_DELTYPE_API_CDS": {
+        "uri": "/sap/opu/odata/sap/YY1_FLG_WOREF_DELTYPE_API_CDS/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/YY1_FLG_WOREF_DELTYPE_API_CDS/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "mattrack-display": {
+          "semanticObject": "mattrack",
+          "action": "display",
+          "title": "{{mattrack-display.flpTitle}}",
+          "subTitle": "{{mattrack-display.flpSubtitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      },
+      "outbounds": {
+        "yy1_invman-display": {
+          "semanticObject": "yy1_invman",
+          "action": "display"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.145.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "ns.flgmat.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {}
+      },
+      "YY1_FLG_UCCWOREF_API_CDS": {
+        "dataSource": "YY1_FLG_UCCWOREF_API_CDS",
+        "preload": true,
+        "settings": {}
+      },
+      "shipmentcontainerunit": {
+        "dataSource": "shipmentcontainerunit",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "fldlogsshipmentcontainer": {
+        "dataSource": "fldlogsshipmentcontainer",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "fldlogsshipmentvoyage": {
+        "dataSource": "fldlogsshipmentvoyage",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "YY1_FLGTRK_TRACKPR_API_CDS": {
+        "dataSource": "YY1_FLGTRK_TRACKPR_API_CDS",
+        "preload": true,
+        "settings": {}
+      },
+      "YY1_FLG_WOREF_DELTYPE_API_CDS": {
+        "dataSource": "YY1_FLG_WOREF_DELTYPE_API_CDS",
+        "preload": true,
+        "settings": {}
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "ns.flgmat.view",
+        "async": true,
+        "viewPath": "ns.flgmat.view"
+      },
+      "routes": [
+        {
+          "name": "RouteMain",
+          "pattern": ":?query:",
+          "target": [
+            "TargetMain"
+          ]
+        }
+      ],
+      "targets": {
+        "TargetMain": {
+          "id": "Main",
+          "name": "Main"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "ns.flgmat.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "nsflgmat"
+  }
+}

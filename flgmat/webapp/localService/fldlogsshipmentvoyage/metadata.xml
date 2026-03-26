@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="Analytics"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="SAP__aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="SAP__capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="SAP__common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CORE',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Core.V1" Alias="SAP__core"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HIERARCHY',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Hierarchy.v1" Alias="SAP__hierarchy"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HTML5',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.HTML5.v1" Alias="SAP__HTML5"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="SAP__measures"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ODM',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.ODM.v1" Alias="SAP__ODM"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PDF',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PDF.v1" Alias="SAP__PDF"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_SESSION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Session.v1" Alias="SAP__session"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_SUPPORT',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Support.v1" Alias="SAP__support"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="SAP__UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="SAP__validation"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="com.sap.gateway.srvd_a2x.api_fldlogsshipmentvoyage.v0001" Alias="SAP__self">
+            <Annotation Term="SAP__core.SchemaVersion" String="1.1.0"/>
+            <EntityType Name="FieldLogisticsShipmentVoyage_Type">
+                <Key>
+                    <PropertyRef Name="FldLogsShptVoyageUUID"/>
+                </Key>
+                <Property Name="FldLogsShptVoyageUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="FldLogsShptVoyageNumber" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FldLogsShptVoyageTypeCode" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FldLogsShptVoyageStatusCode" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FldLogsVoyageChangeDateTime" Type="Edm.DateTimeOffset"/>
+                <Property Name="FldLogsShptVoyIsExternallyMngd" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="IsBusinessPurposeCompleted" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="YY1_FLGMANT_Ship_Date_VOY" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="YY1_FLGMANT_ToLocation_VOY" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="YY1_FLGMANT_DispatchBy_VOY" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="YY1_FLGMANT_ROB_VOY" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="YY1_FLGMANT_FromLoc_VOY" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="YY1_FLGMANT_Vessel_VOY" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd_a2x.api_fldlogsshipmentvoyage.v0001.SAP__Message)" Nullable="false"/>
+                <NavigationProperty Name="_Stage" Type="Collection(com.sap.gateway.srvd_a2x.api_fldlogsshipmentvoyage.v0001.FieldLogisticsShipmentVoyageStage_Type)" Partner="_Voyage">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="FieldLogisticsShipmentVoyageStage_Type">
+                <Key>
+                    <PropertyRef Name="FldLogsShptVoyageUUID"/>
+                    <PropertyRef Name="FldLogsVoyageStageID"/>
+                </Key>
+                <Property Name="FldLogsShptVoyageUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="FldLogsVoyageStageID" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsSrcePlnt" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsDestPlnt" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsShptVoyageStatusCode" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FldLogsVoyageSrceStage" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FldLogsVoyageDestStage" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FldLogsVoyagePlndArrvlDate" Type="Edm.Date"/>
+                <Property Name="FldLogsVoyagePlndDeptrDate" Type="Edm.Date"/>
+                <Property Name="FldLogsVoyageStgeChangeDateTme" Type="Edm.DateTimeOffset"/>
+                <Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd_a2x.api_fldlogsshipmentvoyage.v0001.SAP__Message)" Nullable="false"/>
+                <NavigationProperty Name="_Voyage" Type="com.sap.gateway.srvd_a2x.api_fldlogsshipmentvoyage.v0001.FieldLogisticsShipmentVoyage_Type" Nullable="false" Partner="_Stage">
+                    <ReferentialConstraint Property="FldLogsShptVoyageUUID" ReferencedProperty="FldLogsShptVoyageUUID"/>
+                </NavigationProperty>
+            </EntityType>
+            <ComplexType Name="SAP__Message">
+                <Property Name="code" Type="Edm.String" Nullable="false"/>
+                <Property Name="message" Type="Edm.String" Nullable="false"/>
+                <Property Name="target" Type="Edm.String"/>
+                <Property Name="additionalTargets" Type="Collection(Edm.String)" Nullable="false"/>
+                <Property Name="transition" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="numericSeverity" Type="Edm.Byte" Nullable="false"/>
+                <Property Name="longtextUrl" Type="Edm.String"/>
+            </ComplexType>
+            <Action Name="DispatchFldLogsMaterial" EntitySetPath="_it" IsBound="true">
+                <Parameter Name="_it" Type="com.sap.gateway.srvd_a2x.api_fldlogsshipmentvoyage.v0001.FieldLogisticsShipmentVoyageStage_Type" Nullable="false"/>
+                <ReturnType Type="com.sap.gateway.srvd_a2x.api_fldlogsshipmentvoyage.v0001.FieldLogisticsShipmentVoyageStage_Type" Nullable="false"/>
+            </Action>
+            <Action Name="SetVoyageToArrived" EntitySetPath="_it" IsBound="true">
+                <Parameter Name="_it" Type="com.sap.gateway.srvd_a2x.api_fldlogsshipmentvoyage.v0001.FieldLogisticsShipmentVoyageStage_Type" Nullable="false"/>
+                <ReturnType Type="com.sap.gateway.srvd_a2x.api_fldlogsshipmentvoyage.v0001.FieldLogisticsShipmentVoyageStage_Type" Nullable="false"/>
+            </Action>
+            <EntityContainer Name="Container">
+                <EntitySet Name="FieldLogisticsShipmentVoyage" EntityType="com.sap.gateway.srvd_a2x.api_fldlogsshipmentvoyage.v0001.FieldLogisticsShipmentVoyage_Type">
+                    <NavigationPropertyBinding Path="_Stage" Target="FieldLogisticsShipmentVoyStage"/>
+                </EntitySet>
+                <EntitySet Name="FieldLogisticsShipmentVoyStage" EntityType="com.sap.gateway.srvd_a2x.api_fldlogsshipmentvoyage.v0001.FieldLogisticsShipmentVoyageStage_Type">
+                    <NavigationPropertyBinding Path="_Voyage" Target="FieldLogisticsShipmentVoyage"/>
+                </EntitySet>
+            </EntityContainer>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyage_Type/FldLogsShptVoyageUUID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Voyage UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage UUID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyage_Type/FldLogsShptVoyageNumber">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Voyage Number"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyage_Type/FldLogsShptVoyageTypeCode">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Voyage Type Code"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Type Code"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyage_Type/FldLogsShptVoyageStatusCode">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Voyage Status Code"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Status Code"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyage_Type/IsBusinessPurposeCompleted">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Purpose Completed"/>
+                <Annotation Term="SAP__common.Heading" String="Business Purpose Completed Flag"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Business Purpose Completed Flag"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=CVP_XBLCK"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyage_Type/_Stage">
+                <Annotation Term="SAP__common.Composition"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/FieldLogisticsShipmentVoyage">
+                <Annotation Term="SAP__capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="_Stage"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="Filterable" Bool="true"/>
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="YY1_FLGMANT_ROB_VOY"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SingleValue"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="DeltaUpdateSupported" Bool="true"/>
+                        <PropertyValue Property="NonUpdatableNavigationProperties">
+                            <Collection>
+                                <PropertyPath>_Stage</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeepUpdateSupport">
+                    <Record>
+                        <PropertyValue Property="ContentIDSupported" Bool="true"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyage_Type">
+                <Annotation Term="SAP__common.Label" String="Field Logistics Shipment Voyage"/>
+                <Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyageStage_Type/FldLogsShptVoyageUUID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Voyage UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage UUID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyageStage_Type/FldLogsVoyageStageID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="Stage Sequence"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Stage ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyageStage_Type/FldLogsSrcePlnt">
+                <Annotation Term="SAP__common.FieldControl" EnumMember="SAP__common.FieldControlType/Mandatory"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Plant"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyageStage_Type/FldLogsDestPlnt">
+                <Annotation Term="SAP__common.FieldControl" EnumMember="SAP__common.FieldControlType/Mandatory"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Plant"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyageStage_Type/FldLogsShptVoyageStatusCode">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Voyage Status Code"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Status Code"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyageStage_Type/FldLogsVoyageSrceStage">
+                <Annotation Term="SAP__common.FieldControl" EnumMember="SAP__common.FieldControlType/Mandatory"/>
+                <Annotation Term="SAP__common.Label" String="Source Stage"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Source Stage"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyageStage_Type/FldLogsVoyageDestStage">
+                <Annotation Term="SAP__common.FieldControl" EnumMember="SAP__common.FieldControlType/Mandatory"/>
+                <Annotation Term="SAP__common.Label" String="Destination Stage"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Destination Stage"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/FieldLogisticsShipmentVoyStage">
+                <Annotation Term="SAP__capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="_Voyage"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="DeepUpdateSupport">
+                                        <Record>
+                                            <PropertyValue Property="Supported" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="DeltaUpdateSupported" Bool="true"/>
+                        <PropertyValue Property="NonUpdatableNavigationProperties">
+                            <Collection>
+                                <PropertyPath>_Voyage</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeepUpdateSupport">
+                    <Record>
+                        <PropertyValue Property="ContentIDSupported" Bool="true"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyageStage_Type">
+                <Annotation Term="SAP__common.Label" String="Field Logistics Shipment Stage"/>
+                <Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container">
+                <Annotation Term="SAP__common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
+                <Annotation Term="SAP__capabilities.FilterFunctions">
+                    <Collection>
+                        <String>eq</String>
+                        <String>ne</String>
+                        <String>gt</String>
+                        <String>ge</String>
+                        <String>lt</String>
+                        <String>le</String>
+                        <String>and</String>
+                        <String>or</String>
+                        <String>contains</String>
+                        <String>startswith</String>
+                        <String>endswith</String>
+                        <String>any</String>
+                        <String>all</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__support.TechnicalInfoLinks">
+                    <Record>
+                        <PropertyValue Property="Url" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="FunctionImport" String="GetTechnicalInfoLinks"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SupportedFormats">
+                    <Collection>
+                        <String>application/json</String>
+                        <String>application/pdf</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__PDF.Features">
+                    <Record>
+                        <PropertyValue Property="DocumentDescriptionReference" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="DocumentDescriptionCollection" String="MyDocumentDescriptions"/>
+                        <PropertyValue Property="ArchiveFormat" Bool="true"/>
+                        <PropertyValue Property="Border" Bool="true"/>
+                        <PropertyValue Property="CoverPage" Bool="true"/>
+                        <PropertyValue Property="FitToPage" Bool="true"/>
+                        <PropertyValue Property="FontName" Bool="true"/>
+                        <PropertyValue Property="FontSize" Bool="true"/>
+                        <PropertyValue Property="HeaderFooter" Bool="true"/>
+                        <PropertyValue Property="IANATimezoneFormat" Bool="true"/>
+                        <PropertyValue Property="Margin" Bool="true"/>
+                        <PropertyValue Property="Padding" Bool="true"/>
+                        <PropertyValue Property="ResultSizeDefault" Int="20000"/>
+                        <PropertyValue Property="ResultSizeMaximum" Int="20000"/>
+                        <PropertyValue Property="Signature" Bool="true"/>
+                        <PropertyValue Property="TextDirectionLayout" Bool="true"/>
+                        <PropertyValue Property="Treeview" Bool="true"/>
+                        <PropertyValue Property="UploadToFileShare" Bool="true"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.KeyAsSegmentSupported"/>
+                <Annotation Term="SAP__capabilities.AsynchronousRequestsSupported"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyage_Type/FldLogsVoyageChangeDateTime">
+                <Annotation Term="SAP__common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyage_Type/FldLogsShptVoyIsExternallyMngd">
+                <Annotation Term="SAP__common.Label" String="Externally Managed"/>
+                <Annotation Term="SAP__common.Heading" String="FldLogsShptVoy: Externally Managed Indicator"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Externally managed Indicator"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyage_Type/YY1_FLGMANT_Ship_Date_VOY">
+                <Annotation Term="SAP__common.Label" String="FLOG-MANT: ShippingDateTime"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyage_Type/YY1_FLGMANT_ToLocation_VOY">
+                <Annotation Term="SAP__common.Label" String="FLOG-MANT: To Location"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyage_Type/YY1_FLGMANT_DispatchBy_VOY">
+                <Annotation Term="SAP__common.Label" String="FLOG-MANT: Dispatched By"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyage_Type/YY1_FLGMANT_ROB_VOY">
+                <Annotation Term="SAP__common.Label" String="ROB"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyage_Type/YY1_FLGMANT_FromLoc_VOY">
+                <Annotation Term="SAP__common.Label" String="FLOG-MANT: From Location"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyage_Type/YY1_FLGMANT_Vessel_VOY">
+                <Annotation Term="SAP__common.Label" String="FLOG-MANT: Vessel"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyageStage_Type/FldLogsVoyagePlndArrvlDate">
+                <Annotation Term="SAP__common.Label" String="Planned Arrival Date"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Planned Arrival Date"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyageStage_Type/FldLogsVoyagePlndDeptrDate">
+                <Annotation Term="SAP__common.Label" String="Planned Deptr Date"/>
+                <Annotation Term="SAP__common.Heading" String="Planned Departure Date"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Planned Departure Date"/>
+            </Annotations>
+            <Annotations Target="SAP__self.FieldLogisticsShipmentVoyageStage_Type/FldLogsVoyageStgeChangeDateTme">
+                <Annotation Term="SAP__common.Label" String="Changed On"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

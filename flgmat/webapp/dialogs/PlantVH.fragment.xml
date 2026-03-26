@@ -1,0 +1,84 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:smartVariantManagement="sap.ui.comp.smartvariants"
+    xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+    xmlns:table="sap.ui.table"
+>
+<!-- Plant Dialog -->
+<Dialog id="idPlantDialog"
+        title="{i18n>plant.LBL}"
+        class="sapUiContentPadding"
+        resizable="true"
+        draggable="true"
+        contentWidth="75%"
+        titleAlignment="Center"
+        beforeOpen="onBeforeOpenMoDialog"
+    >
+        <content>
+            <!--Vbox -->
+            <VBox id="idVboxPlant"
+             fitContainer="true">
+                <!-- Filter Bar -->
+                <smartFilterBar:SmartFilterBar
+                    id="idSFBPlantEntity"
+                    entitySet="YY1_FLGTRK_TrackPR_API"
+                    isRunningInValueHelpDialog="true"
+                    useToolbar="true"
+                    enableBasicSearch="true"
+                    
+                />
+                <!-- Smart Table -->
+                <smartTable:SmartTable id="idSMTPlant"
+                    entitySet="YY1_FLGTRK_TrackPR_API"
+                    smartFilterId="idSFBPlantEntity"
+                    persistencyKey="pkSTabPlantEntity"
+                    useVariantManagement="true"
+                    useTablePersonalisation="true"
+                    header="{i18n>plant.LBL}"
+                    showRowCount="true"
+                    enableAutoBinding="true"
+                    class="sapUiResponsiveContentPadding"
+                    tableType="Table"
+                    enableAutoColumnWidth="true"
+                    enableCopy="false"
+                    enableExport="false"
+                    initiallyVisibleFields="Plant,PlantName"
+                    requestAtLeastFields="Plant,PlantName"
+                    beforeRebindTable="onBeforeRebindTablePlant"
+                >
+                    <table:Table
+                        id="idGridTablePlantEntity"
+                        selectionMode="MultiToggle"
+                        selectionBehavior="RowSelector"
+                    />
+                </smartTable:SmartTable>
+            </VBox>
+        </content>
+        <!-- Footer -->
+        <footer>
+            <Toolbar id ="idToolbarPlant">
+                <content>
+                    <ToolbarSpacer id="idToolBarSpacePlant"/>
+                    <!-- Save -->
+                    <Button id = "idBtnOKPlant"
+                        type="Emphasized"
+                        text="{i18n>btnOK.TXT}"
+                        press="onPressOKPlantDialog"
+                        ariaHasPopup="Dialog"
+                    />
+                    <!-- Cancel	-->
+                    <Button id ="idBtnCancelplant"
+                        type="Default"
+                        text="{i18n>btnCancel.TXT}"
+                        press="onPressCancelPlantDialog"
+                        ariaHasPopup="Dialog"
+                    />
+                </content>
+            </Toolbar>
+        </footer>
+    </Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,84 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:smartVariantManagement="sap.ui.comp.smartvariants"
+    xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+    xmlns:table="sap.ui.table"
+>
+<!-- STO Dialog -->
+<Dialog id="idMODialog"
+        title="{i18n>maintOrder.LBL}"
+        class="sapUiContentPadding"
+        resizable="true"
+        draggable="true"
+        contentWidth="75%"
+        titleAlignment="Center"
+        beforeOpen="onBeforeOpenMoDialog"
+    >
+        <content>
+            <!--Vbox -->
+            <VBox id="idVboxMaintOrder"
+             fitContainer="true">
+                <!-- Filter Bar -->
+                <smartFilterBar:SmartFilterBar
+                    id="idSFBMOEntity"
+                    entitySet="YY1_FLGTRK_Tracking_API"
+                    isRunningInValueHelpDialog="true"
+                    useToolbar="true"
+                    enableBasicSearch="true"
+                    
+                />
+                <!-- Smart Table -->
+                <smartTable:SmartTable id="idSMTMaintOrder"
+                    entitySet="YY1_FLGTRK_Tracking_API"
+                    smartFilterId="idSFBMOEntity"
+                    persistencyKey="pkSTabMOEntity"
+                    useVariantManagement="true"
+                    useTablePersonalisation="true"
+                    header="{i18n>maintOrder.LBL}"
+                    showRowCount="true"
+                    enableAutoBinding="true"
+                    class="sapUiResponsiveContentPadding"
+                    tableType="Table"
+                    enableAutoColumnWidth="true"
+                    enableCopy="false"
+                    enableExport="false"
+                    initiallyVisibleFields="MaintenanceOrder,MaintenanceOrderDesc"
+                    requestAtLeastFields="MaintenanceOrder,MaintenanceOrderDesc"
+                    beforeRebindTable="onBeforeRebindTableMO"
+                >
+                    <table:Table
+                        id="idGridTableMOEntity"
+                        selectionMode="MultiToggle"
+                        selectionBehavior="RowSelector"
+                    />
+                </smartTable:SmartTable>
+            </VBox>
+        </content>
+        <!-- Footer -->
+        <footer>
+            <Toolbar id ="idToolbarMO">
+                <content>
+                    <ToolbarSpacer id="idToolBarSpaceMO"/>
+                    <!-- Save -->
+                    <Button id = "idBtnOK"
+                        type="Emphasized"
+                        text="{i18n>btnOK.TXT}"
+                        press="onPressOKMODialog"
+                        ariaHasPopup="Dialog"
+                    />
+                    <!-- Cancel	-->
+                    <Button id ="idBtnCancel"
+                        type="Default"
+                        text="{i18n>btnCancel.TXT}"
+                        press="onPressCancelMODialog"
+                        ariaHasPopup="Dialog"
+                    />
+                </content>
+            </Toolbar>
+        </footer>
+    </Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="Aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="Analytics"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="Capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="Measures"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ODM',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.ODM.v1" Alias="SAP__ODM"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="Validation"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="YY1_FLG_WOREF_DELTYPE_API_CDS" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="YY1_FLG_WOREF_DELTYPE_APIType" sap:label="FLOG Track UCCWOREF with DeliveryDetails" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="SAP_UUID"/>
+                </Key>
+                <Property Name="SAP_UUID" Type="Edm.Guid" Nullable="false" sap:required-in-filter="false" sap:label="UUID" sap:quickinfo="16 Byte UUID in 16 Bytes (Raw Format)"/>
+                <Property Name="DelNum" Type="Edm.String" MaxLength="10" sap:required-in-filter="false" sap:label="DelNum" sap:quickinfo="Text of length 10"/>
+                <Property Name="DelItem" Type="Edm.String" MaxLength="6" sap:required-in-filter="false" sap:label="DelItem" sap:quickinfo="Text of length 6"/>
+                <Property Name="BinLocation" Type="Edm.String" MaxLength="30" sap:required-in-filter="false" sap:label="BinLocation" sap:quickinfo="Text of length 30"/>
+                <Property Name="DropLocation" Type="Edm.String" MaxLength="15" sap:required-in-filter="false" sap:label="DropLocation" sap:quickinfo="Text of length 15"/>
+                <Property Name="OffShoreBin" Type="Edm.String" MaxLength="30" sap:required-in-filter="false" sap:label="OffShoreBin" sap:quickinfo="Text of length 30"/>
+                <Property Name="OldShipItem" Type="Edm.String" MaxLength="15" sap:required-in-filter="false" sap:label="OldShipItem" sap:quickinfo="Text of length 15"/>
+                <Property Name="MaterialNo" Type="Edm.String" MaxLength="40" sap:required-in-filter="false" sap:label="MaterialNo" sap:quickinfo="Text of length 40"/>
+                <Property Name="RentalInfo" Type="Edm.String" MaxLength="3" sap:required-in-filter="false" sap:label="RentalInfo" sap:quickinfo="Text of length 3"/>
+                <Property Name="Requestor" Type="Edm.String" MaxLength="20" sap:required-in-filter="false" sap:label="Requestor" sap:quickinfo="Text of length 20"/>
+                <Property Name="Supplier" Type="Edm.String" MaxLength="30" sap:required-in-filter="false" sap:label="Supplier" sap:quickinfo="Text of length 30"/>
+                <Property Name="DeliveryDocumentType" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Delivery Type"/>
+                <Property Name="PickingDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:required-in-filter="false" sap:label="Picking Date"/>
+                <Property Name="OverallPickingStatus" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Picking Status" sap:quickinfo="Picking Status/Putaway Status (All Items)"/>
+                <Property Name="PlannedGoodsIssueDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:required-in-filter="false" sap:label="Pland Gds Mvmnt Date" sap:quickinfo="Planned Goods Movement Date"/>
+                <Property Name="OverallGoodsMovementStatus" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Goods Movement Sts" sap:quickinfo="Goods Movement Status (All Items)"/>
+                <Property Name="ActualGoodsMovementDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:required-in-filter="false" sap:label="Act. Gds Mvmnt Date" sap:quickinfo="Actual Goods Movement Date"/>
+                <Property Name="OvrlItmGeneralIncompletionSts" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="All Items" sap:quickinfo="Incompletion Status (All Items)"/>
+                <Property Name="InventoryValuationType" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Valuation Type"/>
+                <Property Name="IsReturn" Type="Edm.Boolean" sap:required-in-filter="false" sap:label="IsReturn" sap:quickinfo="Data element for domain BOOLE: TRUE (='X') and FALSE (=' ')"/>
+                <Property Name="MaintOrder" Type="Edm.String" MaxLength="12" sap:required-in-filter="false" sap:label="MaintOrder" sap:quickinfo="Text of length 12"/>
+                <Property Name="RetDel" Type="Edm.String" MaxLength="10" sap:required-in-filter="false" sap:label="RetDel" sap:quickinfo="Text of length 10"/>
+            </EntityType>
+            <EntityContainer Name="YY1_FLG_WOREF_DELTYPE_API_CDS_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="YY1_FLG_WOREF_DELTYPE_API" EntityType="YY1_FLG_WOREF_DELTYPE_API_CDS.YY1_FLG_WOREF_DELTYPE_APIType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+            </EntityContainer>
+            <Annotation Term="Core.SchemaVersion" String="1.0.0" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+            <Annotations Target="YY1_FLG_WOREF_DELTYPE_API_CDS.YY1_FLG_WOREF_DELTYPE_API_CDS_Entities" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
+            </Annotations>
+            <Annotations Target="YY1_FLG_WOREF_DELTYPE_API_CDS.YY1_FLG_WOREF_DELTYPE_API_CDS_Entities" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+            <atom:link rel="self" href="/sap/opu/odata/sap/YY1_FLG_WOREF_DELTYPE_API_CDS/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="/sap/opu/odata/sap/YY1_FLG_WOREF_DELTYPE_API_CDS/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

@@ -1,0 +1,1387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="Analytics"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="SAP__aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="SAP__capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="SAP__common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CORE',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Core.V1" Alias="SAP__core"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HIERARCHY',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Hierarchy.v1" Alias="SAP__hierarchy"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HTML5',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.HTML5.v1" Alias="SAP__HTML5"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="SAP__measures"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ODM',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.ODM.v1" Alias="SAP__ODM"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PDF',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PDF.v1" Alias="SAP__PDF"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_SESSION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Session.v1" Alias="SAP__session"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_SUPPORT',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Support.v1" Alias="SAP__support"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="SAP__UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="SAP__validation"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001" Alias="SAP__self">
+            <Annotation Term="SAP__core.SchemaVersion" String="1.2.0"/>
+            <EntityType Name="ShptStageAssgmtItm_Type">
+                <Key>
+                    <PropertyRef Name="FldLogsShptVoyageUUID"/>
+                    <PropertyRef Name="FldLogsVoyStgeAssgmtUUID"/>
+                </Key>
+                <Property Name="FldLogsShptVoyageUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="FldLogsVoyStgeAssgmtUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="FldLogsVoyStgeAssgmtSqncID" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsShipmentItemTypeCode" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FldLogsShptVoyageNumber" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FldLogsShptVoyageTypeCode" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FldLogsShptVoyageVehicleNumber" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FldLogsShptVoyageVehicleName" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="FldLogsVoyageChangeDateTime" Type="Edm.DateTimeOffset"/>
+                <Property Name="FldLogsSrcePlnt" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsDestPlnt" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsVoyageSrceStage" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FldLogsVoyageDestStage" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.SAP__Message)" Nullable="false"/>
+                <NavigationProperty Name="_ShptStgeItm" Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptHandlingUnit_Type" Nullable="false" Partner="_ShptStgeAssgmt">
+                    <ReferentialConstraint Property="FldLogsVoyStgeAssgmtUUID" ReferencedProperty="FldLogsShptItemUUID"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="ShptContainerUnit_Type">
+                <Key>
+                    <PropertyRef Name="FldLogsContainerUnitUUID"/>
+                </Key>
+                <Property Name="FldLogsContainerUnitUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="FldLogsContainerUUID" Type="Edm.Guid"/>
+                <Property Name="FldLogsContainerID" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="FldLogsShipmentID" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="FldLogsCtnPackgStsCode" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FldLogsCtnPackgChkErrCode" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FldLogsCtnIntTranspStsCode" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FldLogsCtnExtTranspSts" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="FldLogsSrceStorLocID" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsSrcePlnt" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsDestStorLocID" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsDestPlnt" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsCtnPackgChangeDateTime" Type="Edm.DateTimeOffset"/>
+                <Property Name="FldLogsContainerCategory" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FldLogsCtnPackgStsText" Type="Edm.String" Nullable="false" MaxLength="60"/>
+                <Property Name="FldLogsShptCtnIntTranspStsText" Type="Edm.String" Nullable="false" MaxLength="60"/>
+                <Property Name="FldLogsSealNumber1" Type="Edm.String" Nullable="false" MaxLength="15"/>
+                <Property Name="FldLogsSealNumber2" Type="Edm.String" Nullable="false" MaxLength="15"/>
+                <Property Name="FldLogsSealNumber3" Type="Edm.String" Nullable="false" MaxLength="15"/>
+                <Property Name="FldLogsSealNumber4" Type="Edm.String" Nullable="false" MaxLength="15"/>
+                <Property Name="FldLogsSealNumber5" Type="Edm.String" Nullable="false" MaxLength="15"/>
+                <Property Name="FldLogsVoyageSrceStage" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FldLogsVoyageDestStage" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FldLogsShptItmIsAssgdToVoy" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="FldLogsCtnActualWeight" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="FldLogsCtnActualWeightUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="IsBusinessPurposeCompleted" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="SuplrCoIsBusPrpsCmpltd" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.SAP__Message)" Nullable="false"/>
+                <NavigationProperty Name="_ShptItems" Type="Collection(com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShipmentItem_Type)" Partner="_ShptCtnUnit">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <NavigationProperty Name="_ShptStgeAssgmt" Type="Collection(com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptStgeAssgmtCtn_Type)" Partner="_ShptCtnUnit">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="ShptHandlingUnit_Type">
+                <Key>
+                    <PropertyRef Name="FldLogsShptItemUUID"/>
+                </Key>
+                <Property Name="FldLogsShptItemUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="FldLogsReferenceDocCategory" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="DeliveryDocument" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="DeliveryDocumentItem" Type="Edm.String" Nullable="false" MaxLength="6"/>
+                <Property Name="FldLogsReferenceDocumentNumber" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FldLogsShptItmOutbDelivItmID" Type="Edm.String" Nullable="false" MaxLength="17"/>
+                <Property Name="FldLogsShptItmODOItemID" Type="Edm.String" Nullable="false" MaxLength="46"/>
+                <Property Name="FldLogsShptItmHndlgUnitID" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="HandlingUnitExternalID" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="PackagingMaterial" Type="Edm.String" Nullable="false" MaxLength="18"/>
+                <Property Name="GrossVolume" Type="Edm.Decimal" Nullable="false" Precision="15" Scale="3"/>
+                <Property Name="VolumeUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="GrossWeight" Type="Edm.Decimal" Nullable="false" Precision="15" Scale="3"/>
+                <Property Name="WeightUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="MaterialName" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="FldLogsContainerUnitUUID" Type="Edm.Guid"/>
+                <Property Name="FldLogsShptItmStsCode" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FldLogsShptItmStsText" Type="Edm.String" Nullable="false" MaxLength="60"/>
+                <Property Name="FldLogsSrceStorLocID" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsSrcePlnt" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsDestStorLocID" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsDestPlnt" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsDelivDueDate" Type="Edm.Date"/>
+                <Property Name="FldLogsGrossVolume" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="FldLogsGrossVolumeUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="ProductGrossWeight" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="ProductWeightUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="QuantityInBaseUnit" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="OrderQuantityUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="FldLogsShptItmChangedDateTime" Type="Edm.DateTimeOffset"/>
+                <Property Name="FldLogsContainerID" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="ValuationType" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="FldLogsShipmentItemTypeCode" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FldLogsShptItmIsAssgdToCtn" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="FldLogsShptItmIsAssgdToVoy" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="FldLogsVoyageSrceStage" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FldLogsVoyageDestStage" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FldLogsCtnPackgStsCode" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.SAP__Message)" Nullable="false"/>
+                <NavigationProperty Name="_ShptStgeAssgmt" Type="Collection(com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptStageAssgmtItm_Type)" Partner="_ShptStgeItm">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="ShptStgeAssgmtCtn_Type">
+                <Key>
+                    <PropertyRef Name="FldLogsShptVoyageUUID"/>
+                    <PropertyRef Name="FldLogsVoyStgeAssgmtUUID"/>
+                </Key>
+                <Property Name="FldLogsShptVoyageUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="FldLogsVoyStgeAssgmtUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="FldLogsVoyStgeAssgmtSqncID" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsShipmentItemTypeCode" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FldLogsShptVoyageNumber" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FldLogsShptVoyageTypeCode" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FldLogsShptVoyageVehicleNumber" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FldLogsShptVoyageVehicleName" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="FldLogsVoyageChangeDateTime" Type="Edm.DateTimeOffset"/>
+                <Property Name="FldLogsSrcePlnt" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsDestPlnt" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsVoyageSrceStage" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FldLogsVoyageDestStage" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.SAP__Message)" Nullable="false"/>
+                <NavigationProperty Name="_ShptCtnUnit" Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptContainerUnit_Type" Nullable="false" Partner="_ShptStgeAssgmt">
+                    <ReferentialConstraint Property="FldLogsVoyStgeAssgmtUUID" ReferencedProperty="FldLogsContainerUnitUUID"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="ShipmentItem_Type">
+                <Key>
+                    <PropertyRef Name="FldLogsShptItemUUID"/>
+                </Key>
+                <Property Name="FldLogsShptItemUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="FldLogsReferenceDocCategory" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FldLogsReferenceDocumentNumber" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FldLogsShptItmOutbDelivItmID" Type="Edm.String" Nullable="false" MaxLength="17"/>
+                <Property Name="FldLogsShptItmHndlgUnitID" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="FldLogsContainerUnitUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="FldLogsShptItmStsCode" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FldLogsSrceStorLocID" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsSrcePlnt" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsDestStorLocID" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsDestPlnt" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="FldLogsDelivDueDate" Type="Edm.Date"/>
+                <Property Name="FldLogsGrossVolume" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="FldLogsGrossVolumeUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="ProductGrossWeight" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="ProductWeightUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="QuantityInBaseUnit" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="OrderQuantityUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="FldLogsShptItemActualWeight" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="FldLogsShptItemActlWeightUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.SAP__Message)" Nullable="false"/>
+                <NavigationProperty Name="_ShptCtnUnit" Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptContainerUnit_Type" Nullable="false" Partner="_ShptItems">
+                    <ReferentialConstraint Property="FldLogsContainerUnitUUID" ReferencedProperty="FldLogsContainerUnitUUID"/>
+                </NavigationProperty>
+            </EntityType>
+            <ComplexType Name="SAP__Message">
+                <Property Name="code" Type="Edm.String" Nullable="false"/>
+                <Property Name="message" Type="Edm.String" Nullable="false"/>
+                <Property Name="target" Type="Edm.String"/>
+                <Property Name="additionalTargets" Type="Collection(Edm.String)" Nullable="false"/>
+                <Property Name="transition" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="numericSeverity" Type="Edm.Byte" Nullable="false"/>
+                <Property Name="longtextUrl" Type="Edm.String"/>
+            </ComplexType>
+            <Action Name="PostContainerIssue" EntitySetPath="_it" IsBound="true">
+                <Parameter Name="_it" Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptContainerUnit_Type" Nullable="false"/>
+                <ReturnType Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptContainerUnit_Type" Nullable="false"/>
+            </Action>
+            <Action Name="AssignFldLogsShptItm" EntitySetPath="_it" IsBound="true">
+                <Parameter Name="_it" Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptHandlingUnit_Type" Nullable="false"/>
+                <Parameter Name="FldLogsShptVoyageUUID" Type="Edm.Guid" Nullable="true"/>
+                <Parameter Name="FldLogsVoyageStageID" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <ReturnType Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptHandlingUnit_Type" Nullable="false"/>
+            </Action>
+            <Action Name="ScanDigitalTag" EntitySetPath="_it" IsBound="true">
+                <Parameter Name="_it" Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptContainerUnit_Type" Nullable="false"/>
+                <Parameter Name="BarCodeLine1" Type="Edm.String" Nullable="false" MaxLength="255"/>
+                <ReturnType Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptContainerUnit_Type" Nullable="false"/>
+            </Action>
+            <Action Name="Dispatch" EntitySetPath="_it" IsBound="true">
+                <Parameter Name="_it" Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptHandlingUnit_Type" Nullable="false"/>
+                <ReturnType Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptHandlingUnit_Type" Nullable="false"/>
+            </Action>
+            <Action Name="UnsealContainer" EntitySetPath="_it" IsBound="true">
+                <Parameter Name="_it" Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptContainerUnit_Type" Nullable="false"/>
+                <ReturnType Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptContainerUnit_Type" Nullable="false"/>
+            </Action>
+            <Action Name="PostGoodsIssue" EntitySetPath="_it" IsBound="true">
+                <Parameter Name="_it" Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptHandlingUnit_Type" Nullable="false"/>
+                <ReturnType Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptHandlingUnit_Type" Nullable="false"/>
+            </Action>
+            <Action Name="AssignFldLogsCtn" EntitySetPath="_it" IsBound="true">
+                <Parameter Name="_it" Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptContainerUnit_Type" Nullable="false"/>
+                <Parameter Name="FldLogsShptVoyageUUID" Type="Edm.Guid" Nullable="true"/>
+                <Parameter Name="FldLogsVoyageStageID" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <ReturnType Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptContainerUnit_Type" Nullable="false"/>
+            </Action>
+            <Action Name="PackToContainer" EntitySetPath="_it" IsBound="true">
+                <Parameter Name="_it" Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptHandlingUnit_Type" Nullable="false"/>
+                <Parameter Name="FldLogsContainerUUID" Type="Edm.Guid" Nullable="true"/>
+                <ReturnType Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptHandlingUnit_Type" Nullable="false"/>
+            </Action>
+            <Action Name="DeleteAssignment" EntitySetPath="_it" IsBound="true">
+                <Parameter Name="_it" Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShipmentItem_Type" Nullable="false"/>
+                <ReturnType Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShipmentItem_Type" Nullable="false"/>
+            </Action>
+            <Action Name="DispatchContainer" EntitySetPath="_it" IsBound="true">
+                <Parameter Name="_it" Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptContainerUnit_Type" Nullable="false"/>
+                <ReturnType Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptContainerUnit_Type" Nullable="false"/>
+            </Action>
+            <Action Name="SealContainer" EntitySetPath="_it" IsBound="true">
+                <Parameter Name="_it" Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptContainerUnit_Type" Nullable="false"/>
+                <Parameter Name="FldLogsSealNumber1" Type="Edm.String" Nullable="false" MaxLength="15"/>
+                <Parameter Name="FldLogsSealNumber2" Type="Edm.String" Nullable="false" MaxLength="15"/>
+                <Parameter Name="FldLogsSealNumber3" Type="Edm.String" Nullable="false" MaxLength="15"/>
+                <Parameter Name="FldLogsSealNumber4" Type="Edm.String" Nullable="false" MaxLength="15"/>
+                <Parameter Name="FldLogsSealNumber5" Type="Edm.String" Nullable="false" MaxLength="15"/>
+                <ReturnType Type="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptContainerUnit_Type" Nullable="false"/>
+            </Action>
+            <EntityContainer Name="Container">
+                <EntitySet Name="ShipmentContainer" EntityType="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptContainerUnit_Type">
+                    <NavigationPropertyBinding Path="_ShptItems" Target="ShipmentContainerItem"/>
+                    <NavigationPropertyBinding Path="_ShptStgeAssgmt" Target="ShipmentCtnStageAssgnmt"/>
+                </EntitySet>
+                <EntitySet Name="ShipmentContainerItem" EntityType="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShipmentItem_Type">
+                    <NavigationPropertyBinding Path="_ShptCtnUnit" Target="ShipmentContainer"/>
+                </EntitySet>
+                <EntitySet Name="ShipmentCtnStageAssgnmt" EntityType="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptStgeAssgmtCtn_Type">
+                    <NavigationPropertyBinding Path="_ShptCtnUnit" Target="ShipmentContainer"/>
+                </EntitySet>
+                <EntitySet Name="ShipmentItem" EntityType="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptHandlingUnit_Type">
+                    <NavigationPropertyBinding Path="_ShptStgeAssgmt" Target="ShipmentItemStageAssgnmt"/>
+                </EntitySet>
+                <EntitySet Name="ShipmentItemStageAssgnmt" EntityType="com.sap.gateway.srvd_a2x.api_shipmentcontainerpackg.v0001.ShptStageAssgmtItm_Type">
+                    <NavigationPropertyBinding Path="_ShptStgeItm" Target="ShipmentItem"/>
+                </EntitySet>
+            </EntityContainer>
+            <Annotations Target="SAP__self.ShptStageAssgmtItm_Type/FldLogsShptVoyageUUID">
+                <Annotation Term="SAP__core.ComputedDefaultValue"/>
+                <Annotation Term="SAP__common.Label" String="Voyage UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage UUID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStageAssgmtItm_Type/FldLogsVoyStgeAssgmtUUID">
+                <Annotation Term="SAP__core.ComputedDefaultValue"/>
+                <Annotation Term="SAP__common.Label" String="Voy Stge Assgmt UUID"/>
+                <Annotation Term="SAP__common.Heading" String="Voyage Stage Assignment UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Stage Assignment UUID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStageAssgmtItm_Type/FldLogsVoyStgeAssgmtSqncID">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="Voy Stg Assgmt Sq ID"/>
+                <Annotation Term="SAP__common.Heading" String="Voyage Stage Assignment Sequence ID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Stage Assignment Sequence ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStageAssgmtItm_Type/FldLogsShipmentItemTypeCode">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Shpt Item Type Code"/>
+                <Annotation Term="SAP__common.Heading" String="Shipment Item Type Code"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Shipment Item Type Code"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStageAssgmtItm_Type/FldLogsShptVoyageNumber">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Voyage Number"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStageAssgmtItm_Type/FldLogsShptVoyageTypeCode">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Voyage Type Code"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Type Code"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStageAssgmtItm_Type/FldLogsShptVoyageVehicleNumber">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Voyage Veh number"/>
+                <Annotation Term="SAP__common.Heading" String="Voyage Vehicle number"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Vehicle Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStageAssgmtItm_Type/FldLogsShptVoyageVehicleName">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Voyage Veh Name"/>
+                <Annotation Term="SAP__common.Heading" String="Voyage Vehicle Name"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Vehicle Name"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStageAssgmtItm_Type/FldLogsVoyageChangeDateTime">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStageAssgmtItm_Type/FldLogsSrcePlnt">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Plant"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStageAssgmtItm_Type/FldLogsDestPlnt">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Plant"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/ShipmentItemStageAssgnmt">
+                <Annotation Term="SAP__capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="_ShptStgeItm"/>
+                                    <PropertyValue Property="DeepUpdateSupport">
+                                        <Record>
+                                            <PropertyValue Property="Supported" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="NonUpdatableNavigationProperties">
+                            <Collection>
+                                <PropertyPath>_ShptStgeItm</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStageAssgmtItm_Type">
+                <Annotation Term="SAP__common.Label" String="Voyages Assigned to Shipment Item and Handling Unit"/>
+                <Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsContainerUnitUUID">
+                <Annotation Term="SAP__core.ComputedDefaultValue"/>
+                <Annotation Term="SAP__common.Label" String="Container Unit ID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Container Unit ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsContainerID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Container ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsShipmentID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Shipment ID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Shipment ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsCtnPackgStsCode">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Packing Status"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Container Packing Status"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsCtnPackgChkErrCode">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Check Error Code"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Container Packing Check Error Code"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsCtnIntTranspStsCode">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Field Logistics: Container Internal Transport Status Code"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsCtnExtTranspSts">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Ext. Status"/>
+                <Annotation Term="SAP__common.Heading" String="External Status"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Container External Transportion Status"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsSrceStorLocID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Storage Location"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LGORT_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsSrcePlnt">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Plant"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsDestStorLocID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Storage Location"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LGORT_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsDestPlnt">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Plant"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsCtnPackgChangeDateTime">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsContainerCategory">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Container Category"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Container Category"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsCtnPackgStsText">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Short Description"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Short Text for Fixed Values"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VAL_TEXT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsShptCtnIntTranspStsText">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Short Description"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Short Text for Fixed Values"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VAL_TEXT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsSealNumber1">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Seal Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsSealNumber2">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Seal Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsSealNumber3">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Seal Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsSealNumber4">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Seal Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsSealNumber5">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Seal Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsShptItmIsAssgdToVoy">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="VoyAsgnInd"/>
+                <Annotation Term="SAP__common.Heading" String="Field Logistics :Shipment Item Voy assignment Indicator"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics :Shipment Item Voyage assignment Indicator"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsCtnActualWeight">
+                <Annotation Term="SAP__measures.Unit" Path="FldLogsCtnActualWeightUnit"/>
+                <Annotation Term="SAP__common.Label" String="Ctn Actual Weight"/>
+                <Annotation Term="SAP__common.Heading" String="Container Actual Weight"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Container Actual Weight"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsCtnActualWeightUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__common.Label" String="Unit of Weight"/>
+                <Annotation Term="SAP__common.Heading" String="Unit"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=%2FSAPAPO%2FGEWEI"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/IsBusinessPurposeCompleted">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Purpose Completed"/>
+                <Annotation Term="SAP__common.Heading" String="Business Purpose Completed Flag"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Business Purpose Completed Flag"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/SuplrCoIsBusPrpsCmpltd">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Purpose Completed"/>
+                <Annotation Term="SAP__common.Heading" String="Business Purpose Completed Flag"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Business Purpose Completed Flag"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=CVP_XBLCK"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/_ShptItems">
+                <Annotation Term="SAP__common.Composition"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/_ShptStgeAssgmt">
+                <Annotation Term="SAP__common.Composition"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ScanDigitalTag(SAP__self.ShptContainerUnit_Type)/BarCodeLine1">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Bar Code"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=%2FSCWM%2FBARCODE"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AssignFldLogsCtn(SAP__self.ShptContainerUnit_Type)/FldLogsVoyageStageID">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="Stage Sequence"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Stage ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.SealContainer(SAP__self.ShptContainerUnit_Type)/FldLogsSealNumber1">
+                <Annotation Term="SAP__common.Label" String="Seal Number 1"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Seal Number"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Seal Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.SealContainer(SAP__self.ShptContainerUnit_Type)/FldLogsSealNumber2">
+                <Annotation Term="SAP__common.Label" String="Seal Number 2"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Seal Number"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Seal Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.SealContainer(SAP__self.ShptContainerUnit_Type)/FldLogsSealNumber3">
+                <Annotation Term="SAP__common.Label" String="Seal Number 3"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Seal Number"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Seal Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.SealContainer(SAP__self.ShptContainerUnit_Type)/FldLogsSealNumber4">
+                <Annotation Term="SAP__common.Label" String="Seal Number 4"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Seal Number"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Seal Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.SealContainer(SAP__self.ShptContainerUnit_Type)/FldLogsSealNumber5">
+                <Annotation Term="SAP__common.Label" String="Seal Number 5"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Heading" String="Seal Number"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Seal Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type">
+                <Annotation Term="SAP__common.Label" String="Containers"/>
+                <Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/ShipmentContainer">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="DeltaUpdateSupported" Bool="true"/>
+                        <PropertyValue Property="NonUpdatableNavigationProperties">
+                            <Collection>
+                                <PropertyPath>_ShptItems</PropertyPath>
+                                <PropertyPath>_ShptStgeAssgmt</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeepUpdateSupport">
+                    <Record>
+                        <PropertyValue Property="ContentIDSupported" Bool="true"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="FldLogsCtnActualWeight"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container">
+                <Annotation Term="SAP__CodeList.UnitsOfMeasure">
+                    <Record>
+                        <PropertyValue Property="Url" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="CollectionPath" String="UnitsOfMeasure"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
+                <Annotation Term="SAP__capabilities.FilterFunctions">
+                    <Collection>
+                        <String>eq</String>
+                        <String>ne</String>
+                        <String>gt</String>
+                        <String>ge</String>
+                        <String>lt</String>
+                        <String>le</String>
+                        <String>and</String>
+                        <String>or</String>
+                        <String>contains</String>
+                        <String>startswith</String>
+                        <String>endswith</String>
+                        <String>any</String>
+                        <String>all</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__support.TechnicalInfoLinks">
+                    <Record>
+                        <PropertyValue Property="Url" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="FunctionImport" String="GetTechnicalInfoLinks"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SupportedFormats">
+                    <Collection>
+                        <String>application/json</String>
+                        <String>application/pdf</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__PDF.Features">
+                    <Record>
+                        <PropertyValue Property="DocumentDescriptionReference" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="DocumentDescriptionCollection" String="MyDocumentDescriptions"/>
+                        <PropertyValue Property="ArchiveFormat" Bool="true"/>
+                        <PropertyValue Property="Border" Bool="true"/>
+                        <PropertyValue Property="CoverPage" Bool="true"/>
+                        <PropertyValue Property="FitToPage" Bool="true"/>
+                        <PropertyValue Property="FontName" Bool="true"/>
+                        <PropertyValue Property="FontSize" Bool="true"/>
+                        <PropertyValue Property="HeaderFooter" Bool="true"/>
+                        <PropertyValue Property="IANATimezoneFormat" Bool="true"/>
+                        <PropertyValue Property="Margin" Bool="true"/>
+                        <PropertyValue Property="Padding" Bool="true"/>
+                        <PropertyValue Property="ResultSizeDefault" Int="20000"/>
+                        <PropertyValue Property="ResultSizeMaximum" Int="20000"/>
+                        <PropertyValue Property="Signature" Bool="true"/>
+                        <PropertyValue Property="TextDirectionLayout" Bool="true"/>
+                        <PropertyValue Property="Treeview" Bool="true"/>
+                        <PropertyValue Property="UploadToFileShare" Bool="true"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.KeyAsSegmentSupported"/>
+                <Annotation Term="SAP__capabilities.AsynchronousRequestsSupported"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsShptItemUUID">
+                <Annotation Term="SAP__core.ComputedDefaultValue"/>
+                <Annotation Term="SAP__common.Label" String="Shipment Item ID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Shipment Item ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsReferenceDocCategory">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Ref. Document Type"/>
+                <Annotation Term="SAP__common.Heading" String="Reference Document Type"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Reference Document Type for Shipment"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/DeliveryDocument">
+                <Annotation Term="SAP__core.Computed"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/DeliveryDocumentItem">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="Item"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Delivery Item"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=POSNR_VL"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsReferenceDocumentNumber">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Reference Doc Number"/>
+                <Annotation Term="SAP__common.Heading" String="Reference Document Number"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Reference Document Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsShptItmOutbDelivItmID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="OBD Item ID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Shipment Item OBD Item ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsShptItmODOItemID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Outbound Deliv.Order"/>
+                <Annotation Term="SAP__common.Heading" String="Outbound Deliv. Order Item ID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Shipment Item ODO Item ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsShptItmHndlgUnitID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Handling Unit ID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Shipment Item Handling Unit ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/HandlingUnitExternalID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Handling Unit"/>
+                <Annotation Term="SAP__common.QuickInfo" String="External Handling Unit Identification"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EXIDV"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/PackagingMaterial">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Packaging Material"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VHILM"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/GrossVolume">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__measures.Unit" Path="VolumeUnit"/>
+                <Annotation Term="SAP__common.Label" String="Total Volume"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Total Volume of Handling Unit"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BTVOL_VEKP"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/VolumeUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Volume Unit"/>
+                <Annotation Term="SAP__common.Heading" String="VUn"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VOLEH"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/GrossWeight">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__measures.Unit" Path="WeightUnit"/>
+                <Annotation Term="SAP__common.Label" String="Total Weight"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Total Weight of Handling Unit"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BRGEW_VEKP"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/WeightUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Unit of Weight"/>
+                <Annotation Term="SAP__common.Heading" String="WUn"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=GEWEI"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/MaterialName">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Item Description"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Short Text for Sales Order Item"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ARKTX"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsContainerUnitUUID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Container Unit ID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Container Unit ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsShptItmStsCode">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Status Code"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Shipment Item Status Code"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsShptItmStsText">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Short Description"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Short Text for Fixed Values"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VAL_TEXT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsSrceStorLocID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Storage Location"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LGORT_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsSrcePlnt">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Plant"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsDestStorLocID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Storage Location"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LGORT_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsDestPlnt">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Plant"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsDelivDueDate">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Delivery Date"/>
+                <Annotation Term="SAP__common.Heading" String="Deliv. Date"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Item Delivery Date"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EINDT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsGrossVolume">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__measures.Unit" Path="FldLogsGrossVolumeUnit"/>
+                <Annotation Term="SAP__common.Label" String="Volume"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VOLUM"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsGrossVolumeUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Volume Unit"/>
+                <Annotation Term="SAP__common.Heading" String="VUn"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VOLEH"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/ProductGrossWeight">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__measures.Unit" Path="ProductWeightUnit"/>
+                <Annotation Term="SAP__common.Label" String="Gross Weight"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BRGEW"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/ProductWeightUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Unit of Weight"/>
+                <Annotation Term="SAP__common.Heading" String="Unit"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=%2FSAPAPO%2FGEWEI"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/QuantityInBaseUnit">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__measures.Unit" Path="OrderQuantityUnit"/>
+                <Annotation Term="SAP__common.Label" String="Quantity"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MENGE_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/OrderQuantityUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Sales Unit"/>
+                <Annotation Term="SAP__common.Heading" String="SU"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VRKME"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsShptItmChangedDateTime">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsContainerID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Container ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/ValuationType">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Valuation Type"/>
+                <Annotation Term="SAP__common.Heading" String="Val. Type"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BWTAR_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsShipmentItemTypeCode">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Shpt Item Type Code"/>
+                <Annotation Term="SAP__common.Heading" String="Shipment Item Type Code"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Shipment Item Type Code"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsShptItmIsAssgdToCtn">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Boolean Variable (X = True, - = False, Space = Unknown)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsShptItmIsAssgdToVoy">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="VoyAsgnInd"/>
+                <Annotation Term="SAP__common.Heading" String="Field Logistics :Shipment Item Voy assignment Indicator"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics :Shipment Item Voyage assignment Indicator"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsCtnPackgStsCode">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Packing Status"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Container Packing Status"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/_ShptStgeAssgmt">
+                <Annotation Term="SAP__common.Composition"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AssignFldLogsShptItm(SAP__self.ShptHandlingUnit_Type)/FldLogsVoyageStageID">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="Stage Sequence"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Stage ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type">
+                <Annotation Term="SAP__common.Label" String="Shipment Items and Handling Units"/>
+                <Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/ShipmentItem">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="DeltaUpdateSupported" Bool="true"/>
+                        <PropertyValue Property="NonUpdatableNavigationProperties">
+                            <Collection>
+                                <PropertyPath>_ShptStgeAssgmt</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeepUpdateSupport">
+                    <Record>
+                        <PropertyValue Property="ContentIDSupported" Bool="true"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="GrossVolume"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="GrossWeight"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="FldLogsGrossVolume"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="ProductGrossWeight"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="QuantityInBaseUnit"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStgeAssgmtCtn_Type/FldLogsShptVoyageUUID">
+                <Annotation Term="SAP__core.ComputedDefaultValue"/>
+                <Annotation Term="SAP__common.Label" String="Voyage UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage UUID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStgeAssgmtCtn_Type/FldLogsVoyStgeAssgmtUUID">
+                <Annotation Term="SAP__core.ComputedDefaultValue"/>
+                <Annotation Term="SAP__common.Label" String="Voy Stge Assgmt UUID"/>
+                <Annotation Term="SAP__common.Heading" String="Voyage Stage Assignment UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Stage Assignment UUID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStgeAssgmtCtn_Type/FldLogsVoyStgeAssgmtSqncID">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="Voy Stg Assgmt Sq ID"/>
+                <Annotation Term="SAP__common.Heading" String="Voyage Stage Assignment Sequence ID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Stage Assignment Sequence ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStgeAssgmtCtn_Type/FldLogsShipmentItemTypeCode">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Shpt Item Type Code"/>
+                <Annotation Term="SAP__common.Heading" String="Shipment Item Type Code"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Shipment Item Type Code"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStgeAssgmtCtn_Type/FldLogsShptVoyageNumber">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Voyage Number"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStgeAssgmtCtn_Type/FldLogsShptVoyageTypeCode">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Voyage Type Code"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Type Code"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStgeAssgmtCtn_Type/FldLogsShptVoyageVehicleNumber">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Voyage Veh number"/>
+                <Annotation Term="SAP__common.Heading" String="Voyage Vehicle number"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Vehicle Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStgeAssgmtCtn_Type/FldLogsShptVoyageVehicleName">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Voyage Veh Name"/>
+                <Annotation Term="SAP__common.Heading" String="Voyage Vehicle Name"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage Vehicle Name"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStgeAssgmtCtn_Type/FldLogsVoyageChangeDateTime">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStgeAssgmtCtn_Type/FldLogsSrcePlnt">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Plant"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStgeAssgmtCtn_Type/FldLogsDestPlnt">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Plant"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/ShipmentCtnStageAssgnmt">
+                <Annotation Term="SAP__capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="_ShptCtnUnit"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="DeepUpdateSupport">
+                                        <Record>
+                                            <PropertyValue Property="Supported" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="NonUpdatableNavigationProperties">
+                            <Collection>
+                                <PropertyPath>_ShptCtnUnit</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStgeAssgmtCtn_Type">
+                <Annotation Term="SAP__common.Label" String="Voyages Assigned to Container"/>
+                <Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/FldLogsShptItemUUID">
+                <Annotation Term="SAP__core.ComputedDefaultValue"/>
+                <Annotation Term="SAP__common.Label" String="Shipment Item ID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Shipment Item ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/FldLogsReferenceDocCategory">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Ref. Document Type"/>
+                <Annotation Term="SAP__common.Heading" String="Reference Document Type"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Reference Document Type for Shipment"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/FldLogsReferenceDocumentNumber">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Reference Doc Number"/>
+                <Annotation Term="SAP__common.Heading" String="Reference Document Number"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Reference Document Number"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/FldLogsShptItmOutbDelivItmID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="OBD Item ID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Shipment Item OBD Item ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/FldLogsShptItmHndlgUnitID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Handling Unit ID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Shipment Item Handling Unit ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/FldLogsContainerUnitUUID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Container Unit ID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Container Unit ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/FldLogsShptItmStsCode">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Status Code"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Shipment Item Status Code"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/FldLogsSrceStorLocID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Storage Location"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LGORT_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/FldLogsSrcePlnt">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Plant"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/FldLogsDestStorLocID">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Storage Location"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LGORT_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/FldLogsDestPlnt">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Plant"/>
+                <Annotation Term="SAP__common.Heading" String="Plnt"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/FldLogsDelivDueDate">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Delivery Date"/>
+                <Annotation Term="SAP__common.Heading" String="Deliv. Date"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Item Delivery Date"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=EINDT"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/FldLogsGrossVolume">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__measures.Unit" Path="FldLogsGrossVolumeUnit"/>
+                <Annotation Term="SAP__common.Label" String="Volume"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VOLUM"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/FldLogsGrossVolumeUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Volume Unit"/>
+                <Annotation Term="SAP__common.Heading" String="VUn"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VOLEH"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/ProductGrossWeight">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__measures.Unit" Path="ProductWeightUnit"/>
+                <Annotation Term="SAP__common.Label" String="Gross Weight"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BRGEW"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/ProductWeightUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Unit of Weight"/>
+                <Annotation Term="SAP__common.Heading" String="Unit"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=%2FSAPAPO%2FGEWEI"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/QuantityInBaseUnit">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__measures.Unit" Path="OrderQuantityUnit"/>
+                <Annotation Term="SAP__common.Label" String="Quantity"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MENGE_D"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/OrderQuantityUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Sales Unit"/>
+                <Annotation Term="SAP__common.Heading" String="SU"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VRKME"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/FldLogsShptItemActualWeight">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__measures.Unit" Path="FldLogsShptItemActlWeightUnit"/>
+                <Annotation Term="SAP__common.Label" String="Gross Weight"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BRGEW"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type/FldLogsShptItemActlWeightUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Label" String="Base Unit of Measure"/>
+                <Annotation Term="SAP__common.Heading" String="BUn"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MEINS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/ShipmentContainerItem">
+                <Annotation Term="SAP__capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="_ShptCtnUnit"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="DeepUpdateSupport">
+                                        <Record>
+                                            <PropertyValue Property="Supported" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="NonUpdatableNavigationProperties">
+                            <Collection>
+                                <PropertyPath>_ShptCtnUnit</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="FldLogsGrossVolume"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="ProductGrossWeight"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="QuantityInBaseUnit"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="FldLogsShptItemActualWeight"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.ShipmentItem_Type">
+                <Annotation Term="SAP__common.Label" String="Shipment Items and Handling units Assigned to Container"/>
+                <Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStageAssgmtItm_Type/FldLogsVoyageSrceStage">
+                <Annotation Term="SAP__common.Label" String="Source Stage"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Source Stage"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStageAssgmtItm_Type/FldLogsVoyageDestStage">
+                <Annotation Term="SAP__common.Label" String="Destination Stage"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Destination Stage"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsContainerUUID">
+                <Annotation Term="SAP__common.Label" String="Container UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Container UUID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsVoyageSrceStage">
+                <Annotation Term="SAP__common.Label" String="Source Stage"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Source Stage"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptContainerUnit_Type/FldLogsVoyageDestStage">
+                <Annotation Term="SAP__common.Label" String="Destination Stage"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Destination Stage"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsVoyageSrceStage">
+                <Annotation Term="SAP__common.Label" String="Source Stage"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Source Stage"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptHandlingUnit_Type/FldLogsVoyageDestStage">
+                <Annotation Term="SAP__common.Label" String="Destination Stage"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Destination Stage"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStgeAssgmtCtn_Type/FldLogsVoyageSrceStage">
+                <Annotation Term="SAP__common.Label" String="Source Stage"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Source Stage"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ShptStgeAssgmtCtn_Type/FldLogsVoyageDestStage">
+                <Annotation Term="SAP__common.Label" String="Destination Stage"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Destination Stage"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AssignFldLogsShptItm(SAP__self.ShptHandlingUnit_Type)/FldLogsShptVoyageUUID">
+                <Annotation Term="SAP__common.Label" String="Voyage UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage UUID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.AssignFldLogsCtn(SAP__self.ShptContainerUnit_Type)/FldLogsShptVoyageUUID">
+                <Annotation Term="SAP__common.Label" String="Voyage UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Voyage UUID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.PackToContainer(SAP__self.ShptHandlingUnit_Type)/FldLogsContainerUUID">
+                <Annotation Term="SAP__common.Label" String="Container UUID"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Field Logistics: Container UUID"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
