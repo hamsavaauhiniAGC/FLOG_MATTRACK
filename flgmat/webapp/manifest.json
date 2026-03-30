@@ -25,15 +25,6 @@
           "odataVersion": "2.0"
         }
       },
-      "YY1_FLG_UCCWOREF_API_CDS": {
-        "uri": "/sap/opu/odata/sap/YY1_FLG_UCCWOREF_API_CDS/",
-        "type": "OData",
-        "settings": {
-          "annotations": [],
-          "localUri": "localService/YY1_FLG_UCCWOREF_API_CDS/metadata.xml",
-          "odataVersion": "2.0"
-        }
-      },
       "shipmentcontainerunit": {
         "uri": "/sap/opu/odata4/sap/api_shipmentcontainerpackg/srvd_a2x/sap/shipmentcontainerunit/0001/",
         "type": "OData",
@@ -141,11 +132,6 @@
       },
       "": {
         "dataSource": "mainService",
-        "preload": true,
-        "settings": {}
-      },
-      "YY1_FLG_UCCWOREF_API_CDS": {
-        "dataSource": "YY1_FLG_UCCWOREF_API_CDS",
         "preload": true,
         "settings": {}
       },

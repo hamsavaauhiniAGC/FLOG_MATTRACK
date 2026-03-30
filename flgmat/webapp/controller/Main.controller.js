@@ -133,7 +133,124 @@ sap.ui.define([
                 this.onFltrSearch();
             }
         },
-        //UCC FILTERS
+
+        onAfterRendering: function () {
+            console.log("onAfterRendering");
+            var oFilterBar = this.byId("idFilterBar");
+
+            if (!oFilterBar) {
+                return;
+            }
+
+            var aDefineConditionFields = [
+                "idFltrPO",
+                "idFltrSTO",
+                "idFltrDelivery",
+                "idFltrPurReq",
+                "idFltrMOType",
+                "idFltrStrtdt",
+                "idFltrGpEndDt",
+                "idFltrOpr",
+                "idFltrResItemNo",
+                "idFltrGpStorLoc", "idFltrGpRequestor", "idFltrSupplyPlant",
+                "idFltrSupplyPlantSTO", "idFltrIssueSLoc", "idFltrSupplier",
+                "idFltrDeliveryDate", "idFltrDeliveryCrtDate", "idFltrDeliveryPickingdate",
+                "idFltrDeliverPickingstatus", "idFltrDelActGoodsIssuDate", "idFltrDeliPlndGoodsIssuDate",
+                "idFltrdeliGoodsIssuDate", "idFltrDeliveryfinalstatus", "idFltrReturnSTO",
+                "idFltrReturnDeliverySupplier"
+
+            ];
+
+            oFilterBar.getAllFilterItems().forEach(function (oItem) {
+
+                var oControl = oItem.getControl();
+
+                if (oControl instanceof sap.m.MultiInput) {
+
+                    var sId = oControl.getId().split("--").pop();
+
+                    if (aDefineConditionFields.includes(sId)) {
+
+                        oControl.setShowValueHelp(true);
+
+                        oControl.attachValueHelpRequest(
+                            this.onDefineConditionVHRqst.bind(this)
+                        );
+                    }
+                }
+
+            }.bind(this));
+        },
+        onDefineConditionVHRqst: function (oEvent) {
+
+            var oMultiInput = oEvent.getSource();
+            var sLabel = oMultiInput.getParent().getLabel();
+
+            if (!this._oRangeVH) {
+
+                this._oRangeVH = new sap.ui.comp.valuehelpdialog.ValueHelpDialog({
+                    title: "Define Conditions",
+                    supportRanges: true,
+                    supportRangesOnly: true,
+
+                    ok: function (oEvent) {
+
+                        var aTokens = oEvent.getParameter("tokens");
+
+                        this._oCurrentInput.removeAllTokens();
+
+                        aTokens.forEach(function (oToken) {
+
+                            var oRange = oToken.data("range");
+
+                            if (oRange) {
+                                var sKey = oRangeData.value1;
+
+                                if (oRangeData.value2) {
+                                    sKey = oRangeData.value1 + "..." + oRangeData.value2;
+                                }
+                                var oNewToken = new sap.m.Token({
+                                    key: sKey,
+                                    text: sKey
+                                });
+
+                                // store full range (operation, value1, value2, exclude)
+                                oNewToken.data("range", oRange);
+
+                                this._oCurrentInput.addToken(oNewToken);
+                            }
+
+                        }.bind(this));
+
+                        this._oRangeVH.close();
+
+                    }.bind(this),
+
+                    cancel: function () {
+                        this._oRangeVH.close();
+                    }.bind(this)
+                });
+
+                this.getView().addDependent(this._oRangeVH);
+            }
+
+            this._oCurrentInput = oMultiInput;
+
+            this._oRangeVH.setTitle("Define Conditions - " + sLabel);
+
+            this._oRangeVH.setRangeKeyFields([
+                {
+                    label: sLabel,
+                    key: oMultiInput.getId(),   // unique key instead of label
+                    type: "string",
+                    typeInstance: new sap.ui.model.type.String()
+                }
+            ]);
+
+            this._oRangeVH.open();
+        },
+
+
 
         _loadTrackdata: function (aFilters) {
             //_loadTrackdata: function () {    
@@ -416,7 +533,89 @@ sap.ui.define([
                                     oItem.DeliveryNumber = oItem.DeliveryNumber.replace(/^0+/, '') || "";
                                 }
                                 //DeliveryItem
-                                oItem.DeliveryItem = oItem.DeliveryItem?.padStart(6, '0');
+                                if (oItem.DeliveryItem) {
+                                    oItem.DeliveryItem = oItem.DeliveryItem.replace(/^0+/, '') || "";
+                                }
+                                //Maintenance Order Mapping
+                                if (oItem.MaintenanceOrderType) {
+
+                                    if (oItem.MaintenanceOrderType === "YBA1") {
+                                        oItem.MaintenanceOrderType = "Corrective Maintenance"
+                                    }
+                                    else if (oItem.MaintenanceOrderType === "YBA2") {
+                                        oItem.MaintenanceOrderType = "Preventive Maintenance"
+                                    }
+                                    else if (oItem.MaintenanceOrderType === "YBA3") {
+                                        oItem.MaintenanceOrderType = "Unplanned Maintenance"
+                                    }
+                                    else {
+                                        oItem.MaintenanceOrderType
+                                    }
+
+                                }
+                                //Item Category Mapping
+                                var oItemCategoryMap = {
+                                    L: "Stock Item",
+                                    N: "Non-Stock item"
+                                }
+                                if (oItem.MaintComponentItemCategory) {
+                                    oItem.MaintComponentItemCategory = oItemCategoryMap[oItem.MaintComponentItemCategory]
+                                        || oItem.MaintComponentItemCategory;
+                                }
+                                //Delivery Type & Return Delivery Type
+                                var oDeliveryTypeMap = {
+                                    LO: "Delivery w/o Ref",
+                                    NL: 'Replenishment Dlv'
+                                }
+                                if (oItem.DeliveryDocumentType_Deli) {
+                                    oItem.DeliveryDocumentType_Deli = oDeliveryTypeMap[oItem.DeliveryDocumentType_Deli] || oItem.DeliveryDocumentType_Deli
+                                }
+                                if (oItem.DeliveryDocumentType_RDeli) {
+                                    oItem.DeliveryDocumentType_RDeli = oDeliveryTypeMap[oItem.DeliveryDocumentType_RDeli] || oItem.DeliveryDocumentType_RDeli
+                                }
+                                //Warehouse Task Status
+                                var oWHTaskStsMap = {
+                                    '': "Open",
+                                    A: "Canceled",
+                                    B: "Waiting",
+                                    C: "Confirmed"
+                                }
+                                if (oItem.WarehouseTaskStatus) {
+                                    oItem.WarehouseTaskStatus = oWHTaskStsMap[oItem.WarehouseTaskStatus] || oItem.WarehouseTaskStatus
+                                }
+                                // Delivery Picking Status, Delivery Goods Issue Status,ReturnDelivery Picking Status,Return Delivery Goods Issue Status
+                                var oDelStsMap = {
+                                    '': "Not Relevant",
+                                    A: "Not yet processed",
+                                    B: "Partially processed",
+                                    C: "Completely processed"
+                                }
+                                //Delivery Picking Status
+                                if (oItem.OvrlItmGeneralIncompletio_Deli) {
+                                    oItem.OvrlItmGeneralIncompletio_Deli = oDelStsMap[oItem.OvrlItmGeneralIncompletio_Deli] || oItem.OvrlItmGeneralIncompletio_Deli
+                                }
+                                // Delivery Goods Issue Status
+                                if (oItem.OverallGoodsMovementStat_Deli) {
+                                    oItem.OverallGoodsMovementStat_Deli = oDelStsMap[oItem.OverallGoodsMovementStat_Deli] || oItem.OverallGoodsMovementStat_Deli
+                                }
+                                //Return Deli Picking Status
+                                if (oItem.OvrlItmGeneralIncompletion_RDe) {
+                                    oItem.OvrlItmGeneralIncompletion_RDe = oDelStsMap[oItem.OvrlItmGeneralIncompletion_RDe] || oItem.OvrlItmGeneralIncompletion_RDe
+                                }
+                                //Return Deli Goods Issue Status   
+                                if (oItem.OverallGoodsMovementSt_RDEL) {
+                                    oItem.OverallGoodsMovementSt_RDEL = oDelStsMap[oItem.OverallGoodsMovementSt_RDEL] || oItem.OverallGoodsMovementSt_RDEL
+                                }
+                                //Voyage Status
+                                var oVoyStatusMap = {
+                                    "01": "In Transit",
+                                    "02": "Arrived",
+                                    "03": "Completed",
+                                    "04": "Not Started"
+                                }
+                                if (oItem.VoyageStatus) {
+                                    oItem.VoyageStatus = oVoyStatusMap[oItem.VoyageStatus] || oItem.VoyageStatus
+                                }
                             });
 
                             oView.setBusy(false);
@@ -567,33 +766,53 @@ sap.ui.define([
 
             /* ================= Maintenance Order ================= */
 
-            // var oMultiInputMO = this.byId("idFltrMo");
-            var oMultiInputMO = this.getView().byId("idFltrMo")
-
-            // Convert typed value into token 
+            var oMultiInputMO = this.byId("idFltrMo");
             this._addTokenFromValue(oMultiInputMO);
+            var aMOTokens = oMultiInputMO.getTokens();
+            if (aMOTokens.length > 0) {
+                var aMOFilters = [];
+                aMOTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aMOFilters.push(
+                            new sap.ui.model.Filter(
+                                "MaintenanceOrder",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            var aMoTokens = oMultiInputMO.getTokens();
-            var aMoFilters = [];
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
 
-            aMoTokens.forEach(function (oToken) {
-                aMoFilters.push(
-                    new sap.ui.model.Filter(
-                        "MaintenanceOrder",
-                        sap.ui.model.FilterOperator.EQ,
-                        oToken.getKey()
-                    )
-                );
-            });
+                        aMOFilters.push(
+                            new sap.ui.model.Filter(
+                                "MaintenanceOrder",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
 
-            if (aMoFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aMoFilters,
-                        and: false   // OR condition
-                    })
-                );
+                if (aMOFilters.length > 0) {
+
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aMOFilters,
+                            and: false
+                        })
+                    );
+                }
             }
+
             /* Maintenance Order Desc  */
 
             var oMultiInputDesc = this.byId("idFltrMODesc");
@@ -601,71 +820,126 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputDesc);
 
             var aDescTokens = oMultiInputDesc.getTokens();
-            var aDescFilters = [];
+            if (aDescTokens.length > 0) {
+                var aDescFilters = [];
 
-            aDescTokens.forEach(function (oToken) {
-                aDescFilters.push(
-                    new sap.ui.model.Filter(
-                        "MaintenanceOrderDesc",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aDescTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aDescFilters.push(
+                            new sap.ui.model.Filter(
+                                "MaintenanceOrderDesc",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aDescFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aDescFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aDescFilters.push(
+                            new sap.ui.model.Filter(
+                                "MaintenanceOrderDesc",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aDescFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aDescFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             /* Reservation  */
-
             var oMultiInputReserve = this.byId("idFltrReserve");
+
             this._addTokenFromValue(oMultiInputReserve);
+
             var aReserveTokens = oMultiInputReserve.getTokens();
-            var aReserveFilters = [];
-            aReserveTokens.forEach(function (oToken) {
+            if (aReserveTokens.length > 0) {
+                var aReserveFilters = [];
 
-                var sValue = oToken.getKey() || "";
+                aReserveTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    //  Define Condition Case
+                    if (oRange) {
+                        var sValue1 = oRange.value1 || "";
+                        var sValue2 = oRange.value2 || "";
+                        // Padding logic
+                        var sFinal1 = /^\d{10}$/.test(sValue1)
+                            ? sValue1
+                            : sValue1.padStart(10, "0");
 
-                //  Check if value contains *
-                var bHasWildcard = sValue.includes("*");
+                        var sFinal2 = /^\d{10}$/.test(sValue2)
+                            ? sValue2
+                            : sValue2.padStart(10, "0");
 
-                //  Remove * only if present
-                var sCleanValue = bHasWildcard ? sValue.replace(/\*/g, "") : sValue;
+                        aReserveFilters.push(
+                            new sap.ui.model.Filter(
+                                "Reservation",
+                                oRange.operation,
+                                sFinal1,
+                                sFinal2
+                            )
+                        );
 
-                var sFinalValue;
+                    }
+                    // Normal Token Case
+                    else {
 
-                // If already fully padded (10 digits), keep as-is
-                if (/^\d{10}$/.test(sCleanValue)) {
-                    sFinalValue = sCleanValue;
-                } else {
-                    // Otherwise, pad to 10 digits
-                    sFinalValue = sCleanValue.padStart(10, "0");
+                        var sValue = oToken.getKey() || "";
+
+                        var bHasWildcard = sValue.includes("*");
+
+                        var sCleanValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        // Padding logic
+                        var sFinalValue = sCleanValue;
+                        // var sFinalValue = /^\d{10}$/.test(sCleanValue)
+                        //     ? sCleanValue
+                        //     : sCleanValue.padStart(10, "0");
+
+                        var sOperator = bHasWildcard
+                            ? sap.ui.model.FilterOperator.Contains
+                            : sap.ui.model.FilterOperator.EQ;
+
+                        aReserveFilters.push(
+                            new sap.ui.model.Filter(
+                                "Reservation",
+                                sOperator,
+                                sFinalValue
+                            )
+                        );
+                    }
+
+                });
+
+                // OR filter
+                if (aReserveFilters.length > 0) {
+
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aReserveFilters,
+                            and: false
+                        })
+                    );
                 }
 
-                // Create filter for this token
-                aReserveFilters.push(
-                    new sap.ui.model.Filter(
-                        "Reservation",
-                        sap.ui.model.FilterOperator.EQ,
-                        sFinalValue
-                    )
-                );
-
-            });
-
-            //  Combine token filters into one OR filter
-            if (aReserveFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aReserveFilters,
-                        and: false // OR
-                    })
-                );
             }
             /* Plant */
 
@@ -674,25 +948,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputPlant);
 
             var aPlantTokens = oMultiInputPlant.getTokens();
-            var aPlantFilters = [];
+            if (aPlantTokens.length > 0) {
+                var aPlantFilters = [];
 
-            aPlantTokens.forEach(function (oToken) {
-                aPlantFilters.push(
-                    new sap.ui.model.Filter(
-                        "Plant",
-                        sap.ui.model.FilterOperator.EQ,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aPlantTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aPlantFilters.push(
+                            new sap.ui.model.Filter(
+                                "Plant",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aPlantFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aPlantFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aPlantFilters.push(
+                            new sap.ui.model.Filter(
+                                "Plant",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aPlantFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aPlantFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             /* MATERIAL  */
 
@@ -701,25 +998,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputMaterial);
 
             var aMaterialTokens = oMultiInputMaterial.getTokens();
-            var aMaterialFilters = [];
+            if (aMaterialTokens.length > 0) {
+                var aMaterialFilters = [];
 
-            aMaterialTokens.forEach(function (oToken) {
-                aMaterialFilters.push(
-                    new sap.ui.model.Filter(
-                        "Material",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aMaterialTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aDescFilters.push(
+                            new sap.ui.model.Filter(
+                                "Material",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aMaterialFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aMaterialFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aMaterialFilters.push(
+                            new sap.ui.model.Filter(
+                                "Material",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aMaterialFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aMaterialFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             /* ================= Requirement Date ================= */
 
@@ -752,25 +1072,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputSupplyPlantPO);
 
             var aSupplyPlantPOTokens = oMultiInputSupplyPlantPO.getTokens();
-            var aSupplyPlantPOFilters = [];
+            if (aSupplyPlantPOTokens.length > 0) {
+                var aSupplyPlantPOFilters = [];
 
-            aSupplyPlantPOTokens.forEach(function (oToken) {
-                aSupplyPlantPOFilters.push(
-                    new sap.ui.model.Filter(
-                        "SupplyingPlant_PO",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aSupplyPlantPOTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aSupplyPlantPOFilters.push(
+                            new sap.ui.model.Filter(
+                                "SupplyingPlant_PO",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aSupplyPlantPOFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aSupplyPlantPOFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aSupplyPlantPOFilters.push(
+                            new sap.ui.model.Filter(
+                                "SupplyingPlant_PO",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aSupplyPlantPOFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aSupplyPlantPOFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //Supply Plant STO
             var oMultiInputSupplyPlantSTO = this.byId("idFltrSupplyPlantSTO");
@@ -778,52 +1121,97 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputSupplyPlantSTO);
 
             var aSupplyPlantSTOTokens = oMultiInputSupplyPlantSTO.getTokens();
-            var aSupplyPlantSTOFilters = [];
+            if (aSupplyPlantSTOTokens.length > 0) {
+                var aSupplyPlantSTOFilters = [];
 
-            aSupplyPlantSTOTokens.forEach(function (oToken) {
-                aSupplyPlantSTOFilters.push(
-                    new sap.ui.model.Filter(
-                        "SupplyingPlant_STO",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aSupplyPlantSTOTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aSupplyPlantPOFilters.push(
+                            new sap.ui.model.Filter(
+                                "SupplyingPlant_STO",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aSupplyPlantSTOFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aSupplyPlantSTOFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aSupplyPlantSTOFilters.push(
+                            new sap.ui.model.Filter(
+                                "SupplyingPlant_STO",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aSupplyPlantSTOFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aSupplyPlantSTOFilters,
+                            and: false
+                        })
+                    );
+                }
             }
-
             //MO Type
             var oMultiInputMOType = this.byId("idFltrMOType");
 
             this._addTokenFromValue(oMultiInputMOType);
 
             var aMOTypeTokens = oMultiInputMOType.getTokens();
-            var aMOTypeFilters = [];
+            if (aMOTypeTokens.length > 0) {
+                var aMOTypeFilters = [];
 
-            aMOTypeTokens.forEach(function (oToken) {
-                aMOTypeFilters.push(
-                    new sap.ui.model.Filter(
-                        "MaintenanceOrderType",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aMOTypeTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aMOTypeFilters.push(
+                            new sap.ui.model.Filter(
+                                "MaintenanceOrderType",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aMOTypeFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aMOTypeFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aMOTypeFilters.push(
+                            new sap.ui.model.Filter(
+                                "MaintenanceOrderType",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aMOTypeFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aMOTypeFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //Basic Start Date
             var oMultiInputbasicStrtDt = this.byId("idFltrStrtdt");
@@ -831,25 +1219,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputbasicStrtDt);
 
             var abasicStrtDtTokens = oMultiInputbasicStrtDt.getTokens();
-            var abasicStrtDtFilters = [];
+            if (abasicStrtDtTokens.length > 0) {
+                var abasicStrtDtFilters = [];
 
-            abasicStrtDtTokens.forEach(function (oToken) {
-                abasicStrtDtFilters.push(
-                    new sap.ui.model.Filter(
-                        "MaintOrdBasicStartDate",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                abasicStrtDtTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        abasicStrtDtFilters.push(
+                            new sap.ui.model.Filter(
+                                "MaintOrdBasicStartDate",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (abasicStrtDtFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: abasicStrtDtFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        abasicStrtDtFilters.push(
+                            new sap.ui.model.Filter(
+                                "MaintOrdBasicStartDate",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (abasicStrtDtFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: abasicStrtDtFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //Basic End Date
             var oMultiInputEndDt = this.byId("idFltrEndDt");
@@ -857,25 +1268,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputEndDt);
 
             var aEndDtTokens = oMultiInputEndDt.getTokens();
-            var aEndDtFilters = [];
+            if (aEndDtTokens.length > 0) {
+                var aEndDtFilters = [];
 
-            aEndDtTokens.forEach(function (oToken) {
-                aEndDtFilters.push(
-                    new sap.ui.model.Filter(
-                        "MaintOrdBasicEndDate",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aEndDtTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aEndDtFilters.push(
+                            new sap.ui.model.Filter(
+                                "MaintOrdBasicEndDate",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aEndDtFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aEndDtFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aEndDtFilters.push(
+                            new sap.ui.model.Filter(
+                                "MaintOrdBasicEndDate",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aEndDtFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aEndDtFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //Operation
             var oMultiInputOperation = this.byId("idFltrOpr");
@@ -883,25 +1317,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputOperation);
 
             var aOperationTokens = oMultiInputOperation.getTokens();
-            var aOperationFilters = [];
+            if (aOperationTokens.length > 0) {
+                var aOperationFilters = [];
 
-            aOperationTokens.forEach(function (oToken) {
-                aOperationFilters.push(
-                    new sap.ui.model.Filter(
-                        "MaintenanceOrderOperation",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aOperationTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aOperationFilters.push(
+                            new sap.ui.model.Filter(
+                                "MaintenanceOrderOperation",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aOperationFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aOperationFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aOperationFilters.push(
+                            new sap.ui.model.Filter(
+                                "MaintenanceOrderOperation",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aOperationFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aOperationFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //Reservation Item
             var oMultiInputResItemNo = this.byId("idFltrResItemNo");
@@ -909,25 +1366,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputResItemNo);
 
             var aResItemNoTokens = oMultiInputResItemNo.getTokens();
-            var aResItemNoFilters = [];
+            if (aResItemNoTokens.length > 0) {
+                var aResItemNoFilters = [];
 
-            aResItemNoTokens.forEach(function (oToken) {
-                aResItemNoFilters.push(
-                    new sap.ui.model.Filter(
-                        "ReservationItem",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aResItemNoTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aResItemNoFilters.push(
+                            new sap.ui.model.Filter(
+                                "ReservationItem",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aResItemNoFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aResItemNoFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aDescFilters.push(
+                            new sap.ui.model.Filter(
+                                "ReservationItem",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aResItemNoFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aResItemNoFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //Storage loc
             var oMultiInputSloc = this.byId("idFltrSloc");
@@ -935,25 +1415,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputSloc);
 
             var aSlocTokens = oMultiInputSloc.getTokens();
-            var aSlocFilters = [];
+            if (aSlocTokens.length > 0) {
+                var aSlocFilters = [];
 
-            aSlocTokens.forEach(function (oToken) {
-                aSlocFilters.push(
-                    new sap.ui.model.Filter(
-                        "StorageLocation",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aSlocTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aSlocFilters.push(
+                            new sap.ui.model.Filter(
+                                "StorageLocation",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aSlocFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aSlocFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aSlocFilters.push(
+                            new sap.ui.model.Filter(
+                                "StorageLocation",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aSlocFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aSlocFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //Requestor
             var oMultiInputRequestor = this.byId("idFltrRequestor");
@@ -961,54 +1464,95 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputRequestor);
 
             var aRequestorTokens = oMultiInputRequestor.getTokens();
-            var aRequestorFilters = [];
+            if (aRequestorTokens.length > 0) {
+                var aRequestorFilters = [];
 
-            aRequestorTokens.forEach(function (oToken) {
-                aRequestorFilters.push(
-                    new sap.ui.model.Filter(
-                        "MaintOrdOpCompRequisitioner",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aRequestorTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aRequestorFilters.push(
+                            new sap.ui.model.Filter(
+                                "MaintOrdOpCompRequisitioner",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aRequestorFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aRequestorFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aRequestorFilters.push(
+                            new sap.ui.model.Filter(
+                                "MaintOrdOpCompRequisitioner",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aRequestorFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aRequestorFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             // STO
             var oMultiInputSTO = this.byId("idFltrSTO");
-
             this._addTokenFromValue(oMultiInputSTO);
-
             var aSTOTokens = oMultiInputSTO.getTokens();
-            var aSTOFilters = [];
+            if (aSTOTokens.length > 0) {
+                var aSTOFilters = [];
+                aSTOTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aSTOFilters.push(
+                            new sap.ui.model.Filter(
+                                "STO",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            aSTOTokens.forEach(function (oToken) {
-                var sValue = oToken.getKey() || "";
-                var bHasWildcard = sValue.includes("*");
-                var sFinalValue = bHasWildcard ? sValue.replace(/\*/g, "") : sValue;
-                aSTOFilters.push(
-                    new sap.ui.model.Filter(
-                        "STO",
-                        sap.ui.model.FilterOperator.Contains,
-                        sFinalValue
-                    )
-                );
-            });
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
 
-            if (aSTOFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aSTOFilters,
-                        and: false
-                    })
-                );
+                        aSTOFilters.push(
+                            new sap.ui.model.Filter(
+                                "STO",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aSTOFilters.length > 0) {
+
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aSTOFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //PO
             var oMultiInputPO = this.byId("idFltrPO");
@@ -1016,28 +1560,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputPO);
 
             var aPOTokens = oMultiInputPO.getTokens();
-            var aPOFilters = [];
+            if (aPOTokens.length > 0) {
+                var aPOFilters = [];
 
-            aPOTokens.forEach(function (oToken) {
-                var sValue = oToken.getKey() || "";
-                var bHasWildcard = sValue.includes("*");
-                var sFinalValue = bHasWildcard ? sValue.replace(/\*/g, "") : sValue;
-                aPOFilters.push(
-                    new sap.ui.model.Filter(
-                        "PurchaseOrder",
-                        sap.ui.model.FilterOperator.Contains,
-                        sFinalValue
-                    )
-                );
-            });
-             
-            if (aPOFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aPOFilters,
-                        and: false
-                    })
-                );
+                aPOTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aPOFilters.push(
+                            new sap.ui.model.Filter(
+                                "PurchaseOrder",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
+
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aPOFilters.push(
+                            new sap.ui.model.Filter(
+                                "PurchaseOrder",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aPOFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aPOFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //IssueSLoc PO
             var oMultiInputIssueSLocPO = this.byId("idFltrIssueSLoc");
@@ -1045,25 +1609,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputIssueSLocPO);
 
             var aIssueSLocPOTokens = oMultiInputIssueSLocPO.getTokens();
-            var aIssueSLocPOFilters = [];
+            if (aIssueSLocPOTokens.length > 0) {
+                var aIssueSLocPOFilters = [];
 
-            aIssueSLocPOTokens.forEach(function (oToken) {
-                aIssueSLocPOFilters.push(
-                    new sap.ui.model.Filter(
-                        "IssuingStorageLocation_PO",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aIssueSLocPOTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aIssueSLocPOFilters.push(
+                            new sap.ui.model.Filter(
+                                "IssuingStorageLocation_PO",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aIssueSLocPOFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aIssueSLocPOFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aIssueSLocPOFilters.push(
+                            new sap.ui.model.Filter(
+                                "IssuingStorageLocation_PO",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aIssueSLocPOFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aIssueSLocPOFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //Supplier PO
             var oMultiInputSupplier = this.byId("idFltrSupplier");
@@ -1071,25 +1658,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputSupplier);
 
             var aSupplierTokens = oMultiInputSupplier.getTokens();
-            var aSupplierFilters = [];
+            if (aSupplierTokens.length > 0) {
+                var aSupplierFilters = [];
 
-            aSupplierTokens.forEach(function (oToken) {
-                aSupplierFilters.push(
-                    new sap.ui.model.Filter(
-                        "Supplier_PO",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aSupplierTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aSupplierFilters.push(
+                            new sap.ui.model.Filter(
+                                "Supplier_PO",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aSupplierFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aSupplierFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aSupplierFilters.push(
+                            new sap.ui.model.Filter(
+                                "Supplier_PO",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aSupplierFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aSupplierFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //DeliveryDate PO
             var oMultiInputDeliveryDate = this.byId("idFltrDeliveryDate");
@@ -1097,25 +1707,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputDeliveryDate);
 
             var aDeliveryDateTokens = oMultiInputDeliveryDate.getTokens();
-            var aDeliveryDateFilters = [];
+            if (aDeliveryDateTokens.length > 0) {
+                var aDeliveryDateFilters = [];
 
-            aDeliveryDateTokens.forEach(function (oToken) {
-                aDeliveryDateFilters.push(
-                    new sap.ui.model.Filter(
-                        "YY1_DELIVERYDATE_PDI_PO",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aDeliveryDateTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aDeliveryDateFilters.push(
+                            new sap.ui.model.Filter(
+                                "YY1_DELIVERYDATE_PDI_PO",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aDeliveryDateFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aDeliveryDateFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aDeliveryDateFilters.push(
+                            new sap.ui.model.Filter(
+                                "YY1_DELIVERYDATE_PDI_PO",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aDeliveryDateFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aDeliveryDateFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //DeliveryCrtDate
             var oMultiInputDeliveryCrtDate = this.byId("idFltrDeliveryCrtDate");
@@ -1123,25 +1756,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputDeliveryCrtDate);
 
             var aDeliveryCrtDateTokens = oMultiInputDeliveryCrtDate.getTokens();
-            var aDeliveryCrtDateFilters = [];
+            if (aDeliveryCrtDateTokens.length > 0) {
+                var aDeliveryCrtDateFilters = [];
 
-            aDeliveryCrtDateTokens.forEach(function (oToken) {
-                aDeliveryCrtDateFilters.push(
-                    new sap.ui.model.Filter(
-                        "DeliveryCreationDate",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aDeliveryCrtDateTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aDeliveryCrtDateFilters.push(
+                            new sap.ui.model.Filter(
+                                "DeliveryCreationDate",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aDeliveryCrtDateFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aDeliveryCrtDateFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aDeliveryCrtDateFilters.push(
+                            new sap.ui.model.Filter(
+                                "DeliveryCreationDate",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aDeliveryCrtDateFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aDeliveryCrtDateFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //Delivery
             var oMultiInputDelivery = this.byId("idFltrDelivery");
@@ -1149,33 +1805,58 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputDelivery);
 
             var aDeliveryTokens = oMultiInputDelivery.getTokens();
-            var aDeliveryFilters = [];
+            if (aDeliveryTokens.length > 0) {
+                var aDeliveryFilters = [];
 
-            aDeliveryTokens.forEach(function (oToken) {
+                aDeliveryTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        if (oRange.operation === "Equal") {
+                            oRange.value1 = oRange.value1?.padStart(10, '0')
+                            oRange.value2 = oRange.value2?.padStart(10, '0')
+                        }
+                        aDeliveryFilters.push(
+                            new sap.ui.model.Filter(
+                                "DeliveryNumber",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-                var sValue = oToken.getKey() || "";
-                var bHasWildcard = sValue.includes("*");
-                var sFinalValue = bHasWildcard ? sValue.replace(/\*/g, "") : sValue;
-                sFinalValue = sFinalValue?.padStart(10, '0');
-                aDeliveryFilters.push(
-                    new sap.ui.model.Filter(
-                        "DeliveryNumber",
-                        sap.ui.model.FilterOperator.EQ,
-                        sFinalValue
-                    )
-                );
-            });
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+                        if (!bHasWildcard) {
+                            sFinalValue = sFinalValue?.padStart(10, '0');
+                        }
 
-            if (aDeliveryFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aDeliveryFilters,
-                        and: false
-                    })
-                );
+                        aDeliveryFilters.push(
+                            new sap.ui.model.Filter(
+                                "DeliveryNumber",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
 
+                if (aDeliveryFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aDeliveryFilters,
+                            and: false
+                        })
+                    );
+
+                }
+                this._deliveryTokens = aDeliveryTokens;
             }
-            this._deliveryTokens = aDeliveryTokens;
 
             //DeliveryPickingdate - Delivery
             var oMultiInputDeliveryPickingdate = this.byId("idFltrDeliveryPickingdate");
@@ -1183,25 +1864,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputDeliveryPickingdate);
 
             var aDeliveryPickingdateTokens = oMultiInputDeliveryPickingdate.getTokens();
-            var aDeliveryPickingdateFilters = [];
+            if (aDeliveryPickingdateTokens.length > 0) {
+                var aDeliveryPickingdateFilters = [];
 
-            aDeliveryPickingdateTokens.forEach(function (oToken) {
-                aDeliveryPickingdateFilters.push(
-                    new sap.ui.model.Filter(
-                        "PickingDate_Deli",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aDeliveryPickingdateTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aDeliveryPickingdateFilters.push(
+                            new sap.ui.model.Filter(
+                                "PickingDate_Deli",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aDeliveryPickingdateFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aDeliveryPickingdateFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aDeliveryPickingdateFilters.push(
+                            new sap.ui.model.Filter(
+                                "PickingDate_Deli",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aDeliveryPickingdateFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aDeliveryPickingdateFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //DeliverPickingstatus - Delivery
             var oMultiInputDeliverPickingstatus = this.byId("idFltrDeliverPickingstatus");
@@ -1209,25 +1913,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputDeliverPickingstatus);
 
             var aDeliverPickingstatusTokens = oMultiInputDeliverPickingstatus.getTokens();
-            var aDeliverPickingstatusFilters = [];
+            if (aDeliverPickingstatusTokens.length > 0) {
+                var aDeliverPickingstatusFilters = [];
 
-            aDeliverPickingstatusTokens.forEach(function (oToken) {
-                aDeliverPickingstatusFilters.push(
-                    new sap.ui.model.Filter(
-                        "OvrlItmGeneralIncompletio_Deli",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aDeliverPickingstatusTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aDeliverPickingstatusFilters.push(
+                            new sap.ui.model.Filter(
+                                "OvrlItmGeneralIncompletio_Deli",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aDeliverPickingstatusFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aDeliverPickingstatusFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aDeliverPickingstatusFilters.push(
+                            new sap.ui.model.Filter(
+                                "OvrlItmGeneralIncompletio_Deli",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aDeliverPickingstatusFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aDeliverPickingstatusFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //DelActGoodsIssuDate
             var oMultiInputDelActGoodsIssuDate = this.byId("idFltrDelActGoodsIssuDate");
@@ -1235,25 +1962,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputDelActGoodsIssuDate);
 
             var aDelActGoodsIssuDateTokens = oMultiInputDelActGoodsIssuDate.getTokens();
-            var aDelActGoodsIssuDateFilters = [];
+            if (aDelActGoodsIssuDateTokens.length > 0) {
+                var aDelActGoodsIssuDateFilters = [];
 
-            aDelActGoodsIssuDateTokens.forEach(function (oToken) {
-                aDelActGoodsIssuDateFilters.push(
-                    new sap.ui.model.Filter(
-                        "ActualGoodsMovementDa_Deli",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aDelActGoodsIssuDateTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aDelActGoodsIssuDateFilters.push(
+                            new sap.ui.model.Filter(
+                                "ActualGoodsMovementDa_Deli",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aDelActGoodsIssuDateFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aDelActGoodsIssuDateFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aDelActGoodsIssuDateFilters.push(
+                            new sap.ui.model.Filter(
+                                "ActualGoodsMovementDa_Deli",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aDelActGoodsIssuDateFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aDelActGoodsIssuDateFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //DeliPlndGoodsIssuDate
             var oMultiInputDeliPlndGoodsIssuDate = this.byId("idFltrDeliPlndGoodsIssuDate");
@@ -1261,52 +2011,97 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputDeliPlndGoodsIssuDate);
 
             var aDeliPlndGoodsIssuDateTokens = oMultiInputDeliPlndGoodsIssuDate.getTokens();
-            var aDeliPlndGoodsIssuDateFilters = [];
+            if (aDeliPlndGoodsIssuDateTokens.length > 0) {
+                var aDeliPlndGoodsIssuDateFilters = [];
 
-            aDeliPlndGoodsIssuDateTokens.forEach(function (oToken) {
-                aDeliPlndGoodsIssuDateFilters.push(
-                    new sap.ui.model.Filter(
-                        "PlannedGoodsIssueDate_Deli",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aDeliPlndGoodsIssuDateTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aDeliPlndGoodsIssuDateFilters.push(
+                            new sap.ui.model.Filter(
+                                "PlannedGoodsIssueDate_Deli",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aDeliPlndGoodsIssuDateFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aDeliPlndGoodsIssuDateFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aDeliPlndGoodsIssuDateFilters.push(
+                            new sap.ui.model.Filter(
+                                "PlannedGoodsIssueDate_Deli",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aDeliPlndGoodsIssuDateFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aDeliPlndGoodsIssuDateFilters,
+                            and: false
+                        })
+                    );
+                }
             }
-           
             //Deliveryfinalstatus
             var oMultiInputDeliveryfinalstatus = this.byId("idFltrDeliveryfinalstatus");
 
             this._addTokenFromValue(oMultiInputDeliveryfinalstatus);
 
             var aDeliveryfinalstatusTokens = oMultiInputDeliveryfinalstatus.getTokens();
-            var aDeliveryfinalstatusFilters = [];
+            if (aDeliveryfinalstatusTokens.length > 0) {
+                var aDeliveryfinalstatusFilters = [];
 
-            aDeliveryfinalstatusTokens.forEach(function (oToken) {
-                aDeliveryfinalstatusFilters.push(
-                    new sap.ui.model.Filter(
-                        "DeliveryFinalStatus",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aDeliveryfinalstatusTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aDeliveryfinalstatusFilters.push(
+                            new sap.ui.model.Filter(
+                                "DeliveryFinalStatus",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aDeliveryfinalstatusFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aDeliveryfinalstatusFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aDeliveryfinalstatusFilters.push(
+                            new sap.ui.model.Filter(
+                                "DeliveryFinalStatus",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aDeliveryfinalstatusFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aDeliveryfinalstatusFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //ReturnSTO
             var oMultiInputReturnSTO = this.byId("idFltrReturnSTO");
@@ -1314,25 +2109,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputReturnSTO);
 
             var aReturnSTOTokens = oMultiInputReturnSTO.getTokens();
-            var aReturnSTOFilters = [];
+            if (aReturnSTOTokens.length > 0) {
+                var aReturnSTOFilters = [];
 
-            aReturnSTOTokens.forEach(function (oToken) {
-                aReturnSTOFilters.push(
-                    new sap.ui.model.Filter(
-                        "ReturnSTO",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aReturnSTOTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aReturnSTOFilters.push(
+                            new sap.ui.model.Filter(
+                                "ReturnSTO",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aReturnSTOFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aReturnSTOFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aReturnSTOFilters.push(
+                            new sap.ui.model.Filter(
+                                "ReturnSTO",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aReturnSTOFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aReturnSTOFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //Purchase Req
             var oMultiInputPurReq = this.byId("idFltrPurReq");
@@ -1340,28 +2158,48 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputPurReq);
 
             var aPurReqTokens = oMultiInputPurReq.getTokens();
-            var aPurReqFilters = [];
+            if (aPurReqTokens.length > 0) {
+                var aPurReqFilters = [];
 
-            aPurReqTokens.forEach(function (oToken) {
-                var sValue = oToken.getKey() || "";
-                var bHasWildcard = sValue.includes("*");
-                var sFinalValue = bHasWildcard ? sValue.replace(/\*/g, "") : sValue;
-                aPurReqFilters.push(
-                    new sap.ui.model.Filter(
-                        "PurchaseRequisition",
-                        sap.ui.model.FilterOperator.Contains,
-                        sFinalValue
-                    )
-                );
-            });
+                aPurReqTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aPurReqFilters.push(
+                            new sap.ui.model.Filter(
+                                "PurchaseRequisition",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aPurReqFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aPurReqFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aPurReqFilters.push(
+                            new sap.ui.model.Filter(
+                                "PurchaseRequisition",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aPurReqFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aPurReqFilters,
+                            and: false
+                        })
+                    );
+                }
             }
             //ReturnDeliverySupplier
             var oMultiInputReturnDeliverySupplier = this.byId("idFltrReturnDeliverySupplier");
@@ -1369,44 +2207,66 @@ sap.ui.define([
             this._addTokenFromValue(oMultiInputReturnDeliverySupplier);
 
             var aReturnDeliverySupplierTokens = oMultiInputReturnDeliverySupplier.getTokens();
-            var aReturnDeliverySupplierFilters = [];
+            if (aReturnDeliverySupplierTokens.length > 0) {
+                var aReturnDeliverySupplierFilters = [];
 
-            aReturnDeliverySupplierTokens.forEach(function (oToken) {
-                aReturnDeliverySupplierFilters.push(
-                    new sap.ui.model.Filter(
-                        "Supplier_WOREF",
-                        sap.ui.model.FilterOperator.Contains,
-                        oToken.getKey()
-                    )
-                );
-            });
+                aReturnDeliverySupplierTokens.forEach(function (oToken) {
+                    var oRange = oToken.data("range");
+                    if (oRange) {
+                        aReturnDeliverySupplierFilters.push(
+                            new sap.ui.model.Filter(
+                                "Supplier_WOREF",
+                                oRange.operation,
+                                oRange.value1,
+                                oRange.value2
+                            )
+                        );
 
-            if (aReturnDeliverySupplierFilters.length > 0) {
-                aMainFilters.push(
-                    new sap.ui.model.Filter({
-                        filters: aReturnDeliverySupplierFilters,
-                        and: false
-                    })
-                );
+                    } else {
+                        var sValue = oToken.getKey() || "";
+                        var bHasWildcard = sValue.includes("*");
+                        var sFinalValue = bHasWildcard
+                            ? sValue.replace(/\*/g, "")
+                            : sValue;
+
+                        aReturnDeliverySupplierFilters.push(
+                            new sap.ui.model.Filter(
+                                "Supplier_WOREF",
+                                bHasWildcard
+                                    ? sap.ui.model.FilterOperator.Contains
+                                    : sap.ui.model.FilterOperator.EQ,
+                                sFinalValue
+                            )
+                        );
+                    }
+                });
+
+                if (aReturnDeliverySupplierFilters.length > 0) {
+                    aMainFilters.push(
+                        new sap.ui.model.Filter({
+                            filters: aReturnDeliverySupplierFilters,
+                            and: false
+                        })
+                    );
+                }
+
             }
-
-
 
             /*  Apply Filters */
             if (!aMainFilters || aMainFilters.length === 0) {
-
                 sap.m.MessageToast.show("Please select at least one filter");
-
                 return; // stop loading
             }
-            this._loadTrackdata(aMainFilters)
-                .then(function (aData) {
-                    console.log("Data loaded and deduplicated:", aData.length);
-                })
-                .catch(function (err) {
+            else {
+                this._loadTrackdata(aMainFilters)
+                    .then(function (aData) {
+                        console.log("Data loaded and deduplicated:", aData.length);
+                    })
+                    .catch(function (err) {
 
-                    sap.m.MessageToast.show("Error loading data");
-                });
+                        sap.m.MessageToast.show("Error loading data");
+                    });
+            }
             //oBinding.filter(aMainFilters);
         },
 
@@ -1645,6 +2505,8 @@ sap.ui.define([
                     supportMultiselect: true,
                     key: "MaintenanceOrder",
                     descriptionKey: "MaintenanceOrderDesc",
+                    supportRanges: true,          // Enables "Define Conditions"
+                    supportRangesOnly: false,
 
                     ok: function (oEvent) {
 
@@ -1652,11 +2514,28 @@ sap.ui.define([
                         oMultiInput.removeAllTokens();
 
                         oEvent.getParameter("tokens").forEach(function (oToken) {
+                            var oRangeData = oToken.data("range");
+                            // Handle Define Conditions
+                            if (oRangeData) {
 
-                            oMultiInput.addToken(new sap.m.Token({
-                                key: oToken.getKey(),
-                                text: oToken.getKey()
-                            }));
+                                var sValue = oRangeData.value1;
+
+                                if (oRangeData.value2) {
+                                    sValue = oRangeData.value1 + "..." + oRangeData.value2;
+                                }
+                                oMultiInput.addToken(new sap.m.Token({
+                                    key: sValue,
+                                    text: sValue
+                                }));
+                                oMultiInput.data("range", oRangeData);
+                            }
+                            // Normal Selection
+                            else {
+                                oMultiInput.addToken(new sap.m.Token({
+                                    key: oToken.getKey(),
+                                    text: oToken.getKey()
+                                }));
+                            }
 
                         });
 
@@ -1671,8 +2550,16 @@ sap.ui.define([
 
                 this.getView().addDependent(this._oMaintOrderVH);
 
-                this._oMaintOrderVH.setFilterBar(this._createFilterBar(this._oMaintOrderVH));
+                this._oMaintOrderVH.setFilterBar(this._createFilterBar(this._oMaintOrderVH,));
                 this._prepareTable(this._oMaintOrderVH);
+                // Only MaintenanceOrder in Define Conditions
+                this._oMaintOrderVH.setRangeKeyFields([
+                    {
+                        label: "Maintenance Order",
+                        key: "MaintenanceOrder",
+                        type: "string"
+                    }
+                ]);
             }
 
             this._loadMaintOrders("", this._oMaintOrderVH);
@@ -1687,6 +2574,8 @@ sap.ui.define([
                     supportMultiselect: true,
                     key: "MaintenanceOrder",
                     descriptionKey: "MaintenanceOrderDesc",
+                    supportRanges: true,          // Enables "Define Conditions"
+                    supportRangesOnly: false,
 
                     ok: function (oEvent) {
 
@@ -1695,31 +2584,54 @@ sap.ui.define([
 
                         oEvent.getParameter("tokens").forEach(function (oToken) {
 
-                            var sKey = oToken.getKey(); // backend
-                            var sDesc = "";
 
-                            var oContext = oToken.getBindingContext();
+                            var oRangeData = oToken.data("range");
 
-                            //  Get only Description from model
-                            if (oContext) {
-                                sDesc = oContext.getProperty("MaintenanceOrderDesc");
-                            } else {
-                                //  fallback (important)
-                                var sText = oToken.getText ? oToken.getText() : "";
+                            // Define Conditions
+                            if (oRangeData) {
 
-                                if (sText.includes("(")) {
-                                    sDesc = sText.split("(")[0].trim();
-                                } else if (sText.includes("-")) {
-                                    sDesc = sText.split("-")[1].trim();
-                                } else {
-                                    sDesc = sText;
+                                var sValue = oRangeData.value1;
+
+                                if (oRangeData.value2) {
+                                    sValue = oRangeData.value1 + "..." + oRangeData.value2;
                                 }
-                            }
 
-                            oMultiInput.addToken(new sap.m.Token({
-                                key: sDesc,
-                                text: sDesc
-                            }));
+                                var oNewToken = new sap.m.Token({
+                                    key: sValue,
+                                    text: oToken.getText()
+                                });
+
+                                oNewToken.data("range", oRangeData);
+
+                                oMultiInput.addToken(oNewToken);
+                            }
+                            else {
+                                var sKey = oToken.getKey(); // backend
+                                var sDesc = "";
+
+                                var oContext = oToken.getBindingContext();
+
+                                //  Get only Description from model
+                                if (oContext) {
+                                    sDesc = oContext.getProperty("MaintenanceOrderDesc");
+                                } else {
+                                    //  fallback (important)
+                                    var sText = oToken.getText ? oToken.getText() : "";
+
+                                    if (sText.includes("(")) {
+                                        sDesc = sText.split("(")[0].trim();
+                                    } else if (sText.includes("-")) {
+                                        sDesc = sText.split("-")[1].trim();
+                                    } else {
+                                        sDesc = sText;
+                                    }
+                                }
+
+                                oMultiInput.addToken(new sap.m.Token({
+                                    key: sDesc,
+                                    text: sDesc
+                                }));
+                            }
 
                         });
 
@@ -1736,32 +2648,142 @@ sap.ui.define([
 
                 this._oMaintDescVH.setFilterBar(this._createFilterBar(this._oMaintDescVH));
                 this._prepareTable(this._oMaintDescVH);
+                // Only MaintenanceOrderDesc in Define Conditions
+                this._oMaintDescVH.setRangeKeyFields([
+                    {
+                        label: "Maintenance Order Description",
+                        key: "MaintenanceOrderDesc",
+                        type: "string"
+                    }
+                ]);
             }
 
             this._loadMaintOrders("", this._oMaintDescVH);
             this._oMaintDescVH.open();
         },
+        // _createFilterBar: function (oVH) {
+
+        //     var oInput = new sap.m.Input({ placeholder: "Search Maintenance Order / Maximo Work Order" });
+
+        //     var oFilterBar = new sap.ui.comp.filterbar.FilterBar({
+        //         advancedMode: true,
+        //         filterBarExpanded: true,
+
+        //         search: function () {
+        //             this._loadMaintOrders(oInput.getValue(), oVH);
+        //         }.bind(this)
+        //     });
+        //    // oFilterBar.setBasicSearch(oInput);
+
+        //     oFilterBar.addFilterItem(new sap.ui.comp.filterbar.FilterItem({
+        //         name: "MaintOrder/WorkOrder",
+        //         label: "MaintOrder / Maximo WorkOrder",
+        //         control: oInput
+        //     }));
+
+        //     return oFilterBar;
+        // },
         _createFilterBar: function (oVH) {
 
-            var oInput = new sap.m.Input({ placeholder: "Search Maintenance Order / Maximo Work Order" });
+            var oMOInput = new sap.m.Input({
+                placeholder: "Enter Maintenance Order"
+            });
+
+            var oDescInput = new sap.m.Input({
+                placeholder: "Maximo WorkOrder"
+            });
 
             var oFilterBar = new sap.ui.comp.filterbar.FilterBar({
                 advancedMode: true,
                 filterBarExpanded: true,
 
                 search: function () {
-                    this._loadMaintOrders(oInput.getValue(), oVH);
+
+                    var sMO = oMOInput.getValue();
+                    var sDesc = oDescInput.getValue();
+
+                    var oModel = this.getOwnerComponent().getModel();
+                    var aFilters = [];
+
+                    if (sMO) {
+                        aFilters.push(
+                            new sap.ui.model.Filter(
+                                "MaintenanceOrder",
+                                sap.ui.model.FilterOperator.Contains,
+                                sMO
+                            )
+                        );
+                    }
+
+                    if (sDesc) {
+                        aFilters.push(
+                            new sap.ui.model.Filter(
+                                "MaintenanceOrderDesc",
+                                sap.ui.model.FilterOperator.Contains,
+                                sDesc
+                            )
+                        );
+                    }
+
+                    oModel.read("/YY1_FLGTRK_Tracking_API", {
+
+                        filters: aFilters,
+
+                        success: function (oData) {
+
+                            var oMap = new Map();
+
+                            oData.results.forEach(function (oItem) {
+                                if (!oMap.has(oItem.MaintenanceOrder)) {
+                                    oMap.set(oItem.MaintenanceOrder, oItem);
+                                }
+                            });
+
+                            var aData = Array.from(oMap.values());
+
+                            var oVHModel = new sap.ui.model.json.JSONModel(aData);
+
+                            oVH.getTableAsync().then(function (oTable) {
+                                oTable.setModel(oVHModel);
+                                oTable.bindRows("/");
+                            });
+
+                        },
+
+                        error: function () {
+                            sap.m.MessageToast.show("Load failed");
+                        }
+                    });
+
                 }.bind(this)
             });
 
-            oFilterBar.addFilterItem(new sap.ui.comp.filterbar.FilterItem({
-                name: "MaintOrder/WorkOrder",
-                label: "MaintOrder / Maximo WorkOrder",
-                control: oInput
-            }));
+            // Maintenance Order
+            oFilterBar.addFilterItem(
+                new sap.ui.comp.filterbar.FilterItem({
+                    name: "MaintenanceOrder",
+                    label: "Maintenance Order",
+                    control: oMOInput
+                })
+            );
+
+            // Description
+            oFilterBar.addFilterItem(
+                new sap.ui.comp.filterbar.FilterItem({
+                    name: "MaintenanceOrderDesc",
+                    label: "Maximo Work Order",
+                    control: oDescInput
+                })
+            );
+
+            // Initial load
+            setTimeout(function () {
+                oFilterBar.fireSearch();
+            }, 200);
 
             return oFilterBar;
         },
+
         _prepareTable: function (oVH) {
 
             oVH.getTableAsync().then(function (oTable) {
@@ -1833,197 +2855,7 @@ sap.ui.define([
             });
         },
 
-        // onReservVHRqst: function () {
 
-        //     if (!this._oReserveVH) {
-
-        //         this._oReserveVH = new sap.ui.comp.valuehelpdialog.ValueHelpDialog({
-        //             title: "Select Reservation",
-        //             supportMultiselect: true,
-        //             key: "Reservation",
-        //             //descriptionKey: "MaintenanceOrderDesc",
-
-        //             ok: function (oEvent) {
-
-        //                 var aTokens = oEvent.getParameter("tokens");
-        //                 var oMultiInput = this.byId("idFltrReserve");
-
-        //                 oMultiInput.removeAllTokens();
-
-        //                 aTokens.forEach(function (oToken) {
-
-        //                     var oRangeData = oToken.data("range");
-
-        //                     //  Define Conditions (Range)
-        //                     if (oRangeData) {
-
-        //                         var sValue = oRangeData.value1;
-
-        //                         //  handle operators
-        //                         if (oRangeData.operation === "Contains") {
-        //                             sValue = "*" + sValue + "*";
-        //                         }
-
-        //                         oMultiInput.addToken(new sap.m.Token({
-        //                             key: sValue,
-        //                             text: sValue
-        //                         }));
-        //                     }
-
-        //                     //   Normal Selection
-        //                     else {
-        //                         var sKey = oToken.getKey();
-
-        //                         if (sKey) {
-        //                             oMultiInput.addToken(new sap.m.Token({
-        //                                 key: sKey,
-        //                                 text: sKey
-        //                             }));
-        //                         }
-        //                     }
-
-        //                 });
-
-
-        //                 this._oReserveVH.close();
-
-        //             }.bind(this),
-
-        //             cancel: function () {
-        //                 this._oReserveVH.close();
-        //             }.bind(this)
-        //         });
-
-        //         this.getView().addDependent(this._oReserveVH);
-
-        //         // Filter Input
-        //         var oFilterInput = new sap.m.Input({
-        //             placeholder: "Search Reservation"
-        //         });
-
-        //         // Filter Bar
-        //         var oFilterBar = new sap.ui.comp.filterbar.FilterBar({
-        //             advancedMode: true,
-        //             filterBarExpanded: true,
-
-        //             search: function () {
-        //                 var sValue = oFilterInput.getValue();
-        //                 this._loadMaintOrdersReserve(sValue);
-        //             }.bind(this)
-        //         });
-
-        //         // Filter Field
-        //         oFilterBar.addFilterItem(new sap.ui.comp.filterbar.FilterItem({
-        //             name: "Reservation",
-        //             label: "Reservation",
-        //             control: oFilterInput
-        //         }));
-
-        //         this._oReserveVH.setFilterBar(oFilterBar);
-
-        //         // Enable "Define Conditions"
-        //         // this._oMaintVH.setSupportRanges(true);
-        //         // this._oMaintVH.setSupportRangesOnly(false);
-
-        //         // FIX: Required for enabling input field
-        //         this._oReserveVH.setRangeKeyFields([
-        //             {
-        //                 label: "Reservation",
-        //                 key: "Reservation",
-        //                 type: "string",
-        //                 typeInstance: new sap.ui.model.type.String()
-        //             }
-        //             // {
-        //             //     label: "Description",
-        //             //     key: "MaintenanceOrderDesc",
-        //             //     type: "string",
-        //             //     typeInstance: new sap.ui.model.type.String()
-        //             // }
-        //         ]);
-
-        //         // Set Model
-        //         this._oReserveVH.setModel(this.getView().getModel());
-
-        //         //  Prepare Table
-        //         this._oReserveVH.getTableAsync().then(function (oTable) {
-
-        //             // Column: Maintenance Order
-        //             oTable.addColumn(new sap.ui.table.Column({
-        //                 label: new sap.m.Label({ text: "Reservation" }),
-        //                 template: new sap.m.Text({ text: "{Reservation}" })
-        //             }));
-
-        //             // // Column: Description
-        //             // oTable.addColumn(new sap.ui.table.Column({
-        //             //     label: new sap.m.Label({ text: "Description" }),
-        //             //     template: new sap.m.Text({ text: "{MaintenanceOrderDesc}" })
-        //             // }));
-
-        //             oTable.setSelectionMode("MultiToggle");
-
-        //             this._oReserveVH.update();
-
-        //         }.bind(this));
-        //     }
-
-        //     //  Initial Load
-        //     this._loadMaintOrdersReserve("");
-
-        //     this._oReserveVH.open();
-        // },
-
-        // _loadMaintOrdersReserve: function (sValue) {
-
-        //     var oModel = this.getView().getModel();
-        //     var aFilters = [];
-
-        //     //  Search filter
-        //     if (sValue) {
-        //         aFilters.push(new sap.ui.model.Filter({
-        //             filters: [
-        //                 new sap.ui.model.Filter("Reservation", sap.ui.model.FilterOperator.Contains, sValue),
-
-        //             ],
-        //             and: false
-        //         }));
-        //     }
-
-        //     oModel.read("/YY1_FLGTRK_Tracking_API", {
-
-        //         filters: aFilters,
-
-        //         urlParameters: {
-        //             $select: "Reservation",
-        //             $top: 10000
-        //         },
-
-        //         success: function (oData) {
-
-        //             // Remove duplicates
-        //             var oUniqueMap = new Map();
-
-        //             oData.results.forEach(function (oItem) {
-        //                 if (!oUniqueMap.has(oItem.Reservation)) {
-        //                     oUniqueMap.set(oItem.Reservation, oItem);
-        //                 }
-        //             });
-
-        //             var aUniqueData = Array.from(oUniqueMap.values());
-
-        //             var oReserveVHModel = new sap.ui.model.json.JSONModel(aUniqueData);
-
-        //             this._oReserveVH.getTableAsync().then(function (oTable) {
-        //                 oTable.setModel(oReserveVHModel);
-        //                 oTable.bindRows("/");
-        //             });
-
-        //         }.bind(this),
-
-        //         error: function () {
-        //             sap.m.MessageToast.show("Failed to load Reservation");
-        //         }
-        //     });
-        // },
         onReservVHRqst: function () {
 
             if (!this._oReserveVH) {
@@ -2103,14 +2935,14 @@ sap.ui.define([
 
                                 var sValue = oRangeData.value1;
 
-                                if (oRangeData.operation === "Contains") {
-                                    sValue = "*" + sValue + "*";
+                                if (oRangeData.value2) {
+                                    sValue = oRangeData.value1 + "..." + oRangeData.value2;
                                 }
-
                                 oMultiInput.addToken(new sap.m.Token({
                                     key: sValue,
                                     text: sValue
                                 }));
+                                oMultiInput.data("range", oRangeData);
                             }
                             // Normal Selection
                             else {
@@ -2175,8 +3007,8 @@ sap.ui.define([
         },
 
 
-          /* Load Data with Multi Filters                         */
-        
+        /* Load Data with Multi Filters                         */
+
         _loadMaintOrdersReserve: function (aTokenFilters) {
 
             var oModel = this.getView().getModel();
@@ -2229,298 +3061,298 @@ sap.ui.define([
         },
         //Delivery
 
-        onDeliveryVHRqst: function () {
+        // onDeliveryVHRqst: function () {
 
-            if (!this._oDeliveryVH) {
+        //     if (!this._oDeliveryVH) {
 
-                // Create the ValueHelpDialog
-                this._oDeliveryVH = new sap.ui.comp.valuehelpdialog.ValueHelpDialog({
-                    title: "Select Delivery",
-                    supportRanges: true,        // Enables "Define Conditions" tab
-                    supportRangesOnly: true,    // Only show Define Conditions
-                    key: "Delivery",
-                    ok: function (oEvent) {
+        //         // Create the ValueHelpDialog
+        //         this._oDeliveryVH = new sap.ui.comp.valuehelpdialog.ValueHelpDialog({
+        //             title: "Select Delivery",
+        //             supportRanges: true,        // Enables "Define Conditions" tab
+        //             supportRangesOnly: true,    // Only show Define Conditions
+        //             key: "Delivery",
+        //             ok: function (oEvent) {
 
-                        var aTokens = oEvent.getParameter("tokens");
-                        var oMultiInput = this.byId("idFltrDelivery");
+        //                 var aTokens = oEvent.getParameter("tokens");
+        //                 var oMultiInput = this.byId("idFltrDelivery");
 
-                        oMultiInput.removeAllTokens();
+        //                 oMultiInput.removeAllTokens();
 
-                        aTokens.forEach(function (oToken) {
-                            var oRangeData = oToken.data("range");
+        //                 aTokens.forEach(function (oToken) {
+        //                     var oRangeData = oToken.data("range");
 
-                            if (oRangeData) {
-                                // Range token
-                                var sValue = oRangeData.value1;
+        //                     if (oRangeData) {
+        //                         // Range token
+        //                         var sValue = oRangeData.value1;
 
-                                if (oRangeData.operation === "Contains") {
-                                    sValue = "*" + sValue + "*";
-                                }
+        //                         if (oRangeData.operation === "Contains") {
+        //                             sValue = "*" + sValue + "*";
+        //                         }
 
-                                oMultiInput.addToken(new sap.m.Token({
-                                    key: sValue,
-                                    text: sValue
-                                }));
-                            } else {
-                                // Normal selection token
-                                var sKey = oToken.getKey();
-                                if (sKey) {
-                                    oMultiInput.addToken(new sap.m.Token({
-                                        key: sKey,
-                                        text: sKey
-                                    }));
-                                }
-                            }
+        //                         oMultiInput.addToken(new sap.m.Token({
+        //                             key: sValue,
+        //                             text: sValue
+        //                         }));
+        //                     } else {
+        //                         // Normal selection token
+        //                         var sKey = oToken.getKey();
+        //                         if (sKey) {
+        //                             oMultiInput.addToken(new sap.m.Token({
+        //                                 key: sKey,
+        //                                 text: sKey
+        //                             }));
+        //                         }
+        //                     }
 
-                        });
+        //                 });
 
-                        this._oDeliveryVH.close();
+        //                 this._oDeliveryVH.close();
 
-                    }.bind(this),
+        //             }.bind(this),
 
-                    cancel: function () {
-                        this._oDeliveryVH.close();
-                    }.bind(this)
-                });
+        //             cancel: function () {
+        //                 this._oDeliveryVH.close();
+        //             }.bind(this)
+        //         });
 
-                // Add to view
-                this.getView().addDependent(this._oDeliveryVH);
+        //         // Add to view
+        //         this.getView().addDependent(this._oDeliveryVH);
 
-                // Configure range key fields
-                this._oDeliveryVH.setRangeKeyFields([
-                    {
-                        label: "Delivery",
-                        key: "DeliveryNumber",
-                        type: "string",
-                        typeInstance: new sap.ui.model.type.String()
-                    }
-                ]);
+        //         // Configure range key fields
+        //         this._oDeliveryVH.setRangeKeyFields([
+        //             {
+        //                 label: "Delivery",
+        //                 key: "DeliveryNumber",
+        //                 type: "string",
+        //                 typeInstance: new sap.ui.model.type.String()
+        //             }
+        //         ]);
 
-            }
+        //     }
 
-            // Open the ValueHelpDialog
-            this._oDeliveryVH.open();
-        },
-          
-         onPOVHRqst: function () {
+        //     // Open the ValueHelpDialog
+        //     this._oDeliveryVH.open();
+        // },
 
-            if (!this._oPOVH) {
+        // onPOVHRqst: function () {
 
-                // Create the ValueHelpDialog
-                this._oPOVH = new sap.ui.comp.valuehelpdialog.ValueHelpDialog({
-                    title: "Select Purchase Order",
-                    supportRanges: true,        // Enables "Define Conditions" tab
-                    supportRangesOnly: true,    // Only show Define Conditions
-                    key: "PurchaseOrder",
-                    ok: function (oEvent) {
+        //     if (!this._oPOVH) {
 
-                        var aTokens = oEvent.getParameter("tokens");
-                        var oMultiInput = this.byId("idFltrPO");
+        //         // Create the ValueHelpDialog
+        //         this._oPOVH = new sap.ui.comp.valuehelpdialog.ValueHelpDialog({
+        //             title: "Select Purchase Order",
+        //             supportRanges: true,        // Enables "Define Conditions" tab
+        //             supportRangesOnly: true,    // Only show Define Conditions
+        //             key: "PurchaseOrder",
+        //             ok: function (oEvent) {
 
-                        oMultiInput.removeAllTokens();
+        //                 var aTokens = oEvent.getParameter("tokens");
+        //                 var oMultiInput = this.byId("idFltrPO");
 
-                        aTokens.forEach(function (oToken) {
-                            var oRangeData = oToken.data("range");
+        //                 oMultiInput.removeAllTokens();
 
-                            if (oRangeData) {
-                                // Range token
-                                var sValue = oRangeData.value1;
+        //                 aTokens.forEach(function (oToken) {
+        //                     var oRangeData = oToken.data("range");
 
-                                if (oRangeData.operation === "Contains") {
-                                    sValue = "*" + sValue + "*";
-                                }
+        //                     if (oRangeData) {
+        //                         // Range token
+        //                         var sValue = oRangeData.value1;
 
-                                oMultiInput.addToken(new sap.m.Token({
-                                    key: sValue,
-                                    text: sValue
-                                }));
-                            } else {
-                                // Normal selection token
-                                var sKey = oToken.getKey();
-                                if (sKey) {
-                                    oMultiInput.addToken(new sap.m.Token({
-                                        key: sKey,
-                                        text: sKey
-                                    }));
-                                }
-                            }
+        //                         if (oRangeData.operation === "Contains") {
+        //                             sValue = "*" + sValue + "*";
+        //                         }
 
-                        });
+        //                         oMultiInput.addToken(new sap.m.Token({
+        //                             key: sValue,
+        //                             text: sValue
+        //                         }));
+        //                     } else {
+        //                         // Normal selection token
+        //                         var sKey = oToken.getKey();
+        //                         if (sKey) {
+        //                             oMultiInput.addToken(new sap.m.Token({
+        //                                 key: sKey,
+        //                                 text: sKey
+        //                             }));
+        //                         }
+        //                     }
 
-                        this._oPOVH.close();
+        //                 });
 
-                    }.bind(this),
+        //                 this._oPOVH.close();
 
-                    cancel: function () {
-                        this._oPOVH.close();
-                    }.bind(this)
-                });
+        //             }.bind(this),
 
-                // Add to view
-                this.getView().addDependent(this._oPOVH);
+        //             cancel: function () {
+        //                 this._oPOVH.close();
+        //             }.bind(this)
+        //         });
 
-                // Configure range key fields
-                this._oPOVH.setRangeKeyFields([
-                    {
-                        label: "Purchase Order",
-                        key: "PurchaseOrder",
-                        type: "string",
-                        typeInstance: new sap.ui.model.type.String()
-                    }
-                ]);
+        //         // Add to view
+        //         this.getView().addDependent(this._oPOVH);
 
-            }
-            // Open the ValueHelpDialog
-            this._oPOVH.open();
-        },
+        //         // Configure range key fields
+        //         this._oPOVH.setRangeKeyFields([
+        //             {
+        //                 label: "Purchase Order",
+        //                 key: "PurchaseOrder",
+        //                 type: "string",
+        //                 typeInstance: new sap.ui.model.type.String()
+        //             }
+        //         ]);
+
+        //     }
+        //     // Open the ValueHelpDialog
+        //     this._oPOVH.open();
+        // },
 
         //STO
-        onSTOVHRqst: function () {
+        // onSTOVHRqst: function () {
 
-            if (!this._oSTOVH) {
+        //     if (!this._oSTOVH) {
 
-                // Create the ValueHelpDialog
-                this._oSTOVH = new sap.ui.comp.valuehelpdialog.ValueHelpDialog({
-                    title: "Select STO",
-                    supportRanges: true,        // Enables "Define Conditions" tab
-                    supportRangesOnly: true,    // Only show Define Conditions
-                    key: "STO",
-                    ok: function (oEvent) {
+        //         // Create the ValueHelpDialog
+        //         this._oSTOVH = new sap.ui.comp.valuehelpdialog.ValueHelpDialog({
+        //             title: "Select STO",
+        //             supportRanges: true,        // Enables "Define Conditions" tab
+        //             supportRangesOnly: true,    // Only show Define Conditions
+        //             key: "STO",
+        //             ok: function (oEvent) {
 
-                        var aTokens = oEvent.getParameter("tokens");
-                        var oMultiInput = this.byId("idFltrSTO");
+        //                 var aTokens = oEvent.getParameter("tokens");
+        //                 var oMultiInput = this.byId("idFltrSTO");
 
-                        oMultiInput.removeAllTokens();
+        //                 oMultiInput.removeAllTokens();
 
-                        aTokens.forEach(function (oToken) {
-                            var oRangeData = oToken.data("range");
+        //                 aTokens.forEach(function (oToken) {
+        //                     var oRangeData = oToken.data("range");
 
-                            if (oRangeData) {
-                                // Range token
-                                var sValue = oRangeData.value1;
+        //                     if (oRangeData) {
+        //                         // Range token
+        //                         var sValue = oRangeData.value1;
 
-                                if (oRangeData.operation === "Contains") {
-                                    sValue = "*" + sValue + "*";
-                                }
+        //                         if (oRangeData.operation === "Contains") {
+        //                             sValue = "*" + sValue + "*";
+        //                         }
 
-                                oMultiInput.addToken(new sap.m.Token({
-                                    key: sValue,
-                                    text: sValue
-                                }));
-                            } else {
-                                // Normal selection token
-                                var sKey = oToken.getKey();
-                                if (sKey) {
-                                    oMultiInput.addToken(new sap.m.Token({
-                                        key: sKey,
-                                        text: sKey
-                                    }));
-                                }
-                            }
+        //                         oMultiInput.addToken(new sap.m.Token({
+        //                             key: sValue,
+        //                             text: sValue
+        //                         }));
+        //                     } else {
+        //                         // Normal selection token
+        //                         var sKey = oToken.getKey();
+        //                         if (sKey) {
+        //                             oMultiInput.addToken(new sap.m.Token({
+        //                                 key: sKey,
+        //                                 text: sKey
+        //                             }));
+        //                         }
+        //                     }
 
-                        });
+        //                 });
 
-                        this._oSTOVH.close();
+        //                 this._oSTOVH.close();
 
-                    }.bind(this),
+        //             }.bind(this),
 
-                    cancel: function () {
-                        this._oSTOVH.close();
-                    }.bind(this)
-                });
+        //             cancel: function () {
+        //                 this._oSTOVH.close();
+        //             }.bind(this)
+        //         });
 
-                // Add to view
-                this.getView().addDependent(this._oPOVH);
+        //         // Add to view
+        //         this.getView().addDependent(this._oPOVH);
 
-                // Configure range key fields
-                this._oSTOVH.setRangeKeyFields([
-                    {
-                        label: "STO",
-                        key: "STO",
-                        type: "string",
-                        typeInstance: new sap.ui.model.type.String()
-                    }
-                ]);
+        //         // Configure range key fields
+        //         this._oSTOVH.setRangeKeyFields([
+        //             {
+        //                 label: "STO",
+        //                 key: "STO",
+        //                 type: "string",
+        //                 typeInstance: new sap.ui.model.type.String()
+        //             }
+        //         ]);
 
-            }
-            // Open the ValueHelpDialog
-            this._oSTOVH.open();
-        },
-        //PurchaseReq
-        onPRVHRqst: function () {
+        //     }
+        //     // Open the ValueHelpDialog
+        //     this._oSTOVH.open();
+        // },
+        // //PurchaseReq
+        // onPRVHRqst: function () {
 
-            if (!this._oPRVH) {
+        //     if (!this._oPRVH) {
 
-                // Create the ValueHelpDialog
-                this._oPRVH = new sap.ui.comp.valuehelpdialog.ValueHelpDialog({
-                    title: "Select Purchase Requisition",
-                    supportRanges: true,        // Enables "Define Conditions" tab
-                    supportRangesOnly: true,    // Only show Define Conditions
-                    key: "PurchaseRequisition",
-                    ok: function (oEvent) {
+        //         // Create the ValueHelpDialog
+        //         this._oPRVH = new sap.ui.comp.valuehelpdialog.ValueHelpDialog({
+        //             title: "Select Purchase Requisition",
+        //             supportRanges: true,        // Enables "Define Conditions" tab
+        //             supportRangesOnly: true,    // Only show Define Conditions
+        //             key: "PurchaseRequisition",
+        //             ok: function (oEvent) {
 
-                        var aTokens = oEvent.getParameter("tokens");
-                        var oMultiInput = this.byId("idFltrPurReq");
+        //                 var aTokens = oEvent.getParameter("tokens");
+        //                 var oMultiInput = this.byId("idFltrPurReq");
 
-                        oMultiInput.removeAllTokens();
+        //                 oMultiInput.removeAllTokens();
 
-                        aTokens.forEach(function (oToken) {
-                            var oRangeData = oToken.data("range");
+        //                 aTokens.forEach(function (oToken) {
+        //                     var oRangeData = oToken.data("range");
 
-                            if (oRangeData) {
-                                // Range token
-                                var sValue = oRangeData.value1;
+        //                     if (oRangeData) {
+        //                         // Range token
+        //                         var sValue = oRangeData.value1;
 
-                                if (oRangeData.operation === "Contains") {
-                                    sValue = "*" + sValue + "*";
-                                }
+        //                         if (oRangeData.operation === "Contains") {
+        //                             sValue = "*" + sValue + "*";
+        //                         }
 
-                                oMultiInput.addToken(new sap.m.Token({
-                                    key: sValue,
-                                    text: sValue
-                                }));
-                            } else {
-                                // Normal selection token
-                                var sKey = oToken.getKey();
-                                if (sKey) {
-                                    oMultiInput.addToken(new sap.m.Token({
-                                        key: sKey,
-                                        text: sKey
-                                    }));
-                                }
-                            }
+        //                         oMultiInput.addToken(new sap.m.Token({
+        //                             key: sValue,
+        //                             text: sValue
+        //                         }));
+        //                     } else {
+        //                         // Normal selection token
+        //                         var sKey = oToken.getKey();
+        //                         if (sKey) {
+        //                             oMultiInput.addToken(new sap.m.Token({
+        //                                 key: sKey,
+        //                                 text: sKey
+        //                             }));
+        //                         }
+        //                     }
 
-                        });
+        //                 });
 
-                        this._oPRVH.close();
+        //                 this._oPRVH.close();
 
-                    }.bind(this),
+        //             }.bind(this),
 
-                    cancel: function () {
-                        this._oPRVH.close();
-                    }.bind(this)
-                });
+        //             cancel: function () {
+        //                 this._oPRVH.close();
+        //             }.bind(this)
+        //         });
 
-                // Add to view
-                this.getView().addDependent(this._oPRVH);
+        //         // Add to view
+        //         this.getView().addDependent(this._oPRVH);
 
-                // Configure range key fields
-                this._oPRVH.setRangeKeyFields([
-                    {
-                        label: "Purchase Requisition",
-                        key: "PurchaseRequisition",
-                        type: "string",
-                        typeInstance: new sap.ui.model.type.String()
-                    }
-                ]);
+        //         // Configure range key fields
+        //         this._oPRVH.setRangeKeyFields([
+        //             {
+        //                 label: "Purchase Requisition",
+        //                 key: "PurchaseRequisition",
+        //                 type: "string",
+        //                 typeInstance: new sap.ui.model.type.String()
+        //             }
+        //         ]);
 
-            }
-            // Open the ValueHelpDialog
-            this._oPRVH.open();
-        },
-       
+        //     }
+        //     // Open the ValueHelpDialog
+        //     this._oPRVH.open();
+        // },
+
         //Plant
-    
+
         onPlantVHRqst: function () {
 
             if (!this._oPlantVH) {
@@ -2734,7 +3566,9 @@ sap.ui.define([
                     title: "Select Material",
                     supportMultiselect: true,
                     key: "Material",
-                    descriptionKey: "ProductName",
+                    supportRanges: true,          // Enables "Define Conditions"
+                    supportRangesOnly: false,
+                    // descriptionKey: "ProductName",
 
                     ok: function (oEvent) {
 
@@ -2751,16 +3585,16 @@ sap.ui.define([
                             if (oRangeData) {
 
                                 var sValue = oRangeData.value1;
-
-                                //  handle operators
-                                if (oRangeData.operation === "Contains") {
-                                    sValue = "*" + sValue + "*";
+                                if (oRangeData.value2) {
+                                    sValue = oRangeData.value1 + "..." + oRangeData.value2;
                                 }
 
                                 oMultiInput.addToken(new sap.m.Token({
                                     key: sValue,
                                     text: sValue
                                 }));
+                                // store full range (operation, value1, value2, exclude)
+                                oMultiInput.data("range", oRangeData);
                             }
 
                             //   Normal Selection
@@ -2818,20 +3652,21 @@ sap.ui.define([
                 //this._oMaintVH.setSupportRanges(true);
                 //this._oMaintVH.setSupportRangesOnly(false);
 
-                // FIX: Required for enabling input field
+                // FIX: Required for enabling input field - Define Conditions
                 this._oMaterialVH.setRangeKeyFields([
                     {
                         label: "Material",
                         key: "Material",
                         type: "string",
                         typeInstance: new sap.ui.model.type.String()
-                    },
-                    {
-                        label: "Material Description",
-                        key: "ProductName",
-                        type: "string",
-                        typeInstance: new sap.ui.model.type.String()
                     }
+
+                    // {
+                    //     label: "Material Description",
+                    //     key: "ProductName",
+                    //     type: "string",
+                    //     typeInstance: new sap.ui.model.type.String()
+                    // }
 
                 ]);
 

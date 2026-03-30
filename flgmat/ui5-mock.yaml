@@ -22,10 +22,6 @@ server:
           - url: https://my305676-api.s4hana.ondemand.com/
             authenticationType: BasicAuthentication
             destination: S4HC_FLOG_MaTTrack
-            path: /sap/opu/odata/sap/YY1_FLG_UCCWOREF_API_CDS/
-          - url: https://my305676-api.s4hana.ondemand.com/
-            authenticationType: BasicAuthentication
-            destination: S4HC_FLOG_MaTTrack
             path: /sap/opu/odata4/sap/api_shipmentcontainerpackg/srvd_a2x/sap/shipmentcontainerunit/0001/
           - url: https://my305676-api.s4hana.ondemand.com/
             authenticationType: BasicAuthentication
@@ -58,10 +54,6 @@ server:
           - urlPath: /sap/opu/odata/sap/YY1_FLGTRK_TRACKING_API_CDS
             metadataPath: ./webapp/localService/mainService/metadata.xml
             mockdataPath: ./webapp/localService/mainService/data
-            generateMockData: true
-          - urlPath: /sap/opu/odata/sap/YY1_FLG_UCCWOREF_API_CDS
-            metadataPath: ./webapp/localService/YY1_FLG_UCCWOREF_API_CDS/metadata.xml
-            mockdataPath: ./webapp/localService/YY1_FLG_UCCWOREF_API_CDS/data
             generateMockData: true
           - urlPath: /sap/opu/odata4/sap/api_shipmentcontainerpackg/srvd_a2x/sap/shipmentcontainerunit/0001
             metadataPath: ./webapp/localService/shipmentcontainerunit/metadata.xml
