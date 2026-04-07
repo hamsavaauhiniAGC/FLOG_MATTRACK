@@ -23,8 +23,11 @@
                         />
                         <smartVariantManagement:SmartVariantManagement
                             id="svm"
+                            persistencyKey="WO_MATERIAL_TRACKING_VARIANT"
                             showExecuteOnSelection="true"
                             class="spacingBetweenTitleAndVariant"
+                            showShare="true"
+                            showSetAsDefault="true"
                         />
                     </VBox>
                 </f:heading>
@@ -36,12 +39,13 @@
                     <HBox id="idHbx">
                         <fb:FilterBar
                             id="idFilterBar"
-                            persistencyKey="MaterialTrackingKey"
+                            persistencyKey="WO_MATERIAL_TRACKING_VARIANT"
                             useToolbar="false"
                             search="onFltrSearch"
                             filterChange=".onFilterChange"
                             afterVariantLoad=".onAfterVariantLoad"
                             showGoOnFB="true"
+                            
                         >
                             <fb:filterGroupItems>
                                 <fb:FilterGroupItem
@@ -606,6 +610,7 @@
                             />
                         </table:template>
                     </table:Column>
+                    <!--
                     <table:Column
                         id="idColMODesc"
                         width="150px"
@@ -623,6 +628,7 @@
                             />
                         </table:template>
                     </table:Column>
+                     -->
                     <table:Column
                         id="idColMOType"
                         width="150px"
@@ -1277,10 +1283,8 @@
                                 id="idTxtDeliveryDate"
                                 text="{
                                         path: 'trackModel>YY1_DELIVERYDATE_PDI_PO',
-                                        type: 'sap.ui.model.odata.type.Date',
-                                        formatOptions: {
-                                        pattern: 'dd-MM-yyyy'
-                                        }
+                                        formatter: '.formatter.formatCustomDate'
+                                        
                                     }"
                             />
                         </table:template>
@@ -1301,10 +1305,7 @@
                                 id="idTxtDeliveryDateSTO"
                                 text="{
                                         path: 'trackModel>YY1_DELIVERYDATE_PDI_STO',
-                                        type: 'sap.ui.model.odata.type.Date',
-                                        formatOptions: {
-                                        pattern: 'dd-MM-yyyy'
-                                        }
+                                        formatter: '.formatter.formatCustomDate'
                                     }"
                             />
                         </table:template>
@@ -1574,7 +1575,60 @@
                             />
                         </table:template>
                     </table:Column>
+                    <table:Column
+                        id="idColDeliItDesc"
+                        width="150px"
+                        sortProperty="DeliveryDocumentItemText_deli"
+                        showSortMenuEntry="true"
+                    >
+                        <Label
+                            id="idTxtTitleDeliItDesc"
+                            text="{i18n>DeliveryDocumentItemText_deli.LBL}"
+                        />
 
+                        <table:template>
+                            <Text
+                                id="idTxtDeliItdesc"
+                                text="{trackModel>DeliveryDocumentItemText_deli}"
+                            />
+                        </table:template>
+                    </table:Column>
+                     <table:Column
+                        id="idColActualDeliveryQuantity_deli"
+                        width="150px"
+                        sortProperty="ActualDeliveryQuantity_deli"
+                        showSortMenuEntry="true"
+                    >
+                        <Label
+                            id="idTxtTitleActualDeliveryQuantity_deli"
+                            text="{i18n>ActualDeliveryQuantity_deli.LBL}"
+                        />
+
+                        <table:template>
+                            <Text
+                                id="idTxtActualDeliveryQuantity_deli"
+                                text="{trackModel>ActualDeliveryQuantity_deli}"
+                            />
+                        </table:template>
+                    </table:Column>
+                     <table:Column
+                        id="idColBaseUnit_deli"
+                        width="150px"
+                        sortProperty="BaseUnit_deli"
+                        showSortMenuEntry="true"
+                    >
+                        <Label
+                            id="idTxtTitleBaseUnit_deli"
+                            text="{i18n>BaseUnit_deli.LBL}"
+                        />
+
+                        <table:template>
+                            <Text
+                                id="idTxtBaseUnit_deli"
+                                text="{trackModel>BaseUnit_deli}"
+                            />
+                        </table:template>
+                    </table:Column>
                     <table:Column
                         id="idColDeliT"
                         width="150px"
@@ -1986,7 +2040,60 @@
                             />
                         </table:template>
                     </table:Column>
+                    <table:Column
+                        id="idColRDeliItDesc"
+                        width="150px"
+                        sortProperty="DeliveryDocumentItemText_RDeli"
+                        showSortMenuEntry="true"
+                    >
+                        <Label
+                            id="idTxtTitleRDeliItDesc"
+                            text="{i18n>DeliveryDocumentItemText_RDeli.LBL}"
+                        />
 
+                        <table:template>
+                            <Text
+                                id="idTxtDeliItRdesc"
+                                text="{trackModel>DeliveryDocumentItemText_RDeli}"
+                            />
+                        </table:template>
+                    </table:Column>
+                     <table:Column
+                        id="idColActualDeliveryQuantity_RDeli"
+                        width="150px"
+                        sortProperty="ActualDeliveryQuantity_RDeli"
+                        showSortMenuEntry="true"
+                    >
+                        <Label
+                            id="idTxtTitleActualDeliveryQuantity_RDeli"
+                            text="{i18n>ActualDeliveryQuantity_RDeli.LBL}"
+                        />
+
+                        <table:template>
+                            <Text
+                                id="idTxtActualDeliveryQuantity_RDeli"
+                                text="{trackModel>ActualDeliveryQuantity_RDeli}"
+                            />
+                        </table:template>
+                    </table:Column>
+                     <table:Column
+                        id="idColBaseUnit_RDeli"
+                        width="150px"
+                        sortProperty="BaseUnit_RDeli"
+                        showSortMenuEntry="true"
+                    >
+                        <Label
+                            id="idTxtTitleBaseUnit_RDeli"
+                            text="{i18n>BaseUnit_RDeli.LBL}"
+                        />
+
+                        <table:template>
+                            <Text
+                                id="idTxtBaseUnit_RDeli"
+                                text="{trackModel>BaseUnit_RDeli}"
+                            />
+                        </table:template>
+                    </table:Column>
                     <table:Column
                         id="idColValTRDeli"
                         width="150px"

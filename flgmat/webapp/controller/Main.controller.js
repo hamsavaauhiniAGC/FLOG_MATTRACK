@@ -1,5 +1,7 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
+    "ns/flgmat/formatter",
+
     "sap/ui/model/json/JSONModel",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
@@ -9,6 +11,8 @@ sap.ui.define([
     "sap/ui/comp/smartvariants/PersonalizableInfo"
 
 ], (Controller,
+    formatter,
+
     JSONModel,
     Filter,
     FilterOperator,
@@ -20,6 +24,8 @@ sap.ui.define([
     "use strict";
 
     return Controller.extend("ns.flgmat.controller.Main", {
+        formatter: formatter,
+
         onInit: function () {
             var oLocalModel = new sap.ui.model.json.JSONModel([]);
             this.getView().setModel(oLocalModel, "trackModel");
@@ -35,38 +41,24 @@ sap.ui.define([
             this.oFilterBar = this.byId("idFilterBar");
             this.oSmartVariantManagement = this.byId("svm");
             this.oTable = this.byId("idTabTrackList");
-            //this.oFilterBar.setSmartVariant(this.oSmartVariantManagement);
+
             // Attach FilterBar personalizable info
             var oFilterPersInfo = new PersonalizableInfo({
                 type: "filterBar",
-                keyName: "MaterialTrackingKey",
+                keyName: "persistencyKey",
                 control: this.oFilterBar
             });
             this.oSmartVariantManagement.addPersonalizableControl(oFilterPersInfo);
 
             // Attach Table personalizable info
-            // var attachTablePers = function () {
-            //     var aColumns = this.oTable.getColumns();
-            //     var oTablePersInfo = new PersonalizableInfo({
-            //         type: "table",
-            //         keyName: "ColumnVisibilityKey",
-            //         control: this.oTable,
-            //         columnKeys: aColumns.map(c => c.getId())
-            //     });
-            //     this.oSmartVariantManagement.addPersonalizableControl(oTablePersInfo);
+            var oTablePersInfo = new PersonalizableInfo({
+                type: "table",
+                keyName: "persistencyKey",
+                control: this.oTable
+            });
 
-            //     //  Initialize variant management here
-            //     this.oSmartVariantManagement.initialise(function () {
-            //         console.log("Variant initialized");
-            //     }, this.oFilterBar);
-            // }.bind(this);
+            this.oSmartVariantManagement.addPersonalizableControl(oTablePersInfo);
 
-            // If table already has rows (or use attachEventOnce)
-            // if (this.oTable.getColumns().length > 0) {
-            //     attachTablePers();
-            // } else {
-            //     this.oTable.attachEventOnce("updateFinished", attachTablePers);
-            // }
 
             this.oSmartVariantManagement.initialise(function () {
                 console.log("Variant initialized");
@@ -79,19 +71,42 @@ sap.ui.define([
 
         // Get current values from all MultiInput fields as array of keys
         _fetchData: function () {
-            return this.oFilterBar.getFilterGroupItems().map(function (oItem) {
+
+            var aFilterData = this.oFilterBar.getFilterGroupItems().map(function (oItem) {
+
                 var oControl = oItem.getControl();
                 var aTokens = oControl.getTokens ? oControl.getTokens() : [];
-                var aKeys = aTokens.map(function (t) { return t.getKey(); });
+
+                var aKeys = aTokens.map(function (t) {
+                    return t.getKey();
+                });
+
                 return {
                     groupName: oItem.getGroupName(),
                     fieldName: oItem.getName(),
                     fieldData: aKeys
                 };
             });
+
+            // Table column data
+            var aColumnData = this.oTable.getColumns().map(function (oColumn) {
+                return {
+                    id: oColumn.getId(),
+                    visible: oColumn.getVisible()
+                };
+            });
+
+            return {
+                filters: aFilterData,
+                columns: aColumnData
+            };
         },
         // Apply saved variant to MultiInput controls
-        _applyData: function (aData) {
+        _applyData: function (oVariantData) {
+            if (!oVariantData) {
+                return;
+            }
+            var aData = oVariantData.filters || [];
             aData.forEach(function (oDataObject) {
                 var oItem = this.oFilterBar.getFilterGroupItems().find(function (item) {
                     return item.getName() === oDataObject.fieldName &&
@@ -108,7 +123,21 @@ sap.ui.define([
                         });
                     }
                 }
-            }, this);
+            }.bind(this));
+            // Apply column visibility
+            if (oVariantData.columns) {
+
+                oVariantData.columns.forEach(function (oColData) {
+
+                    var oColumn = sap.ui.getCore().byId(oColData.id);
+
+                    if (oColumn) {
+                        oColumn.setVisible(oColData.visible);
+                    }
+
+                });
+
+            }
         },
         onSelectionChange: function (oEvent) {
             // Mark variant as modified whenever user changes filter
@@ -117,21 +146,28 @@ sap.ui.define([
         },
         // Trigger search after a variant is applied
         onAfterVariantLoad: function () {
-            //this.onFltrSearch();
-            var bHasData = this.oFilterBar.getFilterGroupItems().some(function (oItem) {
 
-                var oControl = oItem.getControl();
+            setTimeout(function () {
+                var bHasData = this.oFilterBar.getFilterGroupItems().some(function (oItem) {
 
-                if (oControl.getTokens) {
-                    return oControl.getTokens().length > 0;
+                    var oControl = oItem.getControl();
+
+                    if (oControl.getTokens) {
+                        return oControl.getTokens().length > 0;
+                    }
+
+                    return false;
+                });
+
+                if (bHasData) {
+                    this.onFltrSearch();
                 }
-
-                return false;
-            });
-
-            if (bHasData) {
-                this.onFltrSearch();
-            }
+                else {
+                    // when in variant filter is blank then the table column value -blank
+                    var oModel = this.getView().getModel("trackModel");
+                    oModel.setData([]);
+                }
+            }.bind(this), 200);
         },
 
         onAfterRendering: function () {
@@ -185,9 +221,17 @@ sap.ui.define([
 
             var oMultiInput = oEvent.getSource();
             var sLabel = oMultiInput.getParent().getLabel();
+            var sFieldId = oMultiInput.getId();
+            this._mFieldTokens = this._mFieldTokens || {};
+            this._oCurrentInput = oMultiInput;
+
+            // ALWAYS destroy old dialog 
+            if (this._oRangeVH) {
+                this._oRangeVH.destroy();
+                this._oRangeVH = null;
+            }
 
             if (!this._oRangeVH) {
-
                 this._oRangeVH = new sap.ui.comp.valuehelpdialog.ValueHelpDialog({
                     title: "Define Conditions",
                     supportRanges: true,
@@ -196,6 +240,8 @@ sap.ui.define([
                     ok: function (oEvent) {
 
                         var aTokens = oEvent.getParameter("tokens");
+                        this._mFieldTokens[sFieldId] = aTokens;
+                        var sCurrentFieldId = this._oCurrentInput.getId();
 
                         this._oCurrentInput.removeAllTokens();
 
@@ -204,10 +250,10 @@ sap.ui.define([
                             var oRange = oToken.data("range");
 
                             if (oRange) {
-                                var sKey = oRangeData.value1;
+                                var sKey = oRange.value1;
 
-                                if (oRangeData.value2) {
-                                    sKey = oRangeData.value1 + "..." + oRangeData.value2;
+                                if (oRange.value2) {
+                                    sKey = oRange.value1 + "..." + oRange.value2;
                                 }
                                 var oNewToken = new sap.m.Token({
                                     key: sKey,
@@ -234,23 +280,24 @@ sap.ui.define([
                 this.getView().addDependent(this._oRangeVH);
             }
 
-            this._oCurrentInput = oMultiInput;
-
-            this._oRangeVH.setTitle("Define Conditions - " + sLabel);
+            this._oRangeVH.setTitle(sLabel);
 
             this._oRangeVH.setRangeKeyFields([
                 {
                     label: sLabel,
-                    key: oMultiInput.getId(),   // unique key instead of label
+                    key: sFieldId,   //  filter id instead of label
                     type: "string",
                     typeInstance: new sap.ui.model.type.String()
                 }
             ]);
 
+            var aSavedTokens = this._mFieldTokens[sFieldId] || [];
+
+            this._oRangeVH.setTokens([]);
+            this._oRangeVH.setTokens(aSavedTokens);
+
             this._oRangeVH.open();
         },
-
-
 
         _loadTrackdata: function (aFilters) {
             //_loadTrackdata: function () {    
@@ -298,6 +345,7 @@ sap.ui.define([
                             if (oFilter.sPath === "Plant" || oFilter.sPath === "Material"
                                 || oFilter.sPath === "RequirementDate" || oFilter.sPath === "PurchaseRequisition"
                                 || oFilter.sPath === "PurchaseOrder" || oFilter.sPath === "STO" || oFilter.sPath === "Reservation"
+                                || oFilter.sPath === "MaintenanceOrderType"
                             ) {
                                 bSkipUCC = true;
                             }
@@ -308,6 +356,7 @@ sap.ui.define([
                                     if (subFilter.sPath === "Plant" || subFilter.sPath === "Material"
                                         || subFilter.sPath === "RequirementDate" || subFilter.sPath === "PurchaseRequisition"
                                         || subFilter.sPath === "PurchaseOrder" || subFilter.sPath === "STO" || subFilter.sPath === "Reservation"
+                                        || subFilter.sPath === "MaintenanceOrderType"
                                     ) {
                                         bSkipUCC = true;
                                     }
@@ -317,8 +366,10 @@ sap.ui.define([
                         });
 
                         //UCC PROCESSING 
+                        var pUCCProcess = Promise.resolve();
 
                         if (!bSkipUCC) {
+
 
                             //UCC API -> to pass the Maintenance Order
                             // var aMaintOrders = [...new Set(
@@ -391,6 +442,8 @@ sap.ui.define([
                                             oNEWUCC.MaintenanceOrder = oItem.MaintenanceOrder;
                                             oNEWUCC.MaintenanceOrderDesc = oItem.MaintenanceOrderDesc;
                                             oNEWUCC.MaintenanceOrderType = oItem.MaintenanceOrderType;
+                                            oNEWUCC.MaintOrdBasicStartDate = oItem.MaintOrdBasicStartDate;
+                                            oNEWUCC.MaintOrdBasicEndDate = oItem.MaintOrdBasicEndDate;
                                             oNEWUCC.Reservation = "";
                                             oNEWUCC.Plant = "";
                                             oNEWUCC.Material = "";
@@ -420,7 +473,7 @@ sap.ui.define([
                                                 oNEWUCC.InventoryValuationType_Del = oMatchedUCC.InventoryValuationType || "";
                                                 oNEWUCC.PickingDate_Deli = oMatchedUCC.PickingDate || "";
                                             }
-
+                                            //oNEWUCC.Plant = oMatchedUCC.Plant || "";
                                             oNEWUCC.BinLocation = oMatchedUCC.BinLocation || "";
                                             oNEWUCC.DropLocation = oMatchedUCC.DropLocation || "";
                                             oNEWUCC.OffShoreBin = oMatchedUCC.OffShoreBin || "";
@@ -438,19 +491,89 @@ sap.ui.define([
 
                                 });
 
-                                aFinalData = aUCCMergedData;
+                                //aFinalData = aUCCMergedData;
+                                pUCCProcess = Promise.resolve().then(function () {
+                                    aFinalData = aUCCMergedData;
+                                });
                             }
 
                             else {
+                                var aPromises = [];
                                 oUCCMap.forEach(function (aUCCList, sOrder) {
-
                                     aUCCList.forEach(function (oMatchedUCC) {
+                                        var sMaintOrder = oMatchedUCC.MaintOrder;
+                                        var pPromise = new Promise(function (resolve) {
+                                            var sDesc = "";
+                                            var sMOType = "";
+                                            var sStrtDate = "";
+                                            var sEndDate = ""
+                                            oModel.read("/YY1_FLGTRK_Tracking_API", {
+                                                filters: [
+                                                    new sap.ui.model.Filter(
+                                                        "MaintenanceOrder",
+                                                        sap.ui.model.FilterOperator.EQ,
+                                                        sMaintOrder
+                                                    )
+                                                ],
+
+                                                success: function (oResponse) {
+
+                                                    if (oResponse.results && oResponse.results.length > 0) {
+                                                        sDesc = oResponse.results[0].MaintenanceOrderDesc || "";
+                                                        sMOType = oResponse.results[0].MaintenanceOrderType || "";
+                                                        sStrtDate = oResponse.results[0].MaintOrdBasicStartDate || "";
+                                                        sEndDate = oResponse.results[0].MaintOrdBasicEndDate || "";
+
+                                                    }
+
+                                                    resolve({
+                                                        oMatchedUCC: oMatchedUCC,
+                                                        sDesc: sDesc,
+                                                        sMOType: sMOType,
+                                                        sStrtDate: sStrtDate,
+                                                        sEndDate: sEndDate
+                                                    });
+                                                },
+
+                                                error: function (oError) {
+
+                                                    console.log(
+                                                        "Unable to fetch data for UCC based on Tracking API",
+                                                        oError
+                                                    );
+
+                                                    resolve({
+                                                        oMatchedUCC: oMatchedUCC,
+                                                        sDesc: "",
+                                                        sMOType: ""
+                                                    });
+                                                }
+                                            });
+
+                                        });
+                                        aPromises.push(pPromise);
+
+                                    });
+
+                                });
+
+                                pUCCProcess = Promise.all(aPromises).then(function (aResults) {
+
+                                    aResults.forEach(function (oResult) {
+
+                                        var oMatchedUCC = oResult.oMatchedUCC;
+                                        var sDesc = oResult.sDesc;
+                                        var sMOType = oResult.sMOType;
+                                        var sEndDate = oResult.sEndDate;
+                                        var sStrtDate = oResult.sStrtDate;
 
                                         var oNEWUCC = {};
 
                                         oNEWUCC.MaintenanceOrder = oMatchedUCC.MaintOrder;
-                                        oNEWUCC.MaintenanceOrderDesc = "";
-                                        oNEWUCC.MaintenanceOrderType = "";
+                                        oNEWUCC.MaintenanceOrderDesc = sDesc;
+                                        oNEWUCC.MaintenanceOrderType = sMOType;
+                                        oNEWUCC.MaintOrdBasicStartDate = sStrtDate;
+                                        oNEWUCC.MaintOrdBasicEndDate = sEndDate;
                                         oNEWUCC.Reservation = "";
                                         oNEWUCC.Plant = "";
                                         oNEWUCC.Material = "";
@@ -478,9 +601,9 @@ sap.ui.define([
                                             oNEWUCC.OvrlItmGeneralIncompletio_Deli = oMatchedUCC.OvrlItmGeneralIncompletionSts || "";
                                             oNEWUCC.InventoryValuationType_Del = oMatchedUCC.InventoryValuationType || "";
                                             oNEWUCC.PickingDate_Deli = oMatchedUCC.PickingDate || "";
-
                                         }
 
+                                        //oNEWUCC.Plant = oMatchedUCC.Plant || "";
                                         oNEWUCC.BinLocation = oMatchedUCC.BinLocation || "";
                                         oNEWUCC.DropLocation = oMatchedUCC.DropLocation || "";
                                         oNEWUCC.OffShoreBin = oMatchedUCC.OffShoreBin || "";
@@ -493,140 +616,221 @@ sap.ui.define([
 
                                     });
 
+                                    aFinalData = aUCCMergedData;
+
+                                    console.log("Final UCC Data:", aFinalData);
+
                                 });
 
-                                aFinalData = aUCCMergedData;
                             }
+
+                            //     oUCCMap.forEach(function (aUCCList, sOrder) {
+
+                            //         aUCCList.forEach(function (oMatchedUCC) {
+                            //             var sMaintOrder = [];
+                            //             sMaintOrder = oMatchedUCC.MaintOrder;
+
+                            //             var oNEWUCC = {};
+
+                            //             oNEWUCC.MaintenanceOrder = oMatchedUCC.MaintOrder;
+                            //             oNEWUCC.MaintenanceOrderDesc = "";
+                            //             oNEWUCC.MaintenanceOrderType = "";
+                            //             oNEWUCC.Reservation = "";
+                            //             oNEWUCC.Plant = "";
+                            //             oNEWUCC.Material = "";
+
+                            //             if (oMatchedUCC.IsReturn === true) {
+
+                            //                 oNEWUCC.ReturnDeliveryNumber = oMatchedUCC.DelNum || "";
+                            //                 oNEWUCC.ReturnDeliveryItem = oMatchedUCC.DelItem || "";
+                            //                 oNEWUCC.DeliveryDocumentType_RDeli = oMatchedUCC.DeliveryDocumentType || "";
+                            //                 oNEWUCC.PlannedGoodsIssueDate_RDeli = oMatchedUCC.PlannedGoodsIssueDate || "";
+                            //                 oNEWUCC.OverallGoodsMovementSt_RDEL = oMatchedUCC.OverallGoodsMovementStatus || "";
+                            //                 oNEWUCC.ActualGoodsMovementD_RDel = oMatchedUCC.ActualGoodsMovementDate || "";
+                            //                 oNEWUCC.OvrlItmGeneralIncompletion_RDe = oMatchedUCC.OvrlItmGeneralIncompletionSts || "";
+                            //                 oNEWUCC.InventoryValuationType_RDeli = oMatchedUCC.InventoryValuationType || "";
+                            //                 oNEWUCC.PickingDate_RDeli = oMatchedUCC.PickingDate || "";
+
+                            //             } else {
+
+                            //                 oNEWUCC.DeliveryNumber = oMatchedUCC.DelNum || "";
+                            //                 oNEWUCC.DeliveryItem = oMatchedUCC.DelItem || "";
+                            //                 oNEWUCC.DeliveryDocumentType_Deli = oMatchedUCC.DeliveryDocumentType || "";
+                            //                 oNEWUCC.PlannedGoodsIssueDate_Deli = oMatchedUCC.PlannedGoodsIssueDate || "";
+                            //                 oNEWUCC.OverallGoodsMovementStat_Deli = oMatchedUCC.OverallGoodsMovementStatus || "";
+                            //                 oNEWUCC.ActualGoodsMovementDa_Deli = oMatchedUCC.ActualGoodsMovementDate || "";
+                            //                 oNEWUCC.OvrlItmGeneralIncompletio_Deli = oMatchedUCC.OvrlItmGeneralIncompletionSts || "";
+                            //                 oNEWUCC.InventoryValuationType_Del = oMatchedUCC.InventoryValuationType || "";
+                            //                 oNEWUCC.PickingDate_Deli = oMatchedUCC.PickingDate || "";
+
+                            //             }
+                            //             oNEWUCC.Plant = oMatchedUCC.Plant || "";
+                            //             oNEWUCC.BinLocation = oMatchedUCC.BinLocation || "";
+                            //             oNEWUCC.DropLocation = oMatchedUCC.DropLocation || "";
+                            //             oNEWUCC.OffShoreBin = oMatchedUCC.OffShoreBin || "";
+                            //             oNEWUCC.OldShipItem = oMatchedUCC.OldShipItem || "";
+                            //             oNEWUCC.RentalInfo = oMatchedUCC.RentalInfo || "";
+                            //             oNEWUCC.Supplier_WOREF = oMatchedUCC.Supplier || "";
+                            //             oNEWUCC.RefDelivery = oMatchedUCC.RetDel || "";
+
+                            //             aUCCMergedData.push(oNEWUCC);
+
+                            //         });
+
+                            //     });
+
+                            //     aFinalData = aUCCMergedData;
+                            // }
                         }
 
                         //new - Container API
-                        var aPromises = aFinalData.map(function (oItem) {
-                            if (oItem.DeliveryNumber) { // Ensure you use the right property name
-                                return this._getContainerDetails(oItem);
-                            }
-                            return Promise.resolve();
-                        }.bind(this));
-                        Promise.all(aPromises).then(function () {
-
-
-                            aFinalData.forEach(function (oItem) {
-
-                                //Delivery final status
-                                oItem.DeliveryFinalStatus = "";
-
-                                var isNL = oItem.DeliveryDocumentType_Deli === "NL";
-                                var is101 = oItem.GoodsMovementType_STO === "101";
-                                var isContainerReceived = oItem.ContainerStatus === "Received";
-
-                                // STO Case
-                                if (isNL && is101) {
-                                    oItem.DeliveryFinalStatus = "Received";
+                        pUCCProcess.then(function () {
+                            var aPromises = aFinalData.map(function (oItem) {
+                                if (oItem.DeliveryNumber) { // Ensure you use the right property name
+                                    return this._getContainerDetails(oItem);
                                 }
+                                return Promise.resolve();
+                            }.bind(this));
+                            Promise.all(aPromises).then(function () {
+                                var oResourceBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+                                aFinalData.forEach(function (oItem) {
 
-                                // Other Deliveries
-                                else if (!isNL && isContainerReceived) {
-                                    oItem.DeliveryFinalStatus = "Received";
-                                }
-
-                                //Remove Preceeding Zeros in DeliveryNumber
-                                if (oItem.DeliveryNumber) {
-                                    oItem.DeliveryNumber = oItem.DeliveryNumber.replace(/^0+/, '') || "";
-                                }
-                                //DeliveryItem
-                                if (oItem.DeliveryItem) {
-                                    oItem.DeliveryItem = oItem.DeliveryItem.replace(/^0+/, '') || "";
-                                }
-                                //Maintenance Order Mapping
-                                if (oItem.MaintenanceOrderType) {
-
-                                    if (oItem.MaintenanceOrderType === "YBA1") {
-                                        oItem.MaintenanceOrderType = "Corrective Maintenance"
+                                    //Delivery final status
+                                    oItem.DeliveryFinalStatus = "";
+                                    var isNL = oItem.DeliveryDocumentType_Deli === "NL";
+                                    var is101 = oItem.GoodsMovementType_STO === "101";
+                                    var isContainerReceived = oItem.ContainerStatus === "Received";
+                                    // STO Case
+                                    if (isNL && is101) {
+                                        oItem.DeliveryFinalStatus = "Received";
                                     }
-                                    else if (oItem.MaintenanceOrderType === "YBA2") {
-                                        oItem.MaintenanceOrderType = "Preventive Maintenance"
-                                    }
-                                    else if (oItem.MaintenanceOrderType === "YBA3") {
-                                        oItem.MaintenanceOrderType = "Unplanned Maintenance"
-                                    }
-                                    else {
-                                        oItem.MaintenanceOrderType
+                                    // Other Deliveries
+                                    else if (!isNL && isContainerReceived) {
+                                        oItem.DeliveryFinalStatus = "Received";
                                     }
 
-                                }
-                                //Item Category Mapping
-                                var oItemCategoryMap = {
-                                    L: "Stock Item",
-                                    N: "Non-Stock item"
-                                }
-                                if (oItem.MaintComponentItemCategory) {
-                                    oItem.MaintComponentItemCategory = oItemCategoryMap[oItem.MaintComponentItemCategory]
-                                        || oItem.MaintComponentItemCategory;
-                                }
-                                //Delivery Type & Return Delivery Type
-                                var oDeliveryTypeMap = {
-                                    LO: "Delivery w/o Ref",
-                                    NL: 'Replenishment Dlv'
-                                }
-                                if (oItem.DeliveryDocumentType_Deli) {
-                                    oItem.DeliveryDocumentType_Deli = oDeliveryTypeMap[oItem.DeliveryDocumentType_Deli] || oItem.DeliveryDocumentType_Deli
-                                }
-                                if (oItem.DeliveryDocumentType_RDeli) {
-                                    oItem.DeliveryDocumentType_RDeli = oDeliveryTypeMap[oItem.DeliveryDocumentType_RDeli] || oItem.DeliveryDocumentType_RDeli
-                                }
-                                //Warehouse Task Status
-                                var oWHTaskStsMap = {
-                                    '': "Open",
-                                    A: "Canceled",
-                                    B: "Waiting",
-                                    C: "Confirmed"
-                                }
-                                if (oItem.WarehouseTaskStatus) {
-                                    oItem.WarehouseTaskStatus = oWHTaskStsMap[oItem.WarehouseTaskStatus] || oItem.WarehouseTaskStatus
-                                }
-                                // Delivery Picking Status, Delivery Goods Issue Status,ReturnDelivery Picking Status,Return Delivery Goods Issue Status
-                                var oDelStsMap = {
-                                    '': "Not Relevant",
-                                    A: "Not yet processed",
-                                    B: "Partially processed",
-                                    C: "Completely processed"
-                                }
-                                //Delivery Picking Status
-                                if (oItem.OvrlItmGeneralIncompletio_Deli) {
-                                    oItem.OvrlItmGeneralIncompletio_Deli = oDelStsMap[oItem.OvrlItmGeneralIncompletio_Deli] || oItem.OvrlItmGeneralIncompletio_Deli
-                                }
-                                // Delivery Goods Issue Status
-                                if (oItem.OverallGoodsMovementStat_Deli) {
-                                    oItem.OverallGoodsMovementStat_Deli = oDelStsMap[oItem.OverallGoodsMovementStat_Deli] || oItem.OverallGoodsMovementStat_Deli
-                                }
-                                //Return Deli Picking Status
-                                if (oItem.OvrlItmGeneralIncompletion_RDe) {
-                                    oItem.OvrlItmGeneralIncompletion_RDe = oDelStsMap[oItem.OvrlItmGeneralIncompletion_RDe] || oItem.OvrlItmGeneralIncompletion_RDe
-                                }
-                                //Return Deli Goods Issue Status   
-                                if (oItem.OverallGoodsMovementSt_RDEL) {
-                                    oItem.OverallGoodsMovementSt_RDEL = oDelStsMap[oItem.OverallGoodsMovementSt_RDEL] || oItem.OverallGoodsMovementSt_RDEL
-                                }
-                                //Voyage Status
-                                var oVoyStatusMap = {
-                                    "01": "In Transit",
-                                    "02": "Arrived",
-                                    "03": "Completed",
-                                    "04": "Not Started"
-                                }
-                                if (oItem.VoyageStatus) {
-                                    oItem.VoyageStatus = oVoyStatusMap[oItem.VoyageStatus] || oItem.VoyageStatus
-                                }
+                                    //Remove Preceeding Zeros in DeliveryNumber
+                                    if (oItem.DeliveryNumber) {
+                                        oItem.DeliveryNumber = oItem.DeliveryNumber.replace(/^0+/, '') || "";
+                                    }
+                                    //DeliveryItem
+                                    if (oItem.DeliveryItem) {
+                                        oItem.DeliveryItem = oItem.DeliveryItem.replace(/^0+/, '') || "";
+                                    }
+                                    //ReturnDeliveryNumber
+                                    if (oItem.ReturnDeliveryNumber) {
+                                        oItem.ReturnDeliveryNumber = oItem.ReturnDeliveryNumber.replace(/^0+/, '') || "";
+                                    }
+                                    //ReturnDeliveryItem
+                                    if (oItem.ReturnDeliveryItem) {
+                                        oItem.ReturnDeliveryItem = oItem.ReturnDeliveryItem.replace(/^0+/, '') || "";
+                                    }
+                                    //Maintenance Order Type Mapping
+
+                                    if (oItem.MaintenanceOrderType) {
+
+                                        if (oItem.MaintenanceOrderType === "YBA1") {
+                                            oItem.MaintenanceOrderType = oResourceBundle.getText("CorrectiveMaintenance.FLD");
+                                        }
+                                        else if (oItem.MaintenanceOrderType === "YBA2") {
+                                            oItem.MaintenanceOrderType = oResourceBundle.getText("PreventiveMaintenance.FLD");
+                                        }
+                                        else if (oItem.MaintenanceOrderType === "YBA3") {
+                                            oItem.MaintenanceOrderType = oResourceBundle.getText("UnplannedMaintenance.FLD");
+                                        }
+                                        else {
+                                            oItem.MaintenanceOrderType
+                                        }
+                                        //  if (oItem.MaintenanceOrderType) {
+                                        //     if (oItem.MaintenanceOrderType === "YBA1") {
+                                        //         oItem.MaintenanceOrderType = "Corrective Maintenance";
+                                        //     }
+                                        //     else if (oItem.MaintenanceOrderType === "YBA2") {
+                                        //         oItem.MaintenanceOrderType = "Preventive Maintenance";
+                                        //     }
+                                        //     else if (oItem.MaintenanceOrderType === "YBA3") {
+                                        //         oItem.MaintenanceOrderType = "Unplanned Maintenance";
+                                        //     }
+                                        //     else {
+                                        //         oItem.MaintenanceOrderType
+                                        //     }
+                                    }
+                                    //Item Category Mapping
+                                    var oItemCategoryMap = {
+                                        L: oResourceBundle.getText("StockItem.FLD"),
+                                        N: oResourceBundle.getText("Non-Stockitem.FLD")
+                                    }
+                                    if (oItem.MaintComponentItemCategory) {
+                                        oItem.MaintComponentItemCategory = oItemCategoryMap[oItem.MaintComponentItemCategory]
+                                            || oItem.MaintComponentItemCategory;
+                                    }
+                                    //Delivery Type & Return Delivery Type
+                                    var oDeliveryTypeMap = {
+                                        LO: oResourceBundle.getText("DeliverywoRef.FLD"),
+                                        NL: oResourceBundle.getText('ReplenishmentDlv.FLD')
+                                    }
+                                    if (oItem.DeliveryDocumentType_Deli) {
+                                        oItem.DeliveryDocumentType_Deli = oDeliveryTypeMap[oItem.DeliveryDocumentType_Deli] || oItem.DeliveryDocumentType_Deli
+                                    }
+                                    if (oItem.DeliveryDocumentType_RDeli) {
+                                        oItem.DeliveryDocumentType_RDeli = oDeliveryTypeMap[oItem.DeliveryDocumentType_RDeli] || oItem.DeliveryDocumentType_RDeli
+                                    }
+                                    //Warehouse Task Status
+                                    var oWHTaskStsMap = {
+                                        '': oResourceBundle.getText("Open.FLD"),
+                                        A: oResourceBundle.getText("Canceled.FLD"),
+                                        B: oResourceBundle.getText("Waiting.FLD"),
+                                        C: oResourceBundle.getText("Confirmed.FLD")
+                                    }
+                                    if (oItem.WarehouseTaskStatus) {
+                                        oItem.WarehouseTaskStatus = oWHTaskStsMap[oItem.WarehouseTaskStatus] || oItem.WarehouseTaskStatus
+                                    }
+                                    // Delivery Picking Status, Delivery Goods Issue Status,ReturnDelivery Picking Status,Return Delivery Goods Issue Status
+                                    var oDelStsMap = {
+                                        '': oResourceBundle.getText("NotRelevant.FLD"),
+                                        A: oResourceBundle.getText("Notyetprocessed.FLD"),
+                                        B: oResourceBundle.getText("Partiallyprocessed.FLD"),
+                                        C: oResourceBundle.getText("Completelyprocessed.FLD")
+                                    }
+                                    //Delivery Picking Status
+                                    if (oItem.OvrlItmGeneralIncompletio_Deli) {
+                                        oItem.OvrlItmGeneralIncompletio_Deli = oDelStsMap[oItem.OvrlItmGeneralIncompletio_Deli] || oItem.OvrlItmGeneralIncompletio_Deli
+                                    }
+                                    // Delivery Goods Issue Status
+                                    if (oItem.OverallGoodsMovementStat_Deli) {
+                                        oItem.OverallGoodsMovementStat_Deli = oDelStsMap[oItem.OverallGoodsMovementStat_Deli] || oItem.OverallGoodsMovementStat_Deli
+                                    }
+                                    //Return Deli Picking Status
+                                    if (oItem.OvrlItmGeneralIncompletion_RDe) {
+                                        oItem.OvrlItmGeneralIncompletion_RDe = oDelStsMap[oItem.OvrlItmGeneralIncompletion_RDe] || oItem.OvrlItmGeneralIncompletion_RDe
+                                    }
+                                    //Return Deli Goods Issue Status   
+                                    if (oItem.OverallGoodsMovementSt_RDEL) {
+                                        oItem.OverallGoodsMovementSt_RDEL = oDelStsMap[oItem.OverallGoodsMovementSt_RDEL] || oItem.OverallGoodsMovementSt_RDEL
+                                    }
+                                    //Voyage Status
+                                    var oVoyStatusMap = {
+                                        "01": oResourceBundle.getText("InTransit.FLD"),
+                                        "02": oResourceBundle.getText("Arrived.FLD"),
+                                        "03": oResourceBundle.getText("Completed.FLD"),
+                                        "04": oResourceBundle.getText("NotStarted.FLD")
+                                    }
+                                    if (oItem.VoyageStatus) {
+                                        oItem.VoyageStatus = oVoyStatusMap[oItem.VoyageStatus] || oItem.VoyageStatus
+                                    }
+                                });
+
+                                oView.setBusy(false);
+                                this.getView().getModel("trackModel").setProperty("/", aFinalData);
+                                resolve(aFinalData);
+                            }.bind(this)).catch(function (err) {
+                                oView.setBusy(false);
+                                reject(err);
                             });
+                            //this.getView().getModel("trackModel").setProperty("/", aFinalData);
+                            //resolve(aFinalData);
+                        }.bind(this));
 
-                            oView.setBusy(false);
-                            this.getView().getModel("trackModel").setProperty("/", aFinalData);
-                            resolve(aFinalData);
-                        }.bind(this)).catch(function (err) {
-                            oView.setBusy(false);
-                            reject(err);
-                        });
-                        //this.getView().getModel("trackModel").setProperty("/", aFinalData);
-                        //resolve(aFinalData);
                     }.bind(this),
                     error: function (err) {
                         oView.setBusy(false);
@@ -678,16 +882,19 @@ sap.ui.define([
                         })
                     );
                 }
-
+                if (aFilters.length === 0) {
+                    resolve(oUCCMap);
+                    return;
+                }
                 oModel.read("/YY1_FLG_WOREF_DELTYPE_API", {
 
-                    filters: [
-                        new sap.ui.model.Filter({
-                            filters: aFilters,
-                            and: true
-                        })
-                    ],
-
+                    // filters: [
+                    //     new sap.ui.model.Filter({
+                    //         filters: aFilters,
+                    //         and: false
+                    //     })
+                    // ],
+                    filters: aFilters,
                     success: function (oData) {
 
                         oData.results.forEach(function (item) {
@@ -2252,7 +2459,7 @@ sap.ui.define([
 
             }
 
-            /*  Apply Filters */
+            //Apply Filters to load the data
             if (!aMainFilters || aMainFilters.length === 0) {
                 sap.m.MessageToast.show("Please select at least one filter");
                 return; // stop loading
@@ -2271,7 +2478,7 @@ sap.ui.define([
         },
 
 
-        /* HELPER FUNCTION – ADD TOKEN IF USER TYPED VALUE             */
+        // HELPER FUNCTION – ADD TOKEN IF USER TYPED VALUE      
 
 
         _addTokenFromValue: function (oMultiInput) {
@@ -2341,6 +2548,7 @@ sap.ui.define([
                     columnKey: oColumn.getId(),
                     text: oColumn.getLabel().getText(),
                     visible: oColumn.getVisible()
+
                 }));
 
             });
@@ -2808,7 +3016,7 @@ sap.ui.define([
 
             var oModel = this.getView().getModel();
             var aFilters = [];
-
+              
             if (sValue) {
                 aFilters.push(new sap.ui.model.Filter({
                     filters: [

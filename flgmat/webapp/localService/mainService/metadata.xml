@@ -129,6 +129,12 @@
                 <Property Name="ProductType" Type="Edm.String" MaxLength="4" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Product Type"/>
                 <Property Name="ProductName" Type="Edm.String" MaxLength="40" sap:required-in-filter="false" sap:label="Product Description"/>
                 <Property Name="StockReport" Type="Edm.String" MaxLength="40" sap:aggregation-role="dimension" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="StockReport" sap:quickinfo="Material Number"/>
+                <Property Name="DeliveryDocumentItemText_deli" Type="Edm.String" MaxLength="40" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="Item Description_deli" sap:quickinfo="Short Text for Sales Order Item"/>
+                <Property Name="ActualDeliveryQuantity_deli" Type="Edm.Decimal" Precision="13" Scale="3" sap:aggregation-role="measure" sap:required-in-filter="false" sap:unit="BaseUnit_deli" sap:label="Delivery Quantity_deli" sap:quickinfo="Actual quantity delivered (in sales units)" sap:filterable="false"/>
+                <Property Name="BaseUnit_deli" Type="Edm.String" MaxLength="3" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="Base Unit of Measure_deli" sap:quickinfo="Base Unit of Measure" sap:semantics="unit-of-measure"/>
+                <Property Name="DeliveryDocumentItemText_RDeli" Type="Edm.String" MaxLength="40" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="Item Description_RDeli" sap:quickinfo="Short Text for Sales Order Item"/>
+                <Property Name="ActualDeliveryQuantity_RDeli" Type="Edm.Decimal" Precision="13" Scale="3" sap:aggregation-role="measure" sap:required-in-filter="false" sap:unit="BaseUnit_RDeli" sap:label="Delivery Quantity_RDeli" sap:quickinfo="Actual quantity delivered (in sales units)" sap:filterable="false"/>
+                <Property Name="BaseUnit_RDeli" Type="Edm.String" MaxLength="3" sap:aggregation-role="dimension" sap:required-in-filter="false" sap:label="Base Unit of Measure_RDeli" sap:quickinfo="Base Unit of Measure" sap:semantics="unit-of-measure"/>
             </EntityType>
             <EntityContainer Name="YY1_FLGTRK_TRACKING_API_CDS_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
                 <EntitySet Name="YY1_FLGTRK_Tracking_API" EntityType="YY1_FLGTRK_TRACKING_API_CDS.YY1_FLGTRK_Tracking_APIType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
@@ -146,6 +152,8 @@
                                 <PropertyPath>QuantityinBaseUnit_PO</PropertyPath>
                                 <PropertyPath>QuantityinBaseUnit_STO</PropertyPath>
                                 <PropertyPath>QuantityinBaseUnit_RTO</PropertyPath>
+                                <PropertyPath>ActualDeliveryQuantity_deli</PropertyPath>
+                                <PropertyPath>ActualDeliveryQuantity_RDeli</PropertyPath>
                             </Collection>
                         </PropertyValue>
                     </Record>

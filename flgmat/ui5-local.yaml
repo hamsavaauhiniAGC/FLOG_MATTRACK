@@ -32,8 +32,6 @@ server:
         backend:
           - path: /sap
             url: https://my305676-api.s4hana.ondemand.com
-            authenticationType: BasicAuthentication
-            destination: S4HC_FLOG_MaTTrack
           - url: https://my305676-api.s4hana.ondemand.com/
             authenticationType: BasicAuthentication
             destination: S4HC_FLOG_MaTTrack
@@ -48,8 +46,8 @@ server:
             path: /sap/opu/odata4/sap/api_fldlogsshipmentvoyage/srvd_a2x/sap/fldlogsshipmentvoyage/0001/
           - url: https://my305676-api.s4hana.ondemand.com
             path: /sap/opu/odata/sap/YY1_FLGTRK_TRACKPR_API_CDS/
-          - url: https://my305676-api.s4hana.ondemand.com
-            path: /sap/opu/odata/sap/YY1_FLG_WOREF_DELTYPE_API_CDS/
+          - path: /sap/opu/odata/sap/YY1_FLG_WOREF_DELTYPE_API_CDS/
+            url: https://my305676-api.s4hana.ondemand.com
     - name: sap-fe-mockserver
       beforeMiddleware: csp
       configuration:
