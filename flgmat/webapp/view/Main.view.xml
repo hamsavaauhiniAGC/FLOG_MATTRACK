@@ -649,7 +649,7 @@
                     <table:Column
                         id="idColWo"
                         width="150px"
-                        sortProperty="WorkOrder"
+                        sortProperty="MaintenanceOrderDesc"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -730,7 +730,7 @@
                     <table:Column
                         id="idColMOBasicStrtDt"
                         width="150px"
-                        sortProperty="BasicStartDt"
+                        sortProperty="MaintOrdBasicStartDate"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -753,8 +753,9 @@
                     <table:Column
                         id="idColMOBasicEndDt"
                         width="150px"
-                        sortProperty="BasicEndDt"
+                        sortProperty="MaintOrdBasicEndDate"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleMOBasicEndDt"
@@ -776,8 +777,9 @@
                     <table:Column
                         id="idColMOOperation"
                         width="150px"
-                        sortProperty="MaintenanceOrderOper"
+                        sortProperty="MaintenanceOrderOperation"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleMOOperation"
@@ -793,7 +795,7 @@
                     <table:Column
                         id="idColReservation"
                         width="150px"
-                        sortProperty="Reseravation"
+                        sortProperty="Reservation"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -810,7 +812,7 @@
                     <table:Column
                         id="idColResItemNo"
                         width="150px"
-                        sortProperty="ResItemNo"
+                        sortProperty="ReservationItem"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -844,8 +846,9 @@
                     <table:Column
                         id="idColStorLoc"
                         width="150px"
-                        sortProperty="StorLoc"
+                        sortProperty="StorageLocation"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleStorLoc"
@@ -861,7 +864,7 @@
                     <table:Column
                         id="idColRequestor"
                         width="150px"
-                        sortProperty="Requestor"
+                        sortProperty="MaintOrdOpCompRequisitioner"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -895,6 +898,23 @@
                     <table:Column
                         id="idColMd"
                         width="150px"
+                        sortProperty="Description"
+                        showSortMenuEntry="true"
+                    >
+                        <Label
+                            id="idTxtTitleMd"
+                            text="{i18n>matDesc.LBL}"
+                        />
+                        <table:template>
+                            <Text
+                                id="idTxtMd"
+                                text="{trackModel>Description}"
+                            />
+                        </table:template>
+                    </table:Column>
+                    <!-- <table:Column
+                        id="idColMd"
+                        width="150px"
                         sortProperty="MaterialDesc"
                         showSortMenuEntry="true"
                     >
@@ -908,11 +928,11 @@
                                 text="{trackModel>ProductName}"
                             />
                         </table:template>
-                    </table:Column>
+                    </table:Column> -->
                     <table:Column
                         id="idColQuant"
                         width="150px"
-                        sortProperty="Quant"
+                        sortProperty="RequirementQuantityInBaseUnit"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -929,7 +949,7 @@
                     <table:Column
                         id="idColUnitOM"
                         width="150px"
-                        sortProperty="UnitofMeasure"
+                        sortProperty="BaseUnit"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -946,7 +966,7 @@
                     <table:Column
                         id="idColItemC"
                         width="150px"
-                        sortProperty="ItemCategory"
+                        sortProperty="MaintComponentItemCategory"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -963,8 +983,9 @@
                     <table:Column
                         id="idColReqDate"
                         width="150px"
-                        sortProperty="ReqDate"
+                        sortProperty="RequirementDate"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleReqDate"
@@ -986,7 +1007,7 @@
                     <table:Column
                         id="idColOpenQ"
                         width="150px"
-                        sortProperty="QuantInUnitoFEntry"
+                        sortProperty="QuantityInUnitOfEntry"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1003,7 +1024,7 @@
                     <table:Column
                         id="idColWithdQty"
                         width="150px"
-                        sortProperty="QuantWithdrawninBaseUnit"
+                        sortProperty="QuantityWithdrawnInBaseUnit"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1022,6 +1043,7 @@
                         width="150px"
                         sortProperty="SupplyProcess"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleSupProc"
@@ -1037,7 +1059,7 @@
                     <table:Column
                         id="idColPurReq"
                         width="150px"
-                        sortProperty="PurchReq"
+                        sortProperty="PurchaseRequisition"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1054,7 +1076,7 @@
                     <table:Column
                         id="idColPurReqItem"
                         width="150px"
-                        sortProperty="PurchReqItem"
+                        sortProperty="PurchaseRequisitionItem"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1068,7 +1090,7 @@
                             />
                         </table:template>
                     </table:Column>
-                    <table:Column
+                    <!-- <table:Column
                         id="idColPrDelD"
                         width="150px"
                         sortProperty="PRDeliveryDate"
@@ -1090,7 +1112,7 @@
                                     }"
                             />
                         </table:template>
-                    </table:Column>
+                    </table:Column> -->
                     <table:Column
                         id="idColSto"
                         width="150px"
@@ -1129,7 +1151,7 @@
                     <table:Column
                         id="idColPO"
                         width="150px"
-                        sortProperty="PO"
+                        sortProperty="PurchaseOrder"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1165,7 +1187,7 @@
                     <table:Column
                         id="idColSupplyPlant"
                         width="150px"
-                        sortProperty="SupplyPlant"
+                        sortProperty="SupplyingPlant_PO"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1182,7 +1204,7 @@
                     <table:Column
                         id="idColSupplyPlantSTO"
                         width="150px"
-                        sortProperty="SupplyPlantSTO"
+                        sortProperty="SupplyingPlant_STO"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1199,7 +1221,7 @@
                     <table:Column
                         id="idColIssuingSLoc"
                         width="150px"
-                        sortProperty="IssuingSLoc"
+                        sortProperty="IssuingStorageLocation_PO"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1216,7 +1238,7 @@
                     <table:Column
                         id="idColIssuingSLocSTO"
                         width="150px"
-                        sortProperty="IssuingSLocSTO"
+                        sortProperty="IssuingStorageLocation_STO"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1231,7 +1253,7 @@
                         </table:template>
                     </table:Column>
 
-                    <table:Column
+                    <!-- <table:Column
                         id="idColSupplier"
                         width="150px"
                         sortProperty="Supplier"
@@ -1288,12 +1310,13 @@
                                     }"
                             />
                         </table:template>
-                    </table:Column>
+                    </table:Column> -->
                     <table:Column
                         id="idColDeliveryDateSTO"
                         width="150px"
-                        sortProperty="DeliveryDateSTO"
+                        sortProperty="YY1_DELIVERYDATE_PDI_STO"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleDeliveryDateSTO"
@@ -1311,7 +1334,7 @@
                         </table:template>
                     </table:Column>
 
-                    <table:Column
+                    <!-- <table:Column
                         id="idColDeliveryCrtDate"
                         width="150px"
                         sortProperty="DeliveryCrtDate"
@@ -1334,12 +1357,12 @@
                                     }"
                             />
                         </table:template>
-                    </table:Column>
+                    </table:Column> -->
 
                     <table:Column
                         id="idColOrdQty"
                         width="150px"
-                        sortProperty="OrdQty"
+                        sortProperty="OrderQuantity_PO"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1357,7 +1380,7 @@
                     <table:Column
                         id="idColOrdQtySTO"
                         width="150px"
-                        sortProperty="OrdQtySTO"
+                        sortProperty="OrderQuantit_STO"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1376,7 +1399,7 @@
                     <table:Column
                         id="idColDelQty"
                         width="150px"
-                        sortProperty="DelQty"
+                        sortProperty="QuantityinBaseUnit_PO"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1394,7 +1417,7 @@
                     <table:Column
                         id="idColDelQtySTO"
                         width="150px"
-                        sortProperty="DelQtySTO"
+                        sortProperty="QuantityinBaseUnit_STO"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1413,8 +1436,9 @@
                     <table:Column
                         id="idColYetTDQty"
                         width="150px"
-                        sortProperty="YettoDel"
+                        sortProperty="YettoDeliverQuantity_PO"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleYetTDQty"
@@ -1431,8 +1455,9 @@
                     <table:Column
                         id="idColYetTDQtySTO"
                         width="150px"
-                        sortProperty="YetToDeli"
+                        sortProperty="YettoDeliverQuantity_STO"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleYetTDQtySTO"
@@ -1450,7 +1475,7 @@
                     <table:Column
                         id="idColRecGRD"
                         width="150px"
-                        sortProperty="recGRD"
+                        sortProperty="PostingDate_PO"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1474,7 +1499,7 @@
                     <table:Column
                         id="idColRecGRDSTO"
                         width="150px"
-                        sortProperty="RecGRDSTO"
+                        sortProperty="PostingDate_STO"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1498,6 +1523,9 @@
                     <table:Column
                         id="idColRecGRDRRSTO"
                         width="150px"
+                        sortProperty="PostingDate_RTO"
+                        showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleRecGRDRSTO"
@@ -1521,7 +1549,7 @@
                     <table:Column
                         id="idColStockRprt"
                         width="150px"
-                        sortProperty="StockRprt"
+                        sortProperty="StockReport"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1542,7 +1570,7 @@
                     <table:Column
                         id="idColDelivery"
                         width="150px"
-                        sortProperty="Delivery"
+                        sortProperty="DeliveryNumber"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1562,6 +1590,7 @@
                         width="150px"
                         sortProperty="DeliveryItem"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleDeliI"
@@ -1575,7 +1604,7 @@
                             />
                         </table:template>
                     </table:Column>
-                    <table:Column
+                    <!-- <table:Column
                         id="idColDeliItDesc"
                         width="150px"
                         sortProperty="DeliveryDocumentItemText_deli"
@@ -1592,7 +1621,7 @@
                                 text="{trackModel>DeliveryDocumentItemText_deli}"
                             />
                         </table:template>
-                    </table:Column>
+                    </table:Column> -->
                      <table:Column
                         id="idColActualDeliveryQuantity_deli"
                         width="150px"
@@ -1611,7 +1640,7 @@
                             />
                         </table:template>
                     </table:Column>
-                     <table:Column
+                     <!-- <table:Column
                         id="idColBaseUnit_deli"
                         width="150px"
                         sortProperty="BaseUnit_deli"
@@ -1628,11 +1657,11 @@
                                 text="{trackModel>BaseUnit_deli}"
                             />
                         </table:template>
-                    </table:Column>
+                    </table:Column> -->
                     <table:Column
                         id="idColDeliT"
                         width="150px"
-                        sortProperty="DeliType"
+                        sortProperty="DeliveryDocumentType_Deli"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1651,7 +1680,7 @@
                     <table:Column
                         id="idColWhNo"
                         width="150px"
-                        sortProperty="WhNo"
+                        sortProperty="EWMWarehouse"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1670,7 +1699,7 @@
                     <table:Column
                         id="idColWhHT"
                         width="150px"
-                        sortProperty="WhHT"
+                        sortProperty="WarehouseTask"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1688,7 +1717,7 @@
                     <table:Column
                         id="idColWhTS"
                         width="150px"
-                        sortProperty="WHStatus"
+                        sortProperty="WarehouseTaskStatus"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1726,7 +1755,7 @@
                     <table:Column
                         id="idColValT"
                         width="150px"
-                        sortProperty="ValuaType"
+                        sortProperty="InventoryValuationType_Del"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1745,8 +1774,9 @@
                     <table:Column
                         id="idColDeliveryPickingdate"
                         width="150px"
-                        sortProperty="DeliPickDate"
+                        sortProperty="PickingDate_Deli"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleDeliveryPickingdate"
@@ -1770,8 +1800,9 @@
                     <table:Column
                         id="idColDeliverPickingstatus"
                         width="150px"
-                        sortProperty="DeliPickStatus"
+                        sortProperty="OvrlItmGeneralIncompletio_Deli"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleDeliverPickingstatus"
@@ -1789,8 +1820,9 @@
                     <table:Column
                         id="idColDelActGoodsIssueDate"
                         width="150px"
-                        sortProperty="DelActGoodsIssuDate"
+                        sortProperty="ActualGoodsMovementDa_Deli"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleDelActGoodsIssueDate"
@@ -1814,8 +1846,9 @@
                     <table:Column
                         id="idColDeliPlndGoodsIssuDate"
                         width="150px"
-                        sortProperty="DelPlndGoodsIssDate"
+                        sortProperty="PlannedGoodsIssueDate_Deli"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleDeliPlndGoodsIssuDate"
@@ -1839,8 +1872,9 @@
                     <table:Column
                         id="idColDeliGoodsIssuSt"
                         width="150px"
-                        sortProperty="OverallGoodsIssueStDeli"
+                        sortProperty="OverallGoodsMovementStat_Deli"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleDeliGoodsIssuSt"
@@ -1858,7 +1892,7 @@
                     <table:Column
                         id="idColContainer"
                         width="150px"
-                        sortProperty="Container"
+                        sortProperty="ContainerID"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1894,7 +1928,7 @@
                     <table:Column
                         id="idColVoyage"
                         width="150px"
-                        sortProperty="Voyage"
+                        sortProperty=">VoyageNumber"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1928,7 +1962,7 @@
                         </table:template>
                     </table:Column>
 
-                    <table:Column
+                    <!-- <table:Column
                         id="idColDeliveryFinalStatus"
                         width="150px"
                         sortProperty="DeliFinalStat"
@@ -1945,9 +1979,9 @@
                                 text="{trackModel>DeliveryFinalStatus}"
                             />
                         </table:template>
-                    </table:Column>
+                    </table:Column> -->
 
-                    <table:Column
+                    <!-- <table:Column
                         id="idColReturnInfo"
                         width="150px"
                         sortProperty="ReturnInfo"
@@ -1964,7 +1998,7 @@
                                 text=""
                             />
                         </table:template>
-                    </table:Column>
+                    </table:Column> -->
                     <table:Column
                         id="idColReturnSTO"
                         width="150px"
@@ -1987,7 +2021,7 @@
                     <table:Column
                         id="idColReturnDelivery"
                         width="150px"
-                        sortProperty="ReturnDelivery"
+                        sortProperty="ReturnDeliveryNumber"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -2006,8 +2040,9 @@
                     <table:Column
                         id="idColReturnDeliItem"
                         width="150px"
-                        sortProperty="ReturnDeliItem"
+                        sortProperty="ReturnDeliveryItem"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleReturnDeliItem"
@@ -2025,7 +2060,7 @@
                     <table:Column
                         id="idColDeliTRDeli"
                         width="150px"
-                        sortProperty="RDeliDocType"
+                        sortProperty="DeliveryDocumentType_RDeli"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -2040,7 +2075,7 @@
                             />
                         </table:template>
                     </table:Column>
-                    <table:Column
+                    <!-- <table:Column
                         id="idColRDeliItDesc"
                         width="150px"
                         sortProperty="DeliveryDocumentItemText_RDeli"
@@ -2057,12 +2092,13 @@
                                 text="{trackModel>DeliveryDocumentItemText_RDeli}"
                             />
                         </table:template>
-                    </table:Column>
+                    </table:Column> -->
                      <table:Column
                         id="idColActualDeliveryQuantity_RDeli"
                         width="150px"
                         sortProperty="ActualDeliveryQuantity_RDeli"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleActualDeliveryQuantity_RDeli"
@@ -2081,6 +2117,7 @@
                         width="150px"
                         sortProperty="BaseUnit_RDeli"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleBaseUnit_RDeli"
@@ -2097,8 +2134,9 @@
                     <table:Column
                         id="idColValTRDeli"
                         width="150px"
-                        sortProperty="RDeliValuType"
+                        sortProperty="InventoryValuationType_RDeli"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleValTRDeli"
@@ -2116,8 +2154,9 @@
                     <table:Column
                         id="idColDeliveryPickingdateRDeli"
                         width="150px"
-                        sortProperty="RDelPickingDate"
+                        sortProperty="PickingDate_RDeli"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleDeliveryPickingdateRDeli"
@@ -2141,8 +2180,9 @@
                     <table:Column
                         id="idColDeliverPickingstatusRDeli"
                         width="150px"
-                        sortProperty="RDeliPickingStatus"
+                        sortProperty="OvrlItmGeneralIncompletion_RDe"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleDeliverPickingstatusRDeli"
@@ -2160,8 +2200,9 @@
                     <table:Column
                         id="idColDelActGoodsIssueDateRDeli"
                         width="150px"
-                        sortProperty="RDeliActGoodsIssueDt"
+                        sortProperty="ActualGoodsMovementD_RDel"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleDelActGoodsIssueDateRDeli"
@@ -2185,8 +2226,9 @@
                     <table:Column
                         id="idColDeliPlndGoodsIssuDateRDeli"
                         width="150px"
-                        sortProperty="RDeliPlndGoodsIssDate"
+                        sortProperty="PlannedGoodsIssueDate_RDeli"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleDeliPlndGoodsIssuDateRDeli"
@@ -2210,8 +2252,9 @@
                     <table:Column
                         id="idColDeliGoodsIssuStRDeli"
                         width="150px"
-                        sortProperty="RDeliGoodsIssueSt"
+                        sortProperty="OverallGoodsMovementSt_RDEL"
                         showSortMenuEntry="true"
+                        visible="false"
                     >
                         <Label
                             id="idTxtTitleDeliGoodsIssuStRDeli"
@@ -2229,7 +2272,7 @@
                     <table:Column
                         id="idColReturnDeliverySupplier"
                         width="150px"
-                        sortProperty="RetDeliSupplier"
+                        sortProperty="Supplier_WOREF"
                         showSortMenuEntry="true"
                     >
                         <Label

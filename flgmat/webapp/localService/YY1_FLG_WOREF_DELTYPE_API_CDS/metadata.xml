@@ -57,11 +57,13 @@
                 <Property Name="ActualGoodsMovementDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:required-in-filter="false" sap:label="Act. Gds Mvmnt Date" sap:quickinfo="Actual Goods Movement Date"/>
                 <Property Name="OverallGoodsMovementStatus" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Goods Movement Sts" sap:quickinfo="Goods Movement Status (All Items)"/>
                 <Property Name="OvrlItmGeneralIncompletionSts" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="All Items" sap:quickinfo="Incompletion Status (All Items)"/>
-                <Property Name="InventoryValuationType" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Valuation Type"/>
                 <Property Name="IsReturn" Type="Edm.Boolean" sap:required-in-filter="false" sap:label="IsReturn" sap:quickinfo="Data element for domain BOOLE: TRUE (='X') and FALSE (=' ')"/>
                 <Property Name="MaintOrder" Type="Edm.String" MaxLength="12" sap:required-in-filter="false" sap:label="MaintOrder" sap:quickinfo="Text of length 12"/>
                 <Property Name="RetDel" Type="Edm.String" MaxLength="10" sap:required-in-filter="false" sap:label="RetDel" sap:quickinfo="Text of length 10"/>
                 <Property Name="Plant" Type="Edm.String" MaxLength="4" sap:required-in-filter="false" sap:label="Plant" sap:quickinfo="Text of length 4"/>
+                <Property Name="DeliItem" Type="Edm.String" MaxLength="6" sap:required-in-filter="false" sap:label="DeliItem"/>
+                <Property Name="DeliveryDocumentItemText" Type="Edm.String" MaxLength="40" sap:required-in-filter="false" sap:label="Item Description" sap:quickinfo="Short Text for Sales Order Item"/>
+                <Property Name="InventoryValuationType" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Valuation Type"/>
             </EntityType>
             <EntityContainer Name="YY1_FLG_WOREF_DELTYPE_API_CDS_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
                 <EntitySet Name="YY1_FLG_WOREF_DELTYPE_API" EntityType="YY1_FLG_WOREF_DELTYPE_API_CDS.YY1_FLG_WOREF_DELTYPE_APIType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>

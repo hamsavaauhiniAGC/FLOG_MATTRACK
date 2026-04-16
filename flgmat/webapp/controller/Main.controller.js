@@ -89,16 +89,30 @@ sap.ui.define([
             });
 
             // Table column data
-            var aColumnData = this.oTable.getColumns().map(function (oColumn) {
+            var aColumnData = this.oTable.getColumns().map(function (oColumn, index) {
                 return {
                     id: oColumn.getId(),
-                    visible: oColumn.getVisible()
+                    visible: oColumn.getVisible(),
+                    order: index
                 };
             });
+            // Sorting
+            var oBinding = this.oTable.getBinding("rows");
+            var aSorters = [];
+
+            if (oBinding && oBinding.aSorters) {
+                aSorters = oBinding.aSorters.map(function (oSorter) {
+                    return {
+                        path: oSorter.sPath,
+                        descending: oSorter.bDescending
+                    };
+                });
+            }
 
             return {
                 filters: aFilterData,
-                columns: aColumnData
+                columns: aColumnData,
+                sorters: aSorters
             };
         },
         // Apply saved variant to MultiInput controls
@@ -126,17 +140,38 @@ sap.ui.define([
             }.bind(this));
             // Apply column visibility
             if (oVariantData.columns) {
-
-                oVariantData.columns.forEach(function (oColData) {
+                var oTable = this.oTable;
+                var aSortedColumns = oVariantData.columns.sort(function (a, b) {
+                    return a.order - b.order;
+                });
+                aSortedColumns.forEach(function (oColData, newIndex) {
 
                     var oColumn = sap.ui.getCore().byId(oColData.id);
 
                     if (oColumn) {
                         oColumn.setVisible(oColData.visible);
+                        // Move column to correct position
+                        oTable.removeColumn(oColumn);
+                        oTable.insertColumn(oColumn, newIndex);
                     }
 
                 });
 
+            }
+            // Apply Sorting
+            if (oVariantData.sorters) {
+                var oBinding = this.oTable.getBinding("rows");
+
+                if (oBinding) {
+                    var aSorters = oVariantData.sorters.map(function (oSorter) {
+                        return new sap.ui.model.Sorter(
+                            oSorter.path,
+                            oSorter.descending // false = ASC, true = DESC
+                        );
+                    });
+
+                    oBinding.sort(aSorters);
+                }
             }
         },
         onSelectionChange: function (oEvent) {
@@ -481,7 +516,7 @@ sap.ui.define([
                                             oNEWUCC.RentalInfo = oMatchedUCC.RentalInfo || "";
                                             oNEWUCC.Supplier_WOREF = oMatchedUCC.Supplier || "";
                                             oNEWUCC.RefDelivery = oMatchedUCC.RetDel || "";
-
+                                            oNEWUCC.Description = oMatchedUCC.DeliveryDocumentItemText || "";
 
                                             aUCCMergedData.push(oNEWUCC);
 
@@ -611,7 +646,7 @@ sap.ui.define([
                                         oNEWUCC.RentalInfo = oMatchedUCC.RentalInfo || "";
                                         oNEWUCC.Supplier_WOREF = oMatchedUCC.Supplier || "";
                                         oNEWUCC.RefDelivery = oMatchedUCC.RetDel || "";
-
+                                        oNEWUCC.Description = oMatchedUCC.DeliveryDocumentItemText || "";
                                         aUCCMergedData.push(oNEWUCC);
 
                                     });
@@ -2515,13 +2550,42 @@ sap.ui.define([
                     // Attach handlers once during creation
                     ok: function (oEvent) {
                         var aItems = oEvent.getParameter("payload").columns.tableItems;
+                        var oTable = this.byId("idTabTrackList");
+
+                        var aExistingColumns = oTable.getColumns();
+
+                        // Get current order of column IDs
+                        var aCurrentOrder = aExistingColumns.map(function (oCol) {
+                            return oCol.getId();
+                        });
+
+                        // Get new order from dialog
+                        var aNewOrder = aItems.map(function (oItem) {
+                            return oItem.columnKey;
+                        });
+
+                        // Check if order changed
+                        var bOrderChanged = aCurrentOrder.length !== aNewOrder.length ||
+                            aCurrentOrder.some(function (sKey, index) {
+                                return sKey !== aNewOrder[index];
+                            });
                         aItems.forEach(function (oItem) {
                             var oColumn = this.getView().byId(oItem.columnKey);
                             if (oColumn) {
                                 oColumn.setVisible(oItem.visible);
                             }
                         }.bind(this));
+                        // Reorder ONLY if changed
+                        if (bOrderChanged) {
+                            oTable.removeAllColumns();
 
+                            aItems.forEach(function (oItem) {
+                                var oColumn = this.getView().byId(oItem.columnKey);
+                                if (oColumn) {
+                                    oTable.addColumn(oColumn);
+                                }
+                            }.bind(this));
+                        }
                         this.oSmartVariantManagement.currentVariantSetModified(true);
 
                         this._oSettingDialog.close();
@@ -2592,19 +2656,89 @@ sap.ui.define([
             var oBinding = oTable.getBinding("rows");
 
             // Define columns for export
-            var aCols = oTable.getColumns().map(function (oColumn) {
-                return {
+            var aCols = oTable.getColumns().filter(function (oColumn) {
+                return oColumn.getVisible();
+            }).map(function (oColumn) {
+                var sProperty = oColumn.getTemplate().getBindingPath("text");
+                var oCol = {
                     label: oColumn.getLabel().getText(),
-                    property: oColumn.getTemplate().getBindingPath("text"),
+                    property: sProperty,
                     type: "String"
                 };
+                // Apply date formatting for specific columns
+                if (sProperty === "MaintOrdBasicStartDate" || sProperty === "MaintOrdBasicEndDate"
+                    || sProperty === "RequirementDate" || sProperty === "PostingDate_PO"
+                    || sProperty === "PostingDate_STO" || sProperty === "PostingDate_RTO"
+                    || sProperty === "PickingDate_Deli" || sProperty === "ActualGoodsMovementDa_Deli"
+                    || sProperty === "PlannedGoodsIssueDate_Deli" || sProperty === "PickingDate_RDeli"
+                    || sProperty === "ActualGoodsMovementD_RDel" || sProperty === "PlannedGoodsIssueDate_RDeli"
+                ) {
+                    oCol.type = "Date";
+                    oCol.format = "dd-MM-yyyy"; // Format
+                }
+
+                return oCol;
             });
 
             // Fetch table data
             var iLength = oBinding.getLength();
             var aContexts = await oBinding.getContexts(0, iLength);
             var aData = aContexts.map(function (oContext) {
-                return oContext.getObject();
+                //return oContext.getObject();
+                var oObj = Object.assign({}, oContext.getObject()); // clone object
+
+                // // Convert to JS Date to avoid timezone issues
+                // if (oObj.MaintOrdBasicStartDate) {
+                //     oObj.MaintOrdBasicStartDate = new Date(oObj.MaintOrdBasicStartDate);
+                //     //var dStart = new Date(oObj.MaintOrdBasicStartDate);
+                //     // oObj.MaintOrdBasicStartDate = new Date(
+                //     //     dStart.getFullYear(),
+                //     //     dStart.getMonth(),
+                //     //     dStart.getDate()
+                //     // );
+                // }
+
+                // if (oObj.MaintOrdBasicEndDate) {
+                //     oObj.MaintOrdBasicEndDate = new Date(oObj.MaintOrdBasicEndDate);
+                //     //var dEnd = new Date(oObj.MaintOrdBasicEndDate);
+                //     // oObj.MaintOrdBasicEndDate = new Date(
+                //     //     dEnd.getFullYear(),
+                //     //     dEnd.getMonth(),
+                //     //     dEnd.getDate()
+
+                //     // );
+                // }
+                // if (oObj.RequirementDate) {
+                //     oObj.RequirementDate = new Date(oObj.RequirementDate);
+                // }
+                // if (oObj.PostingDate_PO) {
+                //     oObj.PostingDate_PO = new Date(oObj.PostingDate_PO);
+                // }
+                // if (oObj.PostingDate_STO) {
+                //     oObj.PostingDate_STO = new Date(oObj.PostingDate_STO);
+                // }
+                // if (oObj.PostingDate_RTO) {
+                //     oObj.PostingDate_RTO = new Date(oObj.PostingDate_RTO);
+                // }
+                // if (oObj.PickingDate_Deli) {
+                //     oObj.PickingDate_Deli = new Date(oObj.PickingDate_Deli);
+                // }
+                // if (oObj.ActualGoodsMovementDa_Deli) {
+                //     oObj.ActualGoodsMovementDa_Deli = new Date(oObj.ActualGoodsMovementDa_Deli);
+                // }
+                // if (oObj.PlannedGoodsIssueDate_Deli) {
+                //     oObj.PlannedGoodsIssueDate_Deli = new Date(oObj.PlannedGoodsIssueDate_Deli);
+                // }
+                // if (oObj.PickingDate_RDeli) {
+                //     oObj.PickingDate_RDeli = new Date(oObj.PickingDate_RDeli);
+                // }
+                // if (oObj.ActualGoodsMovementD_RDel) {
+                //     oObj.ActualGoodsMovementD_RDel = new Date(oObj.ActualGoodsMovementD_RDel);
+                // }
+                // if (oObj.PlannedGoodsIssueDate_RDeli) {
+                //     oObj.PlannedGoodsIssueDate_RDeli = new Date(oObj.PlannedGoodsIssueDate_RDeli);
+                // }
+                return oObj;
             });
 
             // Configure spreadsheet settings
@@ -3016,7 +3150,7 @@ sap.ui.define([
 
             var oModel = this.getView().getModel();
             var aFilters = [];
-              
+
             if (sValue) {
                 aFilters.push(new sap.ui.model.Filter({
                     filters: [
