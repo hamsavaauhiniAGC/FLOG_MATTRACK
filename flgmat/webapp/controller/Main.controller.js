@@ -850,8 +850,18 @@ sap.ui.define([
                                         "03": oResourceBundle.getText("Completed.FLD"),
                                         "04": oResourceBundle.getText("NotStarted.FLD")
                                     }
-                                    if (oItem.VoyageStatus) {
-                                        oItem.VoyageStatus = oVoyStatusMap[oItem.VoyageStatus] || oItem.VoyageStatus
+                                    if (oItem.VoyStatus) {
+                                        oItem.VoyStatus = oVoyStatusMap[oItem.VoyStatus] || oItem.VoyStatus
+                                    }
+                                    //Container Status
+                                    var oContStatusMap = {
+                                        "10": oResourceBundle.getText("Available.FLD"),
+                                        "20": oResourceBundle.getText("Packed.FLD"),
+                                        "30": oResourceBundle.getText("Inactive.FLD"),
+                                        "99": oResourceBundle.getText("Deleted.FLD")
+                                    }
+                                    if (oItem.ContainerStatus) {
+                                        oItem.ContainerStatus = oContStatusMap[oItem.ContainerStatus] || oItem.ContainerStatus
                                     }
                                 });
 
@@ -959,13 +969,36 @@ sap.ui.define([
             const oListBinding = oModel.bindList("/ShipmentItem", null, null, [
                 new sap.ui.model.Filter("DeliveryDocument", sap.ui.model.FilterOperator.EQ, sDeliveryNum)
             ]);
+            //fldlogshipment container for container status
+            const oContStatus = this.getOwnerComponent().getModel("fldlogsshipmentcontainer");
             try {
                 const aContexts = await oListBinding.requestContexts();
                 if (aContexts && aContexts.length > 0) {
                     const aData = aContexts.map(oCtx => oCtx.getObject());
                     oItem.ContainerID = aData.map(c => c.FldLogsContainerID).join(", ");
-                    oItem.ContainerStatus = aData[0].FldLogsContainerStatus;
+                   // oItem.ContainerStatus = aData[0].FldLogsContainerStatus;
                     const sContainerUUID = aData[0].FldLogsContainerUnitUUID;
+                    if (oItem.ContainerID) {
+                        const oContStatusBinding = oContStatus.bindList(
+                            "/FldLogsShipmentContainer",
+                            null,
+                            null,
+                            [
+                                new sap.ui.model.Filter(
+                                    "FldLogsContainerID",
+                                    sap.ui.model.FilterOperator.EQ,
+                                    oItem.ContainerID
+                                )
+                            ]
+                        );
+                        const aStatusContexts = await oContStatusBinding.requestContexts();
+                        if (aStatusContexts && aStatusContexts.length > 0) {
+                            const oStatus = aStatusContexts[0].getObject();
+                            // Final Status Mapping
+                            oItem.ContainerStatus = oStatus.FldLogsContainerStatus;
+                        }
+
+                    }
                     if (sContainerUUID) {
                         var voyage = await this._getVoyageDetails(oItem, sContainerUUID);
                     }
@@ -977,27 +1010,59 @@ sap.ui.define([
                 console.error("V4 Fetch Failed for " + sDeliveryNum, oError);
             }
         },
+        
         _getVoyageDetails: async function (oItem, sContainerUUID) {
+            // Shipment Container Model
             const oModel = this.getOwnerComponent().getModel("shipmentcontainerunit");
             const sPath = "/ShipmentContainer(" + sContainerUUID + ")/_ShptStgeAssgmt";
             const oListBinding = oModel.bindList(sPath);
+            // Voyage Model
+            const oVoyageModel = this.getOwnerComponent().getModel("fldlogsshipmentvoyage");
             try {
                 const aContexts = await oListBinding.requestContexts();
                 if (aContexts && aContexts.length > 0) {
                     const oVoyageData = aContexts[0].getObject();
+                    // Assign values from container API
                     oItem.VoyageNumber = oVoyageData.FldLogsShptVoyageNumber;
                     oItem.VoyageUUID = oVoyageData.FldLogsShptVoyageUUID;
                     oItem.VehicleName = oVoyageData.FldLogsShptVoyageVehicleName;
                     oItem.SourceStage = oVoyageData.FldLogsVoyageSrceStage;
                     oItem.DestStage = oVoyageData.FldLogsVoyageDestStage;
-                    oItem.VoyageStatus = oVoyageData.FldLogsShptVoyageTypeCode
+                    oItem.VoyageStatus = oVoyageData.FldLogsShptVoyageTypeCode;
+                    // Voyage Number 
+                    if (oVoyageData.FldLogsShptVoyageNumber) {
+                        const oVoyListBinding = oVoyageModel.bindList(
+                            "/FieldLogisticsShipmentVoyage",
+                            null,
+                            null,
+                            [
+                                new sap.ui.model.Filter(
+                                    "FldLogsShptVoyageNumber",
+                                    sap.ui.model.FilterOperator.EQ,
+                                    oVoyageData.FldLogsShptVoyageNumber
+                                )
+                            ]
+                        );
+
+                        const aVoyContexts = await oVoyListBinding.requestContexts();
+
+                        if (aVoyContexts && aVoyContexts.length > 0) {
+                            const oVoyage = aVoyContexts[0].getObject();
+
+                            // Final Status Mapping
+                            oItem.VoyStatus = oVoyage.FldLogsShptVoyageStatusCode;
+                        }
+                    }
+
                 } else {
                     oItem.VoyageNumber = "No Voyage Assigned";
                 }
+
             } catch (oError) {
                 console.error("Voyage Fetch Failed for Container " + sContainerUUID, oError);
             }
         },
+
 
         onFltrSearch: function () {
 

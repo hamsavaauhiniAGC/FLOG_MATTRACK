@@ -1946,7 +1946,7 @@
                     <table:Column
                         id="idColVoyS"
                         width="150px"
-                        sortProperty="VoyageStatus"
+                        sortProperty="VoyStatus"
                         showSortMenuEntry="true"
                     >
                         <Label
@@ -1957,7 +1957,7 @@
                         <table:template>
                             <Text
                                 id="idTxtVoyS"
-                                text="{trackModel>VoyageStatus}"
+                                text="{trackModel>VoyStatus}"
                             />
                         </table:template>
                     </table:Column>
